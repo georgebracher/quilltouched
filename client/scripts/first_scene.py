@@ -135,7 +135,7 @@ def run(base: str, code: str, shots: Path | None, viewport: tuple[int, int]) -> 
         faults = page.locator("article.turn--fault").count()
         check(f"[{tag}] {len(TURNS)} tapped turns, no fault blocks", faults == 0,
               f"{faults} faults")
-        page.locator(".workings-toggle").last.click()
+        page.locator(".workings-toggle").first.click()  # newest first: the latest turn
         check(f"[{tag}] a workings panel opens", page.locator(".workings").count() >= 1)
         no_unmet_names(page, tag, "the workings panel")
         shot("4-turns")
@@ -151,6 +151,8 @@ def run(base: str, code: str, shots: Path | None, viewport: tuple[int, int]) -> 
         tap(page, MOVE)
         moved = "Market Row" in page.locator(".scene-canvas, header").first.inner_text()
         check(f"[{tag}] the player leaves for Market Row", moved)
+        newest = page.locator("main.transcript .turn-declared").first.inner_text()
+        check(f"[{tag}] the newest turn is at the top", MOVE in newest, newest)
         no_unmet_names(page, tag, "Market Row")
         shot("6-market-row")
 

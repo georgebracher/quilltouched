@@ -215,7 +215,9 @@ def test_flagged_account_captures_action_and_confirm_rows(player, db_url, monkey
     )
     assert pending.status_code == 200, pending.text
     assert pending.json()["pending_confirmation"] is True
-    assert len(_capture_rows(db_url, claimed["world_id"])) == 1
+    rows = _capture_rows(db_url, claimed["world_id"])
+    assert [r["kind"] for r in rows] == ["action", "pending"]  # the beat is logged too
+    assert rows[1]["pending_confirmation"] is True and rows[1]["action_type"] == "physical"
 
     confirmed = client.post(
         "/api/action/confirm",
@@ -225,8 +227,8 @@ def test_flagged_account_captures_action_and_confirm_rows(player, db_url, monkey
     assert confirmed.status_code == 200, confirmed.text
     confirmed_body = confirmed.json()
     rows = _capture_rows(db_url, claimed["world_id"])
-    assert len(rows) == 2
-    confirm_row = rows[1]
+    assert len(rows) == 3
+    confirm_row = rows[2]
     assert confirm_row["kind"] == "confirm"
     assert confirm_row["utterance"] is None
     assert confirm_row["action_type"] == "physical"
@@ -256,3 +258,30 @@ def test_capture_insert_failure_does_not_break_turn(player, db_url, monkeypatch)
     assert r.status_code == 200, r.text
     assert r.json()["outcome"]["event_id"]
     assert _capture_count(db_url) == 0
+
+
+def test_flagged_account_captures_a_refusal(player, db_url, monkeypatch):
+    """A refused attempt is part of the run under review (25 Oct 2026)."""
+    _clear_capture(db_url)
+    client, headers, claimed, _main_mod = player
+    _enable_test_capture(db_url, claimed["account_id"])
+    import api.llm_gateway as gateway
+
+    def fake_parse(text, roster_text, lists=None, correction=None):
+        raise gateway.ParseFailure("no emit_intent tool_use block")
+
+    monkeypatch.setattr(gateway, "parse_free_text", fake_parse)
+    r = client.post(
+        "/api/action",
+        json={"command_id": "capture-refused-1", "text": "find some work"},
+        headers=headers,
+    )
+    assert r.status_code == 502
+    from everquill_engine.db import connect
+
+    with connect(db_url) as conn, conn.cursor() as cur:
+        cur.execute(
+            "SELECT kind, utterance, http_status FROM public.test_turn_capture"
+            " WHERE world_id = %s ORDER BY id", (claimed["world_id"],),
+        )
+        assert cur.fetchall() == [("refused", "find some work", 502)]

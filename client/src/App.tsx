@@ -1150,20 +1150,11 @@ export default function App() {
   // --- transcript autoscroll -------------------------------------------------------
 
   useEffect(() => {
+    // Newest first (George, 25 Oct: "new events should come at the top, so you
+    // don't have to scroll"): the newest turn and the writing line sit at the
+    // top, so every change returns the view there.
     const el = transcriptRef.current
-    if (!el) return
-    // Land on the TOP of the newest turn (not the absolute bottom) so a long
-    // response reads from its first line — the typewriter then follows the
-    // typing tail into view. (George: "appear as if typed, not a dump I have
-    // to scroll back up".) While the Quill is writing, hold position.
-    if (busy) {
-      el.scrollTop = el.scrollHeight
-      return
-    }
-    const turns = el.querySelectorAll<HTMLElement>('.turn')
-    const last = turns[turns.length - 1]
-    if (last) el.scrollTop = Math.max(0, last.offsetTop - el.offsetTop - 8)
-    else el.scrollTop = el.scrollHeight
+    if (el) el.scrollTop = 0
   }, [entries, busy])
 
   // --- onboarding / boot screens ------------------------------------------------------
@@ -1480,21 +1471,13 @@ export default function App() {
 
             {/* Chronicle: the last few blocks, the full Chronicle a tap away. */}
             <main className="transcript" ref={transcriptRef} aria-live="polite">
-              {entries.length > compact.length && (
-                <button
-                  type="button"
-                  className="chronicle-open"
-                  onClick={() => setHistoryOpen(true)}
-                >
-                  Open the full Chronicle ({entries.length} entries)
-                </button>
-              )}
+              {busy && <p className="turn-waiting">&lt;&lt;The Quill is writing&hellip;&gt;&gt;</p>}
               {entries.length === 0 && (
                 <p className="transcript-empty">
                   The Chronicle of this volume opens with your first declaration.
                 </p>
               )}
-              {compact.map((entry) =>
+              {[...compact].reverse().map((entry) =>
                 entry.kind === 'action' ? (
                   <TurnBlock
                     entry={entry}
@@ -1508,7 +1491,15 @@ export default function App() {
                   <NoteBlock entry={entry} key={entry.key} />
                 ),
               )}
-              {busy && <p className="turn-waiting">&lt;&lt;The Quill is writing&hellip;&gt;&gt;</p>}
+              {entries.length > compact.length && (
+                <button
+                  type="button"
+                  className="chronicle-open"
+                  onClick={() => setHistoryOpen(true)}
+                >
+                  Open the full Chronicle ({entries.length} entries)
+                </button>
+              )}
             </main>
 
             {/* Actions: suggestions as chips (rolled actions first), places to
@@ -1667,7 +1658,7 @@ export default function App() {
               </button>
             </header>
             <div className="chronicle-scroll">
-              {entries.map((entry) =>
+              {[...entries].reverse().map((entry) =>
                 entry.kind === 'action' ? (
                   <TurnBlock entry={entry} key={entry.key} names={names} expandedByDefault />
                 ) : entry.kind === 'fault' ? (

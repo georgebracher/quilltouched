@@ -1135,6 +1135,48 @@ def _insert_test_turn_capture(
         )
 
 
+def _capture_attempt(
+    conn,
+    account: accounts_mod.Account,
+    command_id: str,
+    *,
+    kind: str,
+    utterance: str | None,
+    intent: dict[str, Any] | None,
+    note: str | None,
+    http_status: int | None = None,
+) -> None:
+    """One test-capture row for an attempt that did not resolve (a refusal or a
+    <<Proceed?>> beat). Flagged accounts only; never blocks or alters the turn."""
+    from psycopg.types.json import Jsonb
+
+    intent = intent if isinstance(intent, dict) else {}
+    targets = intent.get("target_entity_ids")
+    try:
+        with conn.transaction():
+            conn.execute(
+                """
+                INSERT INTO public.test_turn_capture
+                    (world_id, command_id, kind, utterance, action_type,
+                     target_entity_ids, approach, pending_confirmation, system_note,
+                     http_status)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                """,
+                (
+                    account.world_id, command_id, kind, utterance,
+                    intent.get("action_type"),
+                    Jsonb(targets) if targets is not None else None,
+                    intent.get("approach") if isinstance(intent.get("approach"), str) else None,
+                    kind == "pending", note, http_status,
+                ),
+            )
+    except Exception as exc:  # capture never blocks the turn
+        telemetry.emit(
+            "test_turn_capture_error", command_id=command_id,
+            world_id=account.world_id, error=f"{type(exc).__name__}: {exc}",
+        )
+
+
 def _resolved_response(
     conn,
     account: accounts_mod.Account,
@@ -1591,6 +1633,12 @@ def action(request: Request, body: Annotated[dict[str, Any], Body()]):
 
             if result.status == "pending":
                 _turn_telemetry(request, command_id, account, result)
+                if account.test_capture:
+                    _capture_attempt(
+                        conn, account, command_id, kind="pending",
+                        utterance=source_utterance, intent=result.stored_intent or intent,
+                        note=getattr(result.assessment, "summary", None),
+                    )
                 return JSONResponse({
                     "pending_confirmation": True,
                     "world_id": account.world_id,
@@ -1619,6 +1667,16 @@ def action(request: Request, body: Annotated[dict[str, Any], Body()]):
             ))
             _turn_telemetry(request, command_id, account, result, contract)
             return response
+        except HTTPException as exc:
+            if account.test_capture:  # a refusal is part of the run under review
+                _capture_attempt(
+                    conn, account, command_id, kind="refused",
+                    utterance=body.get("text") if isinstance(body.get("text"), str) else None,
+                    intent=body.get("intent") if isinstance(body.get("intent"), dict) else None,
+                    note=json.dumps(exc.detail, default=str)[:1000],
+                    http_status=exc.status_code,
+                )
+            raise
         finally:
             _release_turn_lock(conn, account.account_id)
 
