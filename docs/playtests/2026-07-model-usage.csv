@@ -1,0 +1,6 @@
+# July 2026 playtest model calls (Railway production database, 13 to 16 July), totals only:
+# no player text, accounts or command ids. Estimated USD at first-party list prices.
+# Days: 2026-07-13, 2026-07-14, 2026-07-15, 2026-07-16. Calls: 310.
+stage,model,calls,input_tokens,output_tokens,cache_read_tokens,cache_write_tokens,median_latency_ms,p90_latency_ms,est_usd
+narrate,claude-sonnet-5,154,271011,18837,549566,99840,3462,4965,1.6349
+parse,claude-haiku-4-5,156,89792,30215,792378,124852,2233,3504,0.4762
