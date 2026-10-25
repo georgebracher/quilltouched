@@ -1,0 +1,46 @@
+locations:
+  - id: loc.test.quarry
+    name: The White Quarry
+    type: road
+    region: test
+    connections: []
+
+entities:
+  - id: creature.test.fox
+    name: Quarry Fox
+    kind: creature
+    location: loc.test.quarry
+    true_sheet:
+      aptitudes: {might: 8, finesse: 10, wits: 6, will: 5, presence: 2, lore: 1}
+      threat_band: 12
+      tags: [test_fixture]
+    common_knowledge:
+      - A lean quarry fox watches from the spoil piles.
+    portrait: null
+
+  - id: creature.test.wyvern
+    name: Apex Wyvern
+    kind: creature
+    location: loc.test.quarry
+    true_sheet:
+      aptitudes: {might: 14, finesse: 12, wits: 8, will: 10, presence: 4, lore: 2}
+      threat_band: 14
+      tags: [test_fixture, apex]
+    common_knowledge:
+      - The wyvern's shadow clears the quarry rim.
+    portrait: null
+
+  - id: creature.test.dragon
+    name: Elder Dragon
+    kind: creature
+    location: loc.test.quarry
+    true_sheet:
+      aptitudes: {might: 20, finesse: 12, wits: 12, will: 16, presence: 10, lore: 8}
+      threat_band: 20
+      tags: [test_fixture, apex]
+    common_knowledge:
+      - The old dragon makes the quarry feel smaller.
+    portrait: null
+
+prices:
+  inn_night_copper: 6

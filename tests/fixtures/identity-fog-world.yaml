@@ -1,0 +1,61 @@
+# Test-only world for identity fog. IDs deliberately avoid true names so tests
+# can assert the name is absent from the whole perceived view.
+
+locations:
+  - id: loc.fog.tavern
+    name: The Fogged Taproom
+    type: tavern
+    region: fog
+    connections: []
+
+entities:
+  - id: npc.fog.greeter
+    name: Arel Voss
+    descriptor: a wary man watching the door
+    kind: npc
+    location: loc.fog.tavern
+    true_sheet:
+      aptitudes: {might: 3, finesse: 3, wits: 3, will: 3, presence: 3, lore: 3}
+      threat_band: 3
+      tags: [test_fixture]
+    common_knowledge:
+      - Arel Voss keeps a room upstairs.
+      - The man by the door watches who enters after dusk.
+    portrait: null
+
+  - id: npc.fog.keeper
+    name: Jorun Pike
+    descriptor: a hard-eyed guard by the stairs
+    kind: npc
+    location: loc.fog.tavern
+    true_sheet:
+      aptitudes: {might: 7, finesse: 4, wits: 5, will: 7, presence: 4, lore: 2}
+      threat_band: 7
+      tags: [guarded, test_fixture]
+    common_knowledge:
+      - The guard by the stairs does not trade names lightly.
+    portrait: null
+
+  - id: creature.fog.slime
+    name: a ditch slime
+    kind: creature
+    location: loc.fog.tavern
+    true_sheet:
+      aptitudes: {might: 2, finesse: 3, wits: 1, will: 2, presence: 1, lore: 1}
+      threat_band: 2
+      tags: [test_fixture]
+    common_knowledge:
+      - It leaves a wet mark on the floor.
+    portrait: null
+
+  - id: prop.fog.board
+    name: the guild board
+    kind: prop
+    location: loc.fog.tavern
+    true_sheet:
+      aptitudes: {might: 0, finesse: 0, wits: 0, will: 0, presence: 0, lore: 0}
+      threat_band: 0
+      tags: [test_fixture]
+    common_knowledge:
+      - Notices curl at the edges.
+    portrait: null

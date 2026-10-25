@@ -1,0 +1,160 @@
+# Universe Canon — Established Anchors (the world's DNA)
+# Team B, Universe Canon v2.
+#
+# ============================================================================================
+# CANON LOCKED 2026-07-14 (George). Every DNA decision reads RESOLVED; nothing FLAGGED remains.
+# The four anchors are confirmed; the six creative decisions are ruled and applied; George's FINAL
+# CONFIRMS (content/canon/decisions-resolved.md, "FINAL CONFIRMS" section) are applied across canon:
+# the 7-settlement base (1 capital + 1 large city + 5 towns + frontier), the two new peoples locked,
+# the burned province far north, regional sects as a first-class repeatable pattern, and the placed
+# Mother Dragon (the Cinder Dam). Sprint 5 worldgen may proceed against this locked base.
+# ============================================================================================
+#
+# These four anchors are already-made decisions (ticket docs/tickets/universe-canon.md). The whole
+# canon is authored to serve them. Worldgen (Sprint 5) and the adjudicator read this file as
+# machine-flags: the `status` values are the rails.
+#
+# status values:
+#   applied    — the canon is authored to this anchor and George has confirmed it.
+#   resolved   — George ruled on this decision (2026-07-14, decisions-resolved.md); applied across canon.
+# (v1's confirm_number / confirm_new / FLAGGED states are all closed: canon is locked.)
+
+anchors:
+  - id: anchor.low_magic
+    name: Low magic
+    status: applied
+    statement: >-
+      Magic is rare, narrow, and paid for. No effect is a permission; every effect is a
+      purchase the engine collects (components, time, permanence, corruption, attention —
+      docs/lore/03-magic-cost-ledger.md). Resurrection is tricky-but-possible via the Five
+      Laws. This is not a high-magic world: no fireballs on tap, no everyday enchantment.
+    applied_in: [cosmology-powers.yaml, docs/lore/03-magic-cost-ledger.md]
+    resolved_note: >-
+      CONFIRMED (George 2026-07-14): battle-magic (thrown fire, speech across distance) is the ceiling
+      for arcane force — UNVERIFIED, attributed to the capital's war-colleges, sealed-tier-if-real,
+      rare, distant, cost-ledgered, never common. Locked.
+
+  - id: anchor.pre_gunpowder_ceiling
+    name: Medieval, pre-gunpowder tech ceiling
+    status: applied
+    statement: >-
+      Classic-fantasy medieval technology. Metallurgy, smithing, and alchemy exist. Gunpowder
+      and firearms do NOT exist yet. Gunpowder is an ACHIEVABLE, world-changing, sealed-tier
+      invention whose components exist under in-world names (nitre, brimstone, charcoal). This
+      is the model for all real-world knowledge enacted through in-world materials.
+    applied_in: [sciences-tech.yaml, materials.yaml]
+    resolved_note: >-
+      CONFIRMED (George 2026-07-14): the reachable sealed-invention set (gunpowder + printing press,
+      distillation, lensed glass, cheap paper, crucible steel, water-driven trip-hammer) and the
+      beyond-horizon set (steam/electricity/firearms-proper, gated behind prerequisite sealed feats)
+      both stand. Locked.
+
+  - id: anchor.monster_ladder
+    name: Slime -> dragon monster ladder
+    status: resolved
+    statement: >-
+      The absolute (never level-scaled) threat ladder runs slime -> goblin -> orc/ogre ->
+      wyvern -> dragon, with undead, giant-kin, aberration, and construct as parallel tracks.
+      Dragons are top-tier and rare. Bands are the engine's threat_band scale
+      (everquill_engine/ladder.py): average adult aptitude is 3; wyvern (the Quarryman) is 14.
+    applied_in: [bestiary.yaml, map.yaml]
+    resolved_note: >-
+      CONFIRMED (George 2026-07-14): top-band numbers stand — young dragons band 18-24, ancient/
+      calamity 25-40, so a dragon stays HOPELESS even for an elite veteran. LIVING DRAGON PLACEMENT
+      RESOLVED (FINAL CONFIRM): the singular Mother Dragon — the Cinder Dam (bestiary.yaml
+      `mother_dragon`, creature.cindermarch.cinder_dam) — is the placed calamity-class living apex,
+      seated in the burned north (region.cindermarch), with her scattered young (wyverns/drakes) across
+      the frontier. She is the endgame target; felling her opens `beyond_the_ladder` (off-ladder,
+      unstatted, the escalation above dragons). Locked.
+
+  - id: anchor.bottomless_core
+    name: Bottomless, extensible core (like the Quill)
+    status: applied
+    statement: >-
+      The canon is a strong authored CORE, not a finite closed set. Player/worldgen discovery
+      extends it, gated by the fit-check (consistency-contract.yaml). Accepted novelties are
+      appended to canon permanently (the precedent-ledger pattern). The Quill's final answer is
+      the one permanently-unsatisfiable claim (docs/lore/06-quill-cosmology.md) — revelations
+      deepen, never close.
+    applied_in: [consistency-contract.yaml, cosmology-powers.yaml, map.yaml]
+    resolved_note: >-
+      CONFIRMED (George 2026-07-14): "append on accept" is the growth model — worldgen and the
+      adjudicator may ADD rungs/materials/texts/regions/sects that pass the fit-check, and those become
+      as canonical as the seated base. The base never shrinks; it only accretes. This is exactly how
+      the frontier grows past the 7-settlement base and how new regional sects are minted. Locked.
+
+# George's six DNA rulings (2026-07-14, content/canon/decisions-resolved.md) + his FINAL CONFIRMS.
+# These were the open creative decisions Team B flagged in v1; George reviewed, ruled, and confirmed
+# the details. ALL are now RESOLVED and applied across the canon — nothing here is flagged or pending.
+resolved_decisions:
+  - id: dec.demon_lord_truth
+    status: resolved
+    file: docs/lore/08-demon-lord-dossier.md
+    ruling: >-
+      Decision 1. The Demon Lord is a DEAD MYTH and/or PROPAGANDA — not a living being. Real-once-
+      and-dead, or never-real, and the legend is MAINTAINED either way. Who benefits from keeping it
+      alive is the hook (cui bono). The church's KNOWN dossier (a living Demon King) is unchanged and
+      stays narrator-safe; the TRUE half is rewritten to the ruling and never reaches narrator context.
+      Bottomless: no body to find, so the domain bottoms toward the maintenance, never a kill.
+  - id: dec.demihumans_exist
+    status: resolved
+    file: content/canon/peoples-factions.yaml
+    ruling: >-
+      Decision 2 + FINAL CONFIRM. Demihumans EXIST (attested but rare; humans dominant) — elves/
+      dwarves/beastfolk confirmed. The two more grounded peoples are now LOCKED IN (names + split
+      confirmed, no longer flagged): halfling-kin (the steadfolk — the integrated farm-country people,
+      seated at region.milbury) and orc-kin (the marchfolk — a settled frontier people distinct from
+      feral bestiary.orc, the region.fellmarch borderland). Interbreeding is canon: people.mixed_heritage
+      (half-kin real, rare, regional attitudes vary, a playable lineage tying to the heir/legacy system).
+  - id: dec.single_god
+    status: resolved
+    file: [content/canon/cosmology-powers.yaml, content/canon/peoples-factions.yaml]
+    ruling: >-
+      Decision 3. The Quill is the SOLE TRUE creator/ruler (real metaphysics; there genuinely IS a
+      System). Worship is PLURAL and REGIONAL: the Open Page and the Blotted are two interpretations;
+      other regions hold their own sects, names, and rites of the same true Quill (quill_worship_regional
+      in cosmology-powers.yaml). One god, many faces. No rival pantheon; other "gods" stay local saints.
+  - id: dec.beyond_the_ladder
+    status: resolved
+    file: [content/canon/bestiary.yaml, content/canon/map.yaml]
+    ruling: >-
+      Decision 4 + FINAL CONFIRM. Dragons (bestiary.dragon_young / dragon_ancient) are the CURRENT
+      apex and STAND (top-band numbers now confirmed under anchor.monster_ladder). FINAL CONFIRM:
+      scatter the dragon-kin as smaller/younger instances across the frontier (the Quarryman +
+      creature.fellmarch.screel / .corrie_drake / creature.cindermarch.ashling) AND place ONE singular
+      living apex — the MOTHER DRAGON, the Cinder Dam (bestiary.yaml `mother_dragon`,
+      creature.cindermarch.cinder_dam), calamity-class top living band, the source her brood descends
+      from, seated in the burned north (region.cindermarch), placed but distant/sealed-approach, the
+      endgame "top." Per bottomless, the apex is not the final ceiling: the off-ladder, UNSTATTED
+      `beyond_the_ladder` hook opens only when the Cinder Dam FALLS. A hook, never a stat block; never
+      worldgen-spawned; may touch the Quill question but never resolve it.
+  - id: dec.church_regional_sects
+    status: resolved
+    file: [content/canon/cosmology-powers.yaml, content/canon/peoples-factions.yaml, content/canon/map.yaml]
+    ruling: >-
+      Decision 5 + FINAL CONFIRM. Open Page / the Blotted confirmed as the two poles. Regional
+      Quill-interpretation is now a FIRST-CLASS, REPEATABLE PATTERN (the world is large): each region/
+      major settlement MAY carry its own sect/reading, and worldgen/authoring MAY mint a new one per new
+      region (cosmology-powers.yaml `quill_worship_regional.pattern`; map.yaml regions carry an optional
+      `sect:` field). The three seeded examples are confirmed: the Crown's Hand (capital's statist high
+      church), the Scored Page (the burned north's grief-church), the Fen Kalendar (the western meres'
+      folk reading). Same true Quill, other names and readings by region (decision 3).
+  - id: dec.initial_map
+    status: resolved
+    file: [docs/lore/13-world-map.md, content/canon/map.yaml]
+    ruling: >-
+      Decision 6 + FINAL CONFIRM. Base map AUTHORED and LOCKED. Scale CONFIRMED: one KINGDOM (Aldreth,
+      name approved) inside a larger UNMAPPED world, sized to exactly 1 CAPITAL (Aldcaster) + 1 LARGE
+      CITY (Severwick) + 5 TOWNS (Harrowdown, Dunmere, Cranholt, and the two authored this pass —
+      Larkhythe on the South Road river-corridor, Milbury the steadfolk farm town), with everything past
+      the 7 frontier-open. Harrowdown is a vale in the Lundmarch province (seat Severwick); civilized
+      south (Severwick -> the capital Aldcaster, the war-colleges) and wild north (the Fellmarch high
+      country -> the burned Cindermarch FAR NORTH, dragon country, records carried south to Severwick,
+      the placed Cinder Dam). Frontier-open edges (Fellmarch, the Meres, the beyond) are where worldgen
+      expands. Names APPROVED (Aldreth/Aldcaster/Lundmarch/Cindermarch/Fellmarch/Meres). Human-readable:
+      docs/lore/13-world-map.md; machine surface: content/canon/map.yaml.
+
+# STANDING anchors — CONFIRMED and LOCKED (George 2026-07-14): the low-magic ceiling (battle-magic =
+# war-colleges, sealed-if-real); the reachable/beyond invention split; the top dragon bands (18-40,
+# extended by dec.beyond_the_ladder and now with the placed Cinder Dam); append-on-accept growth.
+# Nothing on this file remains open: CANON LOCKED.

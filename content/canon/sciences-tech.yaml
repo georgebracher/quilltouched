@@ -1,0 +1,222 @@
+# Universe Canon — Sciences & Tech Ceiling (what is KNOWN vs what is BEYOND)
+# Team B, Universe Canon v1 (DRAFT). Category: 6 of 8.
+#
+# The explicit statement of the tech ceiling (anchor.pre_gunpowder_ceiling) and the space
+# inventions push into. Two parts: FIELDS (where the ceiling sits per discipline) and INVENTIONS
+# (named points past the ceiling, tiered). This is what the adjudicator reads to rule on a
+# "real-world knowledge enacted through in-world materials" attempt (roadmap 3.7).
+#
+# tiers:
+#   mundane / craft — at or below the ceiling; freely done (with a specialist for craft).
+#   sealed          — ACHIEVABLE past the ceiling; a component-list feat (the gunpowder pattern).
+#                     On success it is APPENDED to canon permanently (anchor.bottomless_core).
+#   beyond          — no current route; gated behind prerequisite sealed feats (a tech tree of
+#                     sealed feats). The adjudicator REJECTS until prerequisites are met. NOT
+#                     impossible — just far up the invention tree.
+#   impossible      — violates universe physics; the attempt is a deed but never a route
+#                     (docs/lore/02, /12). Only the explicit list below.
+
+# ---------- FIELDS: where the ceiling sits ----------
+tech_fields:
+
+  - id: tech.field_metallurgy
+    name: metallurgy
+    kind: field
+    tier: craft
+    ceiling: Bloomery iron, carburized steel, bronze casting, shaped plate armor.
+    beyond: The blast furnace and crucible steel in quantity (sealed); true alloy science (beyond).
+    components: [material.iron, material.charcoal, material.limestone]
+    instances: []
+
+  - id: tech.field_alchemy
+    name: chemistry / alchemy
+    kind: field
+    tier: craft
+    ceiling: >-
+      Empirical preparation — distillation of spirits and weak acids, mordants, pigments, curing
+      salts. NO theory of elements. Results depend on trace conditions and are documented, not
+      deduced.
+    beyond: Strong mineral acids and black powder (sealed); a real chemistry (beyond).
+    components: [material.nitre, material.brimstone, material.vitriol]
+    instances: []
+
+  - id: tech.field_mechanics
+    name: mechanics / engineering
+    kind: field
+    tier: craft
+    ceiling: >-
+      Levers, gears, waterwheels, windlasses, the arch, the trebuchet, the crossbow lock. The top
+      of muscle-, water-, and wind-powered machinery.
+    beyond: Precision mechanism and the trip-hammer (sealed); the mechanical clock (sealed->beyond); steam power (beyond).
+    components: [material.iron, material.oak, material.bronze]
+    instances: []
+
+  - id: tech.field_physic
+    name: medicine / physic
+    kind: field
+    tier: craft
+    ceiling: Empirical wound-care, bone-setting, amputation, herb-drugs. Hygiene as custom.
+    beyond: Germ theory and the microscope (beyond — needs lensed glass first); real surgery (beyond).
+    components: [flora.woundwort, flora.willowbark, material.flax]
+    instances: []
+
+  - id: tech.field_optics
+    name: optics / glass
+    kind: field
+    tier: craft
+    ceiling: Green bottle-glass, costly clear glass, mirror-backing. Windows for the rich.
+    beyond: Ground lenses — spectacles, the burning-glass, and eventually the far-glass (sealed).
+    components: [material.sand, material.potash, material.glass]
+    instances: []
+
+  - id: tech.field_agriculture
+    name: agriculture
+    kind: field
+    tier: mundane
+    ceiling: Ox-plough, three-field rotation, water-mill milling, seasonal storage. Yield is weather.
+    beyond: Selective breeding at scale and soil chemistry (beyond); no quick fix for a lean season.
+    components: [flora.barley, flora.flax]
+    instances: []
+
+  - id: tech.field_scribing
+    name: scribing / records
+    kind: field
+    tier: craft
+    ceiling: Hand-copied parchment, iron-gall ink, wax seals. Every copy is a labor and a risk.
+    beyond: Cheap rag paper and the printing press (sealed) — the knowledge-multiplier invention.
+    components: [material.parchment, item_archetype.iron_gall_ink, material.flax]
+    instances: []
+
+# ---------- INVENTIONS: named points past the ceiling ----------
+inventions:
+
+  # ===== THE FLAGSHIP =====
+  - id: tech.black_powder
+    name: black powder (gunpowder)
+    kind: invention
+    tier: sealed
+    ceiling: Does NOT exist. The world knows fire, brimstone matches, and nitre wall-salt separately.
+    beyond: >-
+      The world-changing sealed feat. Components exist under in-world names; the PRODUCT and the
+      PROCESS (the correct proportion, milling, corning) do not. Knowing the idea gives direction,
+      never omnipotence: wrong proportions fail reproducibly and dangerously. On acceptance it is
+      appended to canon permanently — a massive-notoriety deed, faction reactions, forbidden-
+      knowledge exposure, and an economy shift. Carries resurrection-tier costs and attention BY
+      DESIGN (roadmap 3.7). The exemplar every other invention is judged against.
+    components: [material.nitre, material.brimstone, material.charcoal]
+    instances: []
+
+  # ===== OTHER REACHABLE SEALED INVENTIONS (the gunpowder pattern) =====
+  - id: tech.printing_press
+    name: the printing press
+    kind: invention
+    tier: sealed
+    ceiling: Hand-copying only; every book is a scribe's season (text.parish_rolls fallibility follows).
+    beyond: >-
+      Movable type is bottlenecked on precision metalwork and on cheap paper (tech.rag_paper) — a
+      dependency graph, not a recipe (the Bookworm model). Its social payload is enormous: it breaks
+      the church/guild monopoly on the written KNOWN sheet. A prime sealed research arc.
+    components: [material.lead, material.iron, material.flax]
+    instances: []
+
+  - id: tech.distillation
+    name: distillation (aqua vitae & acids)
+    kind: invention
+    tier: sealed
+    ceiling: Ale and wine (fermentation) exist; the still and strong spirits do not.
+    beyond: >-
+      The still unlocks strong spirits (from barley), concentrated tinctures, and — the dangerous
+      branch — stronger acids (with nitre and vitriol). A feedstock invention that other sealed
+      feats depend on.
+    components: [flora.barley, material.vitriol, material.copper]
+    instances: []
+
+  - id: tech.lensed_glass
+    name: lensed glass (spectacles, burning-glass, far-glass)
+    kind: invention
+    tier: sealed
+    ceiling: Clear glass exists; ground optical lenses do not.
+    beyond: >-
+      Grinding a clear blank to a true curve yields spectacles (a quiet revolution for scribes and
+      the old), the burning-glass (fire without flint), and eventually the far-glass. A prerequisite
+      the microscope (and thus germ theory) waits on — which is why medicine's real leap is `beyond`.
+    components: [material.glass, material.sand]
+    instances: []
+
+  - id: tech.rag_paper
+    name: rag paper
+    kind: invention
+    tier: sealed
+    ceiling: Parchment only — durable, costly, and it rations who may keep records.
+    beyond: >-
+      Cheap paper from linen rag pulp. On its own it lowers the price of a KNOWN sheet; paired with
+      the press it changes who controls knowledge. The humbler half of the printing revolution.
+    components: [material.flax]
+    instances: []
+
+  - id: tech.crucible_steel
+    name: crucible steel & the blast furnace
+    kind: invention
+    tier: sealed
+    ceiling: Bloomery iron and carburized steel by a smith; small batches, guild secrets.
+    beyond: >-
+      Melting steel in quantity — better blades, springs, and the metalwork every other invention
+      (type, mechanism, barrels) needs. The metallurgical spine of the sealed tech tree.
+    components: [material.iron, material.charcoal, material.limestone]
+    instances: []
+
+  - id: tech.trip_hammer
+    name: water-driven trip-hammer & precision mechanism
+    kind: invention
+    tier: sealed
+    ceiling: Waterwheels grind grain and full cloth; they do not yet forge or bore.
+    beyond: >-
+      Water power applied to the forge (the trip-hammer) and to precise, repeatable mechanism. The
+      bridge from muscle-craft to early machine-craft; a prerequisite for a mechanical clock.
+    components: [material.oak, material.iron, material.bronze]
+    instances: []
+
+  # ===== BEYOND THE HORIZON (no current route; gated behind prerequisite sealed feats) =====
+  - id: tech.firelock
+    name: the firelock (firearms)
+    kind: invention
+    tier: beyond
+    ceiling: Bows, crossbows, and the tinderbox spark. No firearm exists.
+    beyond: >-
+      Requires black powder (sealed) AND a cast/bored barrel (sealed, from bronze/crucible steel)
+      AND a spring lock. A tree of sealed feats — the adjudicator rejects a "make a gun" attempt
+      until the prerequisites are themselves canon. This is HOW the tech tree stays honest.
+    components: [tech.black_powder, material.bronze, material.flint, material.steel]
+    instances: []
+
+  - id: tech.mechanical_clock
+    name: the mechanical clock (precision time)
+    kind: invention
+    tier: beyond
+    ceiling: Sun, sand, water, and the church bell mark the hours. Time is a rhythm, not a number.
+    beyond: Requires precision mechanism (sealed) and fine metalwork; the escapement is the hard part.
+    components: [material.steel, material.bronze]
+    instances: []
+
+  - id: tech.steam_power
+    name: steam power
+    kind: invention
+    tier: beyond
+    ceiling: Water and wind and muscle. No engine that is not alive or falling.
+    beyond: >-
+      Requires crucible steel, precision mechanism, AND a metallurgy of pressure vessels — a deep
+      tree. Reachable only in principle; a multi-generation project, and the far horizon of the
+      bottomless core. Never IMPOSSIBLE, just very far.
+    components: [tech.crucible_steel, tech.trip_hammer]
+    instances: []
+
+# ---------- IMPOSSIBLE (physics-violating; the attempt is a deed, never a route) ----------
+# From docs/lore/02 and /12. These get NO roll and NO adjudicator route. Fiction reacts to the
+# attempt (the vale's word is "cloud-shouter") and logs the deed with social consequences.
+impossible:
+  - Unmaking a written deed (the log is append-only in the world as in the engine).
+  - Raising the dead by grief alone (resurrection is the Five Laws, or it is nothing).
+  - Flight by wanting it.
+  - Speech across distance by will alone (if far-magic manages it, it is sealed and cost-ledgered, never willed).
+  - Any "log out," respawn, patch, or menu — the System is not software (docs/lore/12, no VRMMO logic).
+  - Proving what the Quill is — the one permanently-unsatisfiable claim (docs/lore/06).

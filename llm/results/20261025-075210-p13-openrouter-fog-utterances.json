@@ -1,0 +1,218 @@
+{
+  "overall": 1.0,
+  "passed": 98,
+  "total": 98,
+  "subtotals": {
+    "v1.2 fields": {
+      "ok": 62,
+      "n": 62
+    },
+    "v1.3 fields": {
+      "ok": 36,
+      "n": 36
+    }
+  },
+  "fields": {
+    "schema_valid": {
+      "ok": 6,
+      "n": 6
+    },
+    "action_type": {
+      "ok": 6,
+      "n": 6
+    },
+    "target_entity_ids": {
+      "ok": 6,
+      "n": 6
+    },
+    "stat_hint": {
+      "ok": 6,
+      "n": 6
+    },
+    "plausibility_hint": {
+      "ok": 6,
+      "n": 6
+    },
+    "ambiguity_flags": {
+      "ok": 6,
+      "n": 6
+    },
+    "dialogue.presence": {
+      "ok": 6,
+      "n": 6
+    },
+    "dialogue.addressee_id": {
+      "ok": 4,
+      "n": 4
+    },
+    "dialogue.quoted_speech": {
+      "ok": 4,
+      "n": 4
+    },
+    "duration_hint.presence": {
+      "ok": 6,
+      "n": 6
+    },
+    "approach": {
+      "ok": 6,
+      "n": 6
+    },
+    "addressee": {
+      "ok": 6,
+      "n": 6
+    },
+    "speech_act": {
+      "ok": 6,
+      "n": 6
+    },
+    "movement_scope": {
+      "ok": 6,
+      "n": 6
+    },
+    "transaction": {
+      "ok": 6,
+      "n": 6
+    },
+    "topic_ids": {
+      "ok": 6,
+      "n": 6
+    },
+    "invoked_law_ids": {
+      "ok": 6,
+      "n": 6
+    }
+  },
+  "gates_ok": true,
+  "api_errors": [],
+  "misses": [],
+  "raw": {
+    "fo-001": {
+      "action_type": "dialogue",
+      "target_entity_ids": [
+        "person_3"
+      ],
+      "approach": "inquire about the wary man's ruined left arm",
+      "stat_hint": null,
+      "dialogue": {
+        "addressee_id": "person_3",
+        "quoted_speech": null
+      },
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": [],
+      "addressee": "person",
+      "speech_act": "question",
+      "topic_ids": [],
+      "transaction": null,
+      "invoked_law_ids": [],
+      "movement_scope": null
+    },
+    "fo-002": {
+      "action_type": "dialogue",
+      "target_entity_ids": [
+        "person_4"
+      ],
+      "approach": "seeking information about the Quarryman",
+      "stat_hint": null,
+      "dialogue": {
+        "addressee_id": "person_4",
+        "quoted_speech": null
+      },
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": [],
+      "addressee": "person",
+      "speech_act": "question",
+      "topic_ids": [
+        "creature_harrowdown_quarryman"
+      ],
+      "transaction": null,
+      "invoked_law_ids": [],
+      "movement_scope": null
+    },
+    "fo-003": {
+      "action_type": "observation",
+      "target_entity_ids": [
+        "person_3"
+      ],
+      "approach": "studying the wary man's bearing, posture, and demeanor",
+      "stat_hint": "wits",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": [],
+      "addressee": null,
+      "speech_act": null,
+      "topic_ids": [],
+      "transaction": null,
+      "invoked_law_ids": [],
+      "movement_scope": null
+    },
+    "fo-004": {
+      "action_type": "social",
+      "target_entity_ids": [
+        "person_4"
+      ],
+      "approach": "ordering a drink",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": [],
+      "addressee": "person",
+      "speech_act": "statement",
+      "topic_ids": [],
+      "transaction": {
+        "kind": "buy",
+        "price_key": "ale_pint_copper",
+        "count": 1
+      },
+      "invoked_law_ids": [],
+      "movement_scope": null
+    },
+    "fo-005": {
+      "action_type": "dialogue",
+      "target_entity_ids": [
+        "person_4"
+      ],
+      "approach": "asking about the hard-faced man who works Market Row",
+      "stat_hint": null,
+      "dialogue": {
+        "addressee_id": "person_4",
+        "quoted_speech": null
+      },
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": [],
+      "addressee": "person",
+      "speech_act": "question",
+      "topic_ids": [
+        "person_5"
+      ],
+      "transaction": null,
+      "invoked_law_ids": [],
+      "movement_scope": null
+    },
+    "fo-006": {
+      "action_type": "dialogue",
+      "target_entity_ids": [
+        "person_3"
+      ],
+      "approach": "introduce yourself and ask for his name in return",
+      "stat_hint": null,
+      "dialogue": {
+        "addressee_id": "person_3",
+        "quoted_speech": null
+      },
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": [],
+      "addressee": "person",
+      "speech_act": "introduction",
+      "topic_ids": [],
+      "transaction": null,
+      "invoked_law_ids": [],
+      "movement_scope": null
+    }
+  }
+}

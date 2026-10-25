@@ -1,0 +1,243 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:quilltouched:contracts:narration_context",
+  "title": "NarrationContext",
+  "description": "The context assembler's output envelope: the ONLY state that may reach the narrator, alongside a ResolvedOutcome. LEAK AUDIT ANCHOR: true-sheet fields are structurally absent from this schema by design -- there is no place to put a real stat, difficulty, or hidden motive, and additionalProperties:false at every level means any attempt to smuggle one is a schema violation, not a style problem. CI leak audits validate every narrator payload against this file. Selection is deterministic (structured queries, never vector similarity); the assembler owns the token budget and the summarize-vs-quote policy. All declared fields are required; absence is expressed as null or [].",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "scene_manifest",
+    "known_sheet_slices",
+    "salient_claims",
+    "active_clocks",
+    "canon_excerpts",
+    "token_budget",
+    "assembly"
+  ],
+  "properties": {
+    "scene_manifest": {
+      "description": "The PERCEIVED scene -- the fog-of-warred subset of true scene state the player character can currently perceive. Same object the client tableau renders from: every entity here is guaranteed real and committed.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["location_id", "label_known", "world_time", "entities"],
+      "properties": {
+        "location_id": { "$ref": "#/$defs/entity_id" },
+        "label_known": {
+          "description": "Location name as the player knows it; null if the place is unidentified.",
+          "anyOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }]
+        },
+        "world_time": { "description": "World-calendar timestamp string (Chronicle-exact).", "type": "string", "minLength": 1 },
+        "entities": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/perceived_entity" }
+        }
+      }
+    },
+    "known_sheet_slices": {
+      "description": "Chronicle-layer slices for entities relevant this turn: exact, immutable, authoritative facts of record (time, coin, inventory, wounds, named abilities, public guild rank, post-roll dice history). The narrator CANNOT contradict anything here. Never contains true-sheet values -- only facts already of record for the player.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["entity_id", "facts"],
+        "properties": {
+          "entity_id": { "$ref": "#/$defs/entity_id" },
+          "facts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["field", "value"],
+              "properties": {
+                "field": { "type": "string", "minLength": 1 },
+                "value": { "type": ["string", "number", "boolean"] }
+              }
+            }
+          }
+        }
+      }
+    },
+    "salient_claims": {
+      "description": "Inquiry-layer claims selected deterministically (top-K by subject/location/recency). Fallible KNOWN: may be incomplete, outdated, or confidently wrong -- the narrator treats these as what the character believes, with provenance, never as world truth.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/claim" }
+    },
+    "active_clocks": {
+      "description": "World clocks the player knows about that bear on this scene (timers, deadlines, pressure fronts). Only player-known clocks are ever assembled.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["clock_id", "label", "due_world_time", "progress_text"],
+        "properties": {
+          "clock_id": { "$ref": "#/$defs/entity_id" },
+          "label": { "type": "string", "minLength": 1 },
+          "due_world_time": {
+            "anyOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }]
+          },
+          "progress_text": {
+            "description": "Fictional progress stage ('cataloguing -> cross-referencing'), not digits.",
+            "anyOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }]
+          }
+        }
+      }
+    },
+    "canon_excerpts": {
+      "description": "Lore-bible / precedent-ledger material selected for this turn, each carrying the assembler's summarize-vs-quote decision.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_ref", "mode", "text"],
+        "properties": {
+          "source_ref": { "description": "Stable reference into the lore bible or precedent ledger.", "type": "string", "minLength": 1 },
+          "mode": { "enum": ["quote", "summary"] },
+          "text": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "token_budget": {
+      "description": "The assembler-owned budget for the narrator call (~2-3k target per roadmap 4).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_tokens", "policy"],
+      "properties": {
+        "max_tokens": { "type": "integer", "minimum": 1 },
+        "policy": { "enum": ["prefer_quotes", "prefer_summaries", "mixed"] }
+      }
+    },
+    "assembly": {
+      "description": "Assembler provenance (v1.1): version stamp, content hash, and the machine-readable trace of the LAST committed resolution -- always present so the narrator can never re-narrate the previous outcome (synthesis 2.4 section 7 / pitfall 4). Logged as an event by the caller.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assembler_version", "content_hash", "last_resolution"],
+      "properties": {
+        "assembler_version": { "type": "string", "minLength": 1 },
+        "content_hash": {
+          "description": "sha256 hex of the canonical envelope serialization (sorted keys, compact separators, ensure_ascii) computed with this field set to the empty string.",
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "last_resolution": {
+          "description": "Trace of the previous committed resolution. Null ONLY at world start (no prior resolution exists); the section itself is never evicted.",
+          "anyOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/resolution_trace" }
+          ]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "entity_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "resolution_trace": {
+      "description": "KNOWN-safe machine trace of one committed resolution: everything here is post-roll Chronicle data the player already saw. No true-sheet values can travel here.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_id", "action_summary", "tier_resolved", "outcome_tier", "dice_total"],
+      "properties": {
+        "event_id": { "type": "string", "minLength": 1 },
+        "action_summary": {
+          "description": "One-line factual summary of the resolved action (from the parsed approach, not prose).",
+          "type": "string",
+          "minLength": 1
+        },
+        "tier_resolved": { "enum": ["trivial", "routine", "risky", "desperate", "hopeless", "sealed", "impossible"] },
+        "outcome_tier": { "enum": ["strong_hit", "hit_with_complication", "miss", null] },
+        "dice_total": {
+          "description": "Post-roll total (rolls + modifiers); null when no roll occurred.",
+          "anyOf": [{ "type": "null" }, { "type": "integer" }]
+        }
+      }
+    },
+    "perceived_entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entity_id", "label_known", "category", "position", "state_tags"],
+      "properties": {
+        "entity_id": { "$ref": "#/$defs/entity_id" },
+        "label_known": {
+          "description": "Name as the player knows it ('Warden Hessa') or a perceptual description ('a scarred guard') when unidentified.",
+          "type": "string",
+          "minLength": 1
+        },
+        "category": { "description": "Entity category (person, creature, item, feature) -- drives silhouettes and common-sense tier.", "type": "string", "minLength": 1 },
+        "position": {
+          "description": "Tableau placement, normalized 0..1; null for ambient/off-tableau presences.",
+          "anyOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["x", "y"],
+              "properties": {
+                "x": { "type": "number", "minimum": 0, "maximum": 1 },
+                "y": { "type": "number", "minimum": 0, "maximum": 1 }
+              }
+            }
+          ]
+        },
+        "state_tags": {
+          "description": "Externally visible conditions only (wounded, asleep, armed). Never internal state.",
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "uniqueItems": true
+        }
+      }
+    },
+    "claim": {
+      "description": "Full Inquiry claim with provenance (roadmap 3.3 claim schema). UI shows provenance, never confidence bars; confidence = evidence consistency, never truth-probability. Keep in lockstep with outcome.schema.json#/$defs/claim_write (duplicated deliberately, see README).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "claim_id",
+        "subject_entity_id",
+        "claim_text",
+        "value_or_range",
+        "source",
+        "observer",
+        "method",
+        "world_date",
+        "scope",
+        "confidence",
+        "corroboration_ids",
+        "contradiction_ids",
+        "inheritance_status"
+      ],
+      "properties": {
+        "claim_id": { "type": "string", "minLength": 1 },
+        "subject_entity_id": { "$ref": "#/$defs/entity_id" },
+        "claim_text": { "type": "string", "minLength": 1 },
+        "value_or_range": {
+          "anyOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }]
+        },
+        "source": { "description": "Named source ('Warden Hessa', 'the Ballad of Red Vermithrax').", "type": "string", "minLength": 1 },
+        "observer": {
+          "description": "Who made the observation, when distinct from the source; null if unknown.",
+          "anyOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }]
+        },
+        "method": { "description": "Acquisition method (witnessed, appraisal_ii, archive_research, rumor, inherited_journal, ...).", "type": "string", "minLength": 1 },
+        "world_date": { "type": "string", "minLength": 1 },
+        "scope": { "type": "string", "minLength": 1 },
+        "confidence": { "enum": ["uncorroborated", "consistent", "strongly_corroborated"] },
+        "corroboration_ids": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "contradiction_ids": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "inheritance_status": {
+          "description": "original = first-hand this character; inherited = via journal/estate with qualifiers intact; inherited_incomplete = the note lost its qualifier (canonical wrong-intel mechanism).",
+          "enum": ["original", "inherited", "inherited_incomplete"]
+        }
+      }
+    }
+  }
+}

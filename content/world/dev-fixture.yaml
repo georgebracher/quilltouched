@@ -1,0 +1,84 @@
+# =============================================================================
+# DEV FIXTURE — REPLACED BY TEAM B'S REGION
+# =============================================================================
+# Minimal world for the Sprint-1 CLI fun-or-kill test: one tavern, three NPCs
+# spanning the plausibility ladder, one sealed law, one impossible law.
+# Format is LOCKED by docs/tickets/sprint-1.md interface decision #3
+# (loader: everquill_engine/world.py — errors carry file:line:[id]).
+# The `laws:` section is Team A's documented optional extension for authored
+# sealed/impossible overrides (see docs/engine/stats.md §Laws).
+# TRUE SHEETS BELOW ARE SERVER-SIDE CONFIG: they never reach the client,
+# the log, or any narrator context path.
+
+locations:
+  - id: loc.dev.tavern
+    name: The Inkwell Rest
+    type: tavern
+    region: dev
+    connections: []
+
+entities:
+  - id: npc.dev.hedda
+    name: Hedda Marle
+    kind: npc
+    location: loc.dev.tavern
+    true_sheet:
+      aptitudes: {might: 5, finesse: 6, wits: 8, will: 9, presence: 8, lore: 6}
+      threat_band: 5
+      tags: [barkeep, local_fixture]
+    common_knowledge:
+      - Hedda Marle has kept the Inkwell Rest for twenty years and forgets no tab.
+      - Nothing moves through this town that Hedda does not hear about by nightfall.
+    portrait: null
+
+  - id: npc.dev.sorrel
+    name: Sorrel Vane
+    kind: npc
+    location: loc.dev.tavern
+    true_sheet:
+      aptitudes: {might: 4, finesse: 5, wits: 11, will: 7, presence: 6, lore: 12}
+      threat_band: 8
+      tags: [scholar, church_lapsed]
+    common_knowledge:
+      - Sorrel Vane copies ledgers for the guild hall and reads three dead scripts.
+      - The Skill Church struck Sorrel's name from its rolls, and nobody says why.
+    portrait: null
+
+  - id: npc.dev.torvald
+    name: Torvald Ashmane
+    kind: npc
+    location: loc.dev.tavern
+    true_sheet:
+      aptitudes: {might: 16, finesse: 12, wits: 9, will: 14, presence: 10, lore: 5}
+      threat_band: 20
+      tags: [veteran, drillmaster]
+    common_knowledge:
+      - Torvald Ashmane drilled two generations of guild blades before his knee went.
+      - They say Torvald once held a bridge alone through a whole night of the war.
+    portrait: null
+
+prices:
+  inn_night_copper: 6
+  ale_copper: 1
+  stew_copper: 2
+
+rumor_seeds:
+  - deed: a stranger woke in the Inkwell Rest speaking to something nobody else saw
+    notoriety: 2
+
+laws:
+  - law_id: law.hearth_oath
+    name: The Hearth-Oath
+    tier: sealed
+    action_types: [social]
+    invoke_phrases: ["hearth-oath", "hearth oath"]
+    components: [hearth_token, witness_blessing]
+    on_attempt_incomplete:
+      - the oath does not take; the fire does not answer
+      - the attempt is a deed, witnessed and rumor-seeded
+      - something that keeps oaths has heard your name
+
+  - law_id: law.unwritten_flight
+    name: Unwritten Flight
+    tier: impossible
+    invoke_phrases: [levitate, "sprout wings", "fly across"]

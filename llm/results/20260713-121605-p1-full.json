@@ -1,0 +1,938 @@
+{
+  "overall": 0.9481327800829875,
+  "passed": 457,
+  "total": 482,
+  "fields": {
+    "schema_valid": {
+      "ok": 48,
+      "n": 50
+    },
+    "action_type": {
+      "ok": 43,
+      "n": 50
+    },
+    "target_entity_ids": {
+      "ok": 44,
+      "n": 50
+    },
+    "stat_hint": {
+      "ok": 47,
+      "n": 50
+    },
+    "plausibility_hint": {
+      "ok": 50,
+      "n": 50
+    },
+    "ambiguity_flags": {
+      "ok": 48,
+      "n": 50
+    },
+    "dialogue.presence": {
+      "ok": 49,
+      "n": 50
+    },
+    "duration_hint.presence": {
+      "ok": 50,
+      "n": 50
+    },
+    "approach": {
+      "ok": 47,
+      "n": 50
+    },
+    "dialogue.addressee_id": {
+      "ok": 8,
+      "n": 9
+    },
+    "dialogue.quoted_speech": {
+      "ok": 9,
+      "n": 9
+    },
+    "duration_hint.mode": {
+      "ok": 7,
+      "n": 7
+    },
+    "duration_hint.text": {
+      "ok": 7,
+      "n": 7
+    }
+  },
+  "gates_ok": true,
+  "api_errors": [],
+  "misses": [
+    {
+      "id": "gu-003",
+      "utterance": "I declare myself god of this world",
+      "field": "action_type",
+      "pass": false,
+      "expected": "social",
+      "actual": "meta"
+    },
+    {
+      "id": "gu-011",
+      "utterance": "I begin the rite to bring Aldric back",
+      "field": "action_type",
+      "pass": false,
+      "expected": "physical",
+      "actual": "research"
+    },
+    {
+      "id": "gu-012",
+      "utterance": "Order an ale from the barkeep",
+      "field": "approach",
+      "pass": false,
+      "expected": "casual purchase at the bar",
+      "actual": "'ordering a drink'  [no content overlap with golden approach/utterance]"
+    },
+    {
+      "id": "gu-013",
+      "utterance": "Look around the market square",
+      "field": "approach",
+      "pass": false,
+      "expected": "broad unhurried scan of the square",
+      "actual": "'scanning the area for detail and activity'  [no content overlap with golden approach/utterance]"
+    },
+    {
+      "id": "gu-014",
+      "utterance": "I climb the wall behind the stable",
+      "field": "action_type",
+      "pass": false,
+      "expected": "movement",
+      "actual": "physical"
+    },
+    {
+      "id": "gu-016",
+      "utterance": "I sharpen my blade by the fire",
+      "field": "target_entity_ids",
+      "pass": false,
+      "expected": [
+        "itm_shortsword"
+      ],
+      "actual": [
+        "itm_shortsword",
+        "obj_campfire"
+      ]
+    },
+    {
+      "id": "gu-017",
+      "utterance": "Follow the blood trail the wounded wolf left",
+      "field": "action_type",
+      "pass": false,
+      "expected": "observation",
+      "actual": "movement"
+    },
+    {
+      "id": "gu-020",
+      "utterance": "I rest at the inn until morning",
+      "field": "target_entity_ids",
+      "pass": false,
+      "expected": [
+        "loc_inn_dunmere"
+      ],
+      "actual": []
+    },
+    {
+      "id": "gu-021",
+      "utterance": "I wait here until dusk",
+      "field": "approach",
+      "pass": false,
+      "expected": "settle in and wait, letting the hours pass",
+      "actual": "'waiting in place'  [no content overlap with golden approach/utterance]"
+    },
+    {
+      "id": "gu-024",
+      "utterance": "Tell the barkeep to send two ales over to the corner table",
+      "field": "action_type",
+      "pass": false,
+      "expected": "dialogue",
+      "actual": "social"
+    },
+    {
+      "id": "gu-028",
+      "utterance": "Spend the evening in the archive reading up on the monastery's founding",
+      "field": "target_entity_ids",
+      "pass": false,
+      "expected": [
+        "loc_dunmere_archive",
+        "loc_monastery_pass"
+      ],
+      "actual": [
+        "loc_dunmere_archive"
+      ]
+    },
+    {
+      "id": "gu-031",
+      "utterance": "Practice sword forms in the yard till sundown",
+      "field": "target_entity_ids",
+      "pass": false,
+      "expected": [],
+      "actual": [
+        "obj_practice_post"
+      ]
+    },
+    {
+      "id": "gu-032",
+      "utterance": "I definitely don't stab the gate guard (I stab him)",
+      "field": "stat_hint",
+      "pass": false,
+      "expected": "might",
+      "actual": "finesse"
+    },
+    {
+      "id": "gu-033",
+      "utterance": "I'm not not going to drink that red potion",
+      "field": "ambiguity_flags",
+      "pass": false,
+      "expected": [],
+      "actual": [
+        "contradictory_negation"
+      ]
+    },
+    {
+      "id": "gu-036",
+      "utterance": "i clim the wall behnd teh stable",
+      "field": "stat_hint",
+      "pass": false,
+      "expected": "might",
+      "actual": "finesse"
+    },
+    {
+      "id": "gu-038",
+      "utterance": "I kill some time at the inn until the caravan leaves",
+      "field": "target_entity_ids",
+      "pass": false,
+      "expected": [
+        "loc_inn_dunmere"
+      ],
+      "actual": []
+    },
+    {
+      "id": "gu-044",
+      "utterance": "I knock the ale barrel over and bolt for the door",
+      "field": "schema_valid",
+      "pass": false,
+      "expected": "valid",
+      "actual": "SCHEMA VIOLATION"
+    },
+    {
+      "id": "gu-044",
+      "utterance": "I knock the ale barrel over and bolt for the door",
+      "field": "action_type",
+      "pass": false,
+      "expected": "physical",
+      "actual": "compound_action"
+    },
+    {
+      "id": "gu-044",
+      "utterance": "I knock the ale barrel over and bolt for the door",
+      "field": "stat_hint",
+      "pass": false,
+      "expected": "might",
+      "actual": "finesse"
+    },
+    {
+      "id": "gu-045",
+      "utterance": "Distract the smith with questions about the duke while I pocket a whetstone",
+      "field": "schema_valid",
+      "pass": false,
+      "expected": "valid",
+      "actual": "SCHEMA VIOLATION"
+    },
+    {
+      "id": "gu-045",
+      "utterance": "Distract the smith with questions about the duke while I pocket a whetstone",
+      "field": "action_type",
+      "pass": false,
+      "expected": "social",
+      "actual": "compound_action"
+    },
+    {
+      "id": "gu-045",
+      "utterance": "Distract the smith with questions about the duke while I pocket a whetstone",
+      "field": "dialogue.presence",
+      "pass": false,
+      "expected": null,
+      "actual": "object"
+    },
+    {
+      "id": "gu-048",
+      "utterance": "Ask the guard about the duke's schedule",
+      "field": "target_entity_ids",
+      "pass": false,
+      "expected": [],
+      "actual": [
+        "npc_guard_captain_bren"
+      ]
+    },
+    {
+      "id": "gu-048",
+      "utterance": "Ask the guard about the duke's schedule",
+      "field": "ambiguity_flags",
+      "pass": false,
+      "expected": [
+        "ambiguous_addressee"
+      ],
+      "actual": []
+    },
+    {
+      "id": "gu-048",
+      "utterance": "Ask the guard about the duke's schedule",
+      "field": "dialogue.addressee_id",
+      "pass": false,
+      "expected": null,
+      "actual": "npc_guard_captain_bren"
+    }
+  ],
+  "raw": {
+    "gu-001": {
+      "action_type": "physical",
+      "target_entity_ids": [
+        "crt_dragon_vermithrax"
+      ],
+      "approach": "a deceptive strike, testing the dragon's reaction while committing no real follow-through",
+      "stat_hint": "finesse",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": [
+        "could_be_feint_or_fight"
+      ]
+    },
+    "gu-002": {
+      "action_type": "physical",
+      "target_entity_ids": [
+        "crt_dragon_vermithrax"
+      ],
+      "approach": "direct combat engagement",
+      "stat_hint": "might",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-003": {
+      "action_type": "meta",
+      "target_entity_ids": [],
+      "approach": "declaring self-godhood over the world",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "impossible_in_fiction",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-004": {
+      "action_type": "dialogue",
+      "target_entity_ids": [
+        "npc_guard_captain_bren"
+      ],
+      "approach": "commanding the guard captain to stand aside, invoking business with the duke as authority",
+      "stat_hint": "presence",
+      "dialogue": {
+        "addressee_id": "npc_guard_captain_bren",
+        "quoted_speech": "stand down, we have business with the duke"
+      },
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-005": {
+      "action_type": "research",
+      "target_entity_ids": [
+        "loc_dunmere_archive",
+        "hyp_dragon_soft_underbelly"
+      ],
+      "approach": "searching the archive's records for knowledge about whether dragons share the lizardkin's soft underbelly vulnerability",
+      "stat_hint": "lore",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-006": {
+      "action_type": "train",
+      "target_entity_ids": [
+        "obj_practice_post"
+      ],
+      "approach": "drilling spear techniques repeatedly against the post",
+      "stat_hint": "finesse",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": {
+        "mode": "until_condition",
+        "text": "until the caravan leaves"
+      },
+      "ambiguity_flags": []
+    },
+    "gu-007": {
+      "action_type": "social",
+      "target_entity_ids": [
+        "npc_gate_guard_tam",
+        "itm_gate_keys"
+      ],
+      "approach": "charming Tam with conversation while covertly taking the keys from his belt",
+      "stat_hint": "presence",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": [
+        "compound_action"
+      ]
+    },
+    "gu-008": {
+      "action_type": "dialogue",
+      "target_entity_ids": [
+        "npc_librarian_esme"
+      ],
+      "approach": "asking about dragon anatomy and physical vulnerabilities",
+      "stat_hint": null,
+      "dialogue": {
+        "addressee_id": "npc_librarian_esme",
+        "quoted_speech": null
+      },
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-009": {
+      "action_type": "physical",
+      "target_entity_ids": [
+        "itm_potion_red_small"
+      ],
+      "approach": "drinking the small red potion from your pack",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-010": {
+      "action_type": "movement",
+      "target_entity_ids": [
+        "loc_monastery_pass"
+      ],
+      "approach": "departing at first light for the monastery at the pass",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-011": {
+      "action_type": "research",
+      "target_entity_ids": [
+        "npc_aldric"
+      ],
+      "approach": "performing a resurrection rite",
+      "stat_hint": "lore",
+      "dialogue": null,
+      "plausibility_hint": "dubious",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-012": {
+      "action_type": "social",
+      "target_entity_ids": [
+        "npc_barkeep_odo"
+      ],
+      "approach": "ordering a drink",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-013": {
+      "action_type": "observation",
+      "target_entity_ids": [
+        "loc_market_square"
+      ],
+      "approach": "scanning the area for detail and activity",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-014": {
+      "action_type": "physical",
+      "target_entity_ids": [
+        "obj_stable_wall"
+      ],
+      "approach": "climbing the wall behind the stable",
+      "stat_hint": "might",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-015": {
+      "action_type": "social",
+      "target_entity_ids": [
+        "npc_smith_harl",
+        "itm_shortsword"
+      ],
+      "approach": "haggling down the smith on the price",
+      "stat_hint": "presence",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-016": {
+      "action_type": "craft",
+      "target_entity_ids": [
+        "itm_shortsword",
+        "obj_campfire"
+      ],
+      "approach": "using the whetstone by the campfire's warmth and light to hone the blade",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-017": {
+      "action_type": "movement",
+      "target_entity_ids": [
+        "crt_ash_wolf"
+      ],
+      "approach": "following the blood trail the wounded ash-wolf left behind",
+      "stat_hint": "wits",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-018": {
+      "action_type": "meta",
+      "target_entity_ids": [],
+      "approach": "querying current location",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-019": {
+      "action_type": "craft",
+      "target_entity_ids": [
+        "itm_rabbit_carcass",
+        "obj_campfire"
+      ],
+      "approach": "preparing the rabbit meat over an open flame",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-020": {
+      "action_type": "rest",
+      "target_entity_ids": [],
+      "approach": "lodging and sleeping at the inn",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": {
+        "mode": "until_condition",
+        "text": "until morning"
+      },
+      "ambiguity_flags": []
+    },
+    "gu-021": {
+      "action_type": "rest",
+      "target_entity_ids": [],
+      "approach": "waiting in place",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": {
+        "mode": "until_condition",
+        "text": "until dusk"
+      },
+      "ambiguity_flags": []
+    },
+    "gu-022": {
+      "action_type": "rest",
+      "target_entity_ids": [
+        "obj_campfire"
+      ],
+      "approach": "settling down for a short nap by the warmth of the campfire",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-023": {
+      "action_type": "dialogue",
+      "target_entity_ids": [
+        "npc_gate_guard_tam"
+      ],
+      "approach": "whispering a conspiratorial plea, implying a shared secret that should be kept from Bren",
+      "stat_hint": "presence",
+      "dialogue": {
+        "addressee_id": "npc_gate_guard_tam",
+        "quoted_speech": "Your captain doesn't need to know about this."
+      },
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-024": {
+      "action_type": "social",
+      "target_entity_ids": [
+        "npc_barkeep_odo"
+      ],
+      "approach": "ordering two ales to a corner table via the barkeep",
+      "stat_hint": null,
+      "dialogue": {
+        "addressee_id": "npc_barkeep_odo",
+        "quoted_speech": null
+      },
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-025": {
+      "action_type": "dialogue",
+      "target_entity_ids": [],
+      "approach": "shouting a command to everyone present, projecting authority",
+      "stat_hint": "presence",
+      "dialogue": {
+        "addressee_id": null,
+        "quoted_speech": "Everyone stay calm!"
+      },
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-026": {
+      "action_type": "dialogue",
+      "target_entity_ids": [
+        "npc_smith_harl"
+      ],
+      "approach": "asking about his past commissions for the duke's guard",
+      "stat_hint": null,
+      "dialogue": {
+        "addressee_id": "npc_smith_harl",
+        "quoted_speech": null
+      },
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-027": {
+      "action_type": "train",
+      "target_entity_ids": [
+        "obj_practice_post"
+      ],
+      "approach": "practicing sword forms, drilling against the post",
+      "stat_hint": "finesse",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": {
+        "mode": "explicit",
+        "text": "for three hours"
+      },
+      "ambiguity_flags": []
+    },
+    "gu-028": {
+      "action_type": "research",
+      "target_entity_ids": [
+        "loc_dunmere_archive"
+      ],
+      "approach": "reading records about the monastery's founding in the archive during the evening",
+      "stat_hint": "lore",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": {
+        "mode": "explicit",
+        "text": "the evening"
+      },
+      "ambiguity_flags": []
+    },
+    "gu-029": {
+      "action_type": "movement",
+      "target_entity_ids": [
+        "loc_market_square"
+      ],
+      "approach": "returning to the market square",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-030": {
+      "action_type": "movement",
+      "target_entity_ids": [
+        "loc_monastery_pass"
+      ],
+      "approach": "traveling the pass road to the monastery, pausing only to water the horse at a trough or stream",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-031": {
+      "action_type": "train",
+      "target_entity_ids": [
+        "obj_practice_post"
+      ],
+      "approach": "drilling sword forms repeatedly against the practice post",
+      "stat_hint": "finesse",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": {
+        "mode": "until_condition",
+        "text": "till sundown"
+      },
+      "ambiguity_flags": []
+    },
+    "gu-032": {
+      "action_type": "physical",
+      "target_entity_ids": [
+        "npc_gate_guard_tam"
+      ],
+      "approach": "stabbing the gate guard",
+      "stat_hint": "finesse",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": [
+        "contradictory_negation"
+      ]
+    },
+    "gu-033": {
+      "action_type": "physical",
+      "target_entity_ids": [
+        "itm_potion_red_small"
+      ],
+      "approach": "drinking the red potion from the pack",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": [
+        "contradictory_negation"
+      ]
+    },
+    "gu-034": {
+      "action_type": "dialogue",
+      "target_entity_ids": [
+        "crt_dragon_vermithrax"
+      ],
+      "approach": "approaching the dragon and asking for its hoard",
+      "stat_hint": "presence",
+      "dialogue": {
+        "addressee_id": "crt_dragon_vermithrax",
+        "quoted_speech": null
+      },
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": [
+        "sarcasm_or_literal"
+      ]
+    },
+    "gu-035": {
+      "action_type": "observation",
+      "target_entity_ids": [
+        "loc_market_square"
+      ],
+      "approach": "looking around to take in the surroundings",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-036": {
+      "action_type": "movement",
+      "target_entity_ids": [
+        "obj_stable_wall"
+      ],
+      "approach": "climbing up the wall",
+      "stat_hint": "finesse",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-037": {
+      "action_type": "social",
+      "target_entity_ids": [
+        "npc_barkeep_odo"
+      ],
+      "approach": "ordering an ale",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-038": {
+      "action_type": "rest",
+      "target_entity_ids": [],
+      "approach": "idling at the inn, whiling away the hours",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": {
+        "mode": "until_condition",
+        "text": "until the caravan leaves"
+      },
+      "ambiguity_flags": []
+    },
+    "gu-039": {
+      "action_type": "physical",
+      "target_entity_ids": [
+        "obj_water_trough"
+      ],
+      "approach": "splashing water on face and washing",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-040": {
+      "action_type": "meta",
+      "target_entity_ids": [],
+      "approach": "checking personal coin purse",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-041": {
+      "action_type": "physical",
+      "target_entity_ids": [],
+      "approach": "stretching and cracking knuckles, loosening up",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-042": {
+      "action_type": "physical",
+      "target_entity_ids": [
+        "crt_tavern_cat"
+      ],
+      "approach": "gently petting the cat",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-043": {
+      "action_type": "physical",
+      "target_entity_ids": [
+        "obj_campfire"
+      ],
+      "approach": "warming hands by the heat of the fire",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-044": {
+      "action_type": "compound_action",
+      "target_entity_ids": [
+        "obj_ale_barrel"
+      ],
+      "approach": "toppling the ale barrel as a distraction while fleeing toward the door",
+      "stat_hint": "finesse",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": [
+        "compound_action"
+      ]
+    },
+    "gu-045": {
+      "action_type": "compound_action",
+      "target_entity_ids": [
+        "npc_smith_harl",
+        "itm_whetstone"
+      ],
+      "approach": "engaging the smith in conversation about the duke to divert his attention while taking the whetstone",
+      "stat_hint": "presence",
+      "dialogue": {
+        "addressee_id": "npc_smith_harl",
+        "quoted_speech": null
+      },
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": [
+        "compound_action"
+      ]
+    },
+    "gu-046": {
+      "action_type": "craft",
+      "target_entity_ids": [],
+      "approach": "carving a soul anchor from the old oak as a safeguard against death",
+      "stat_hint": "lore",
+      "dialogue": null,
+      "plausibility_hint": "dubious",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-047": {
+      "action_type": "observation",
+      "target_entity_ids": [
+        "npc_guard_captain_bren"
+      ],
+      "approach": "studying his stance for tactical vulnerabilities",
+      "stat_hint": "wits",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-048": {
+      "action_type": "dialogue",
+      "target_entity_ids": [
+        "npc_guard_captain_bren"
+      ],
+      "approach": "asking about the duke's schedule",
+      "stat_hint": null,
+      "dialogue": {
+        "addressee_id": "npc_guard_captain_bren",
+        "quoted_speech": null
+      },
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-049": {
+      "action_type": "physical",
+      "target_entity_ids": [],
+      "approach": "flapping arms to achieve unaided flight toward the moon",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "impossible_in_fiction",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-050": {
+      "action_type": "dialogue",
+      "target_entity_ids": [
+        "npc_aldric"
+      ],
+      "approach": "kneeling at the grave to make a solemn oath",
+      "stat_hint": null,
+      "dialogue": {
+        "addressee_id": "npc_aldric",
+        "quoted_speech": "I'm sorry, brother. I'll finish it."
+      },
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    }
+  }
+}

@@ -1,0 +1,223 @@
+# Universe Canon — Flora (plants, herbs, fungi + properties)
+# Team B, Universe Canon v1 (DRAFT). Category: 3 of 8.
+#
+# Feeds potions, poisons, dyes, inks, and research (roadmap 3.7). The vale's "hedge-craft"
+# poultices and "vale herbs" (docs/lore/02, /10) are INSTANCES of these universe plants.
+# common_sense is narrator-safe. research_depth carries dose lines, look-alikes, and the
+# deterministic wrong-intel seats (a poison mistaken for its edible twin; a remedy that only
+# works on wounds that were closing anyway).
+#
+# Grounding rule (docs/lore/12): no Earth-food beats. A plant is regional intel, never a
+# nostalgia import. Cuisine and remedy are researchable, never "the hero invents mayonnaise."
+
+flora:
+
+  # ---------- MEDICINAL HERBS ----------
+  - id: flora.woundwort
+    name: woundwort (bruisewort)
+    kind: herb
+    habitat: [hedgerow, ditch, waste_ground, downs]
+    properties: [medicinal, styptic, common]
+    reagent_role: [item_archetype.poultice]
+    common_sense:
+      - The green a mother packs on a cut. Slows bleeding, keeps a wound from going bad.
+      - Grows everywhere; every household knows it. The base of a hedge-poultice.
+    research_depth:
+      - The honest limit is the wrong-intel seat — a woundwort poultice works on wounds that were
+        going to close anyway, faster — it does not save a wound that was going to kill. Belief
+        that it does gets people killed. (docs/lore/10, poultice = herbs and honesty.)
+    instances: []
+
+  - id: flora.willowbark
+    name: willowbark
+    kind: tree
+    habitat: [riverbank, fen, wet_meadow]
+    properties: [medicinal, febrifuge, analgesic, common]
+    reagent_role: [item_archetype.poultice, item_archetype.potion_lesser]
+    common_sense:
+      - Chewed or steeped for fever and pain. The riverside healer's first answer.
+    research_depth:
+      - Dose and preparation are the researchable depth; too strong turns the stomach. A genuine,
+        mundane analgesic — no magic, just a plant that works.
+    instances: []
+
+  - id: flora.comfrey
+    name: comfrey (knitbone)
+    kind: herb
+    habitat: [riverbank, damp_ground, garden]
+    properties: [medicinal, bone_knitting, mild_toxic_internal]
+    reagent_role: [item_archetype.poultice]
+    common_sense:
+      - Bound over a set bone to help it knit. Called knitbone for it.
+    research_depth:
+      - The wrong-intel seat is safe-outside / poison-inside — excellent on a splint, harmful drunk
+        as a tea over time. A confident folk remedy that is half right.
+    instances: []
+
+  - id: flora.yarrow
+    name: yarrow
+    kind: herb
+    habitat: [downs, meadow, roadside]
+    properties: [medicinal, styptic, common]
+    reagent_role: [item_archetype.poultice]
+    common_sense:
+      - Packed in a wound to stop bleeding; soldier's-woundwort, the old campaigners call it.
+    research_depth:
+      - Interchangeable with woundwort in a pinch — a redundancy that makes hedge-craft robust.
+    instances: []
+
+  # ---------- POISONS ----------
+  - id: flora.hemlock
+    name: hemlock
+    kind: herb
+    habitat: [ditch, riverbank, waste_ground]
+    properties: [poisonous, lethal, common]
+    reagent_role: [item_archetype.poison]
+    common_sense:
+      - Tall, white-flowered, smells foul when crushed. Kills. Never gather greens where it grows.
+    research_depth:
+      - The deadly wrong-intel seat — hemlock looks like several edible umbellifers (wild parsley,
+        cow-parsnip). Correct recipe, wrong material species (docs/lore claim model) — a forager
+        who trusts the leaf-shape dies. Dose is the difference between numbing and killing.
+    instances: []
+
+  - id: flora.nightshade
+    name: nightshade (belladonna)
+    kind: herb
+    habitat: [hedgerow, ruin, shaded_waste]
+    properties: [poisonous, hallucinogen, dilates_the_eye, lethal]
+    reagent_role: [item_archetype.poison, item_archetype.potion_lesser]
+    common_sense:
+      - Black berries, sweet-looking, that children must never eat. A killer and a fever-dream.
+    research_depth:
+      - Micro-dose is an apothecary drug (pain, dilation); full dose is death and visions. The
+        line between medicine and murder is dose — the whole magic-as-cost-ledger idea in a plant.
+    instances: []
+
+  - id: flora.foxglove
+    name: foxglove
+    kind: herb
+    habitat: [woodland_edge, bank, garden]
+    properties: [poisonous, heart_acting, medicinal_in_dose]
+    reagent_role: [item_archetype.poison, item_archetype.potion_lesser]
+    common_sense:
+      - Tall purple bells. Steadies a failing heart in the right hand and stops one in the wrong.
+    research_depth:
+      - The narrow-window remedy — a real drug with no safety margin. Wrong intel here is fatal and
+        the mechanism is exact (a healer who over-doses out of confidence).
+    instances: []
+
+  - id: flora.wolfsbane
+    name: wolfsbane (monkshood)
+    kind: herb
+    habitat: [upland, shaded_bank, cold_ground]
+    properties: [poisonous, lethal, absorbs_through_skin]
+    reagent_role: [item_archetype.poison]
+    common_sense:
+      - Hooded blue flower of the high ground. Poisons wolves, arrows, and careless hands — the
+        poison goes in through the skin.
+    research_depth:
+      - Arrow-poison and pest-poison; handling itself is the hazard. A ready component for an
+        antagonist's craft, never trivialized.
+    instances: []
+
+  # ---------- ALCHEMICAL / DYE / INK ----------
+  - id: flora.woad
+    name: woad
+    kind: crop
+    habitat: [cultivated_field, fen_edge]
+    properties: [dye, blue, alchemical]
+    reagent_role: [item_archetype.dyed_cloth]
+    common_sense:
+      - The blue of the dyers. Fermented and vatted; stains everything it touches.
+    research_depth:
+      - Needs a mordant (alum) and a foul fermentation to fix — a real supply-chain, not a
+        one-step recolor. Dye is a trade and a craft, not a cosmetic.
+    instances: []
+
+  - id: flora.madder
+    name: madder
+    kind: crop
+    habitat: [cultivated_field, warm_bank]
+    properties: [dye, red, alchemical]
+    reagent_role: [item_archetype.dyed_cloth]
+    common_sense:
+      - The red root the dyers grow. Turf-red to blood-red depending on the water and the mordant.
+    research_depth:
+      - Color depends on water minerals and mordant — trace conditions change the result
+        (the Bookworm empirical-craft lesson) — the same recipe gives different reds in different
+        towns, a natural regional-intel wrinkle.
+    instances: []
+
+  - id: flora.oak_gall
+    name: oak-gall
+    kind: tree
+    habitat: [oak_woodland]
+    properties: [alchemical, tannin_rich, ink_base]
+    reagent_role: [item_archetype.iron_gall_ink]
+    common_sense:
+      - The hard brown apple a wasp makes on an oak. Crushed with copperas, it makes the black ink
+        the rolls are written in.
+    research_depth:
+      - The ink that fades or bites the parchment depending on the mix — why old rolls go brown and
+        why a bad batch eats its own page. Ties the archive's fallibility to a real material fact.
+    instances: []
+
+  # ---------- FUNGI ----------
+  - id: flora.tinder_fungus
+    name: tinder fungus
+    kind: fungus
+    habitat: [dead_birch, dead_oak, damp_wood]
+    properties: [flammable, catches_a_spark]
+    reagent_role: [item_archetype.tinderbox]
+    common_sense:
+      - The bracket on a dead trunk that a traveler dries and carries; it catches a flint-spark
+        when nothing else will. Fire-in-the-pocket.
+    research_depth:
+      - Prepared (boiled in lye, beaten) it becomes amadou — the reliable spark-catch. A humble but
+        load-bearing part of the fire-lighting chain that any firelock invention depends on.
+    instances: []
+
+  - id: flora.ergot
+    name: ergot
+    kind: fungus
+    habitat: [rye_field, damp_grain, granary]
+    properties: [poisonous, hallucinogen, constricts_blood, veil_adjacent]
+    reagent_role: [item_archetype.poison]
+    common_sense:
+      - The black spur that spoils damp rye. Bread made from it brings burning limbs and waking
+        dreams; whole parishes have gone mad on a bad harvest.
+    research_depth:
+      - A mass-poisoning vector (spoiled grain), an apothecary drug in micro-dose, and — rumor
+        holds — a thing that thins the seeing near a thin place. The bridge from flora into
+        veil-lore; researching that bridge accrues forbidden-knowledge exposure.
+    instances: []
+
+  - id: flora.barrow_cap
+    name: barrow-cap
+    kind: fungus
+    habitat: [barrow_field, grave_soil, thin_place]
+    properties: [poisonous, hallucinogen, veil_adjacent]
+    reagent_role: [item_archetype.poison]
+    common_sense:
+      - A pale mushroom that only grows on grave-mounds. Shepherds say eating it lets you hear the
+        barrows talk. Mostly it just kills you.
+    research_depth:
+      - Grows where the veil is thin; the folk claim that it opens the seeing is a wrong-intel
+        seat with a real kernel (it is genuinely tied to thin ground). A research lead toward the
+        veil, disguised as a poison.
+    instances: []
+
+  # ---------- CROP / STAPLE ----------
+  - id: flora.barley
+    name: barley
+    kind: crop
+    habitat: [cultivated_field]
+    properties: [food, fermentable]
+    reagent_role: [item_archetype.ale]
+    common_sense:
+      - Bread-grain and ale-grain. The vale's belly and its tavern both run on it.
+    research_depth:
+      - Malted and fermented it is ale; distilled it would be strong spirits (a sealed craft —
+        see tech.distillation). The base of the food economy and a sealed-invention feedstock.
+    instances: []

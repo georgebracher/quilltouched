@@ -1,0 +1,162 @@
+# Universe Canon — Schema & ID conventions
+# Team B, Universe Canon v1 (DRAFT). The field shapes every category file conforms to.
+#
+# WHY THIS FILE EXISTS: the canon is a DIFFERENT object from a region instance file.
+# content/world/harrowdown.yaml has a LOCKED per-entity schema ("Do not add fields") whose
+# rows are INSTANCES. This canon holds the CATEGORIES those instances slot under, and carries
+# fields an instance never does: threat_band RANGES (not one band), taxonomy parents,
+# tech-tiers, composition rules, and fit-check bounds. So it lives in its own directory with
+# its own schema. Format is YAML — the project's content lingua franca (the engine already
+# parses YAML world files via everquill_engine/world.py), human-reviewable by George, and
+# diffable in review.
+
+# ---------------------------------------------------------------------------
+# ID CONVENTIONS
+# ---------------------------------------------------------------------------
+# Universe categories are namespaced by category, region-LESS (a universe rung has no region):
+#   bestiary.<family>          e.g. bestiary.wyvern
+#   material.<id>              e.g. material.nitre
+#   flora.<id>                 e.g. flora.woundwort
+#   item_archetype.<id>        e.g. item_archetype.spear
+#   knowledge.<domain>         e.g. knowledge.veil_lore
+#   text.<id>                  e.g. text.wyvern_hunt_archive
+#   tech.<id>                  e.g. tech.black_powder
+#   power.<id>                 e.g. power.veil_work
+#   people.<id> / faction.<id> e.g. people.humans / faction.adventurers_guild
+#   law.<id>                   (shared with docs/lore laws-format) e.g. law.summoning
+#
+# Region INSTANCES keep the existing scheme <kind>.<region>.<name> (creature.harrowdown.quarryman).
+# The mapping is authored on the CANON side, in each category's `instances:` list, so the
+# region files stay untouched (they are locked / other-team-owned). Harrowdown's six creatures,
+# its materials, and its items are lifted up here as instances of universe rungs.
+
+# ---------------------------------------------------------------------------
+# KNOWLEDGE-LAYER FIELDS (the game's TRUE/KNOWN model — same as the region files)
+# ---------------------------------------------------------------------------
+# Every category may carry three knowledge layers, matching docs/lore/09-bestiary.md:
+#   common_sense   — free category knowledge; NARRATOR-SAFE, usable without provenance.
+#   research_depth — the SHAPE of what deep research surfaces at the universe level (a
+#                    template for a rung's hidden truths, NOT any one instance's secret).
+#                    Engine + authoring context only. Never narrator context.
+#   fit_rules      — constraints a generated/discovered instance of this category must satisfy
+#                    (consumed by consistency-contract.yaml). Authoring only.
+# Region instances hold the ACTUAL secret (true_sheet, per-source knowledge_scope); the canon
+# holds only the category-level pattern. TRUE numbers never appear anywhere in this canon.
+
+# ---------------------------------------------------------------------------
+# PER-CATEGORY FIELD SCHEMAS
+# ---------------------------------------------------------------------------
+schemas:
+
+  bestiary:
+    required: [id, name, family, rung, threat_band_range]
+    fields:
+      id: string
+      name: string
+      family: enum[beast, humanoid, undead, draconic, giant_kin, aberration, construct]
+      rung: int                 # ladder ordering key (ascending = more dangerous, overlaps allowed)
+      threat_band_range:        # [floor, typical, ceiling] on the engine threat_band scale
+        - int  # floor    (weakest individual)
+        - int  # typical  (the common case a dossier grades)
+        - int  # ceiling  (an exceptional individual — chief, elder, calamity specimen)
+      habitat: [string]         # canon biome tags (see cosmology-powers.yaml biome set)
+      common_sense: [string]    # narrator-safe
+      research_depth: [string]  # authoring only — the pattern of re-tiering truths this family hides
+      ladder_note: string       # relation to rungs above/below (the "gap is the point" texture)
+      fit_rules: [string]       # what a generated variant must obey
+      instances: [string]       # region-instance ids that instantiate this rung
+
+  material:
+    required: [id, name, material_class, tech_tier]
+    fields:
+      id: string
+      name: string
+      material_class: enum[metal, alloy, ore, stone, salt, fuel, fibre, hide, wood, glass, ceramic, reagent, organic]
+      in_world_names: [string]  # diegetic aliases (nitre = saltpetre = "wall-salt"/"tomb-frost")
+      found: string             # where it comes from
+      properties: [string]      # tags: flammable, oxidiser, corrosive, malleable, toxic, ...
+      known_uses: [string]      # mundane uses at the tech ceiling
+      combines_into:            # the "periodic table" edges the adjudicator checks
+        - product: string       # a tech.<id> or material.<id> or item_archetype.<id>
+          with: [string]        # other material ids required
+          process: string       # the procedure (knowledge-gated)
+          tier: enum[mundane, craft, sealed, beyond]
+      tech_tier: enum[mundane, craft, sealed, beyond]
+      instances: [string]
+
+  flora:
+    required: [id, name, kind]
+    fields:
+      id: string
+      name: string
+      kind: enum[herb, fungus, tree, crop, moss_lichen]
+      habitat: [string]
+      properties: [string]      # medicinal, poisonous, alchemical, dye, food, fibre, veil_adjacent
+      reagent_role: [string]    # what craft/potion/ink it feeds (material.<id> / item_archetype.<id>)
+      common_sense: [string]
+      research_depth: [string]  # authoring only (dose lines, look-alikes, deterministic wrong-intel)
+      instances: [string]
+
+  item_archetype:
+    required: [id, name, item_class, tier]
+    fields:
+      id: string
+      name: string
+      item_class: enum[weapon, armor, tool, consumable, document, relic, currency, garment]
+      tier: enum[mundane, rare, sealed, anchor_class]
+      materials: [string]       # canon material.<id> it is composed of (item fit-check whitelist)
+      tech_ceiling: string      # where it sits vs the ceiling
+      notes: string
+      instances: [string]
+
+  knowledge:                    # a field of study
+    required: [id, name]
+    fields:
+      id: string
+      name: string
+      studies: string
+      tech_ceiling: string      # what is knowable in this field at the world ceiling
+      forbidden: bool           # accrues forbidden-knowledge exposure (docs/lore laws)
+      exposure_track: string    # if forbidden, what watches / what it costs
+      taught_at: [string]       # faction/text ids where it is archived or taught
+      research_tiers: [string]  # tier 0..n shape (appraisal-ladder for a DOMAIN)
+
+  text:                         # a canonical tome/record that an archive can hold
+    required: [id, name, domain]
+    fields:
+      id: string
+      name: string
+      domain: string            # knowledge.<id>
+      held_at: [string]         # faction/location archetype
+      reliability: string       # it is a KNOWN sheet — how/why it can be wrong
+      instances: [string]       # region props that instantiate it (guild_board, parish rolls)
+
+  tech:                         # a science field or a named invention
+    required: [id, name, tier]
+    fields:
+      id: string
+      name: string
+      kind: enum[field, invention]
+      tier: enum[mundane, craft, sealed, beyond, impossible]
+      ceiling: string           # what is KNOWN here
+      beyond: string            # what lies past the ceiling and how it is gated
+      components: [string]      # material.<id> for invention-kind (the adjudicator input)
+      instances: [string]
+
+  power:                        # a metaphysical force / class of magic
+    required: [id, name, tier]
+    fields:
+      id: string
+      name: string
+      tier: enum[hedge, rite, sealed, unverified, impossible]
+      what: string
+      cost: string              # references docs/lore/03-magic-cost-ledger.md
+      links: [string]           # lore file / law ids
+
+  people:
+    required: [id, name]
+    fields: {id: string, name: string, prevalence: string, common_sense: [string], notes: string}
+
+  faction:
+    required: [id, name]
+    fields: {id: string, name: string, kind: string, reach: string, common_sense: [string], known_sheet_note: string}

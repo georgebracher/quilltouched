@@ -1,0 +1,440 @@
+# Universe Canon — Materials & Substances (the crafting + synthesis "periodic table")
+# Team B, Universe Canon v1 (DRAFT). Category: 2 of 8.
+#
+# This is what the adjudicator checks inventions against (roadmap 3.7, the Bookworm
+# supply-chain model: concept -> tested procedure -> specialist -> tooling -> inputs ->
+# facility -> legality -> time). Every material carries `combines_into` edges — the graph the
+# engine walks to validate a synthesis attempt. Knowing a recipe is NEVER the same as typing it
+# into existence: wrong proportions fail reproducibly (and dangerously).
+#
+# FLAGSHIP: gunpowder = material.nitre + material.brimstone + material.charcoal + process.
+# The components exist under in-world names; the PRODUCT (tech.black_powder) does not exist yet.
+# It is the model for all real-world knowledge enacted through in-world materials (anchors.yaml).
+#
+# tech_tier per material: mundane (freely worked), craft (needs a specialist), sealed (a
+# component of a sealed invention), beyond (no current route). A material can be mundane while
+# its most interesting combination is sealed — nitre is a common wall-salt; nitre-in-black-powder
+# is sealed.
+
+materials:
+
+  # ---------- METALS & ALLOYS ----------
+  - id: material.iron
+    name: iron
+    material_class: metal
+    in_world_names: [iron, cold iron, bog iron]
+    found: Smelted from rock ore or bog ore; the working metal of the world.
+    properties: [malleable, hard_when_worked, rusts, magnetic]
+    known_uses: [tools, blades, nails, fittings, mail]
+    combines_into:
+      - {product: material.steel, with: [material.charcoal], process: carburize and quench (smithing), tier: craft}
+      - {product: item_archetype.spear, with: [material.oak], process: forge and haft, tier: mundane}
+    tech_tier: mundane
+    instances: []
+
+  - id: material.steel
+    name: steel
+    material_class: alloy
+    in_world_names: [steel, worked steel, watered steel]
+    found: Iron carburized with charcoal by a skilled smith; better steel is a guild secret.
+    properties: [hard, holds_edge, springy, costly]
+    known_uses: [good blades, mail, springs, tools that must not bend]
+    combines_into:
+      - {product: tech.crucible_steel, with: [material.iron, material.charcoal], process: crucible melt (sealed method), tier: sealed}
+    tech_tier: craft
+    instances: []
+
+  - id: material.copper
+    name: copper
+    material_class: metal
+    in_world_names: [copper, red metal]
+    found: Smelted from green ore (malachite); softer than iron, worked cold or hot.
+    properties: [malleable, conducts_heat, corrosion_resistant, green_patina]
+    known_uses: [pots, wire, sheet, coin, roofing]
+    combines_into:
+      - {product: material.bronze, with: [material.tin], process: alloy melt, tier: craft}
+      - {product: material.vitriol, with: [], process: weathering / roasting the ore, tier: craft}
+    tech_tier: mundane
+    instances: []
+
+  - id: material.tin
+    name: tin
+    material_class: metal
+    in_world_names: [tin, white metal]
+    found: Smelted from stream-ore (cassiterite); a trade metal, moved long distances.
+    properties: [soft, low_melt, corrosion_resistant]
+    known_uses: [alloying, pewter, tinning iron against rust, solder]
+    combines_into:
+      - {product: material.bronze, with: [material.copper], process: alloy melt, tier: craft}
+    tech_tier: mundane
+    instances: []
+
+  - id: material.bronze
+    name: bronze
+    material_class: alloy
+    in_world_names: [bronze, bell-metal, gun-metal]
+    found: Copper alloyed with tin; older than good steel and still the metal for castings.
+    properties: [castable, corrosion_resistant, rings_true, holds_fine_shape]
+    known_uses: [bells, statues, fine castings, bearings, ordnance-if-it-existed]
+    combines_into:
+      - {product: tech.cast_barrel, with: [], process: sand-casting (a sealed prerequisite for firearms), tier: sealed}
+    tech_tier: craft
+    instances: []
+
+  - id: material.lead
+    name: lead
+    material_class: metal
+    in_world_names: [lead, plumb]
+    found: Smelted from galena, often alongside silver; heavy, soft, poisonous over time.
+    properties: [heavy, soft, low_melt, toxic_slow, corrosion_resistant]
+    known_uses: [pipes, roofing, weights, seals, shot-if-firearms-existed, cheap glaze]
+    combines_into:
+      - {product: material.silver, with: [], process: cupellation of argentiferous galena, tier: craft}
+    tech_tier: mundane
+    instances: []
+
+  - id: material.silver
+    name: silver
+    material_class: metal
+    in_world_names: [silver, white coin]
+    found: Cupelled from lead ore; the metal of marks and of church plate.
+    properties: [precious, malleable, tarnishes, said_to_bite_the_unnatural]
+    known_uses: [coin (the mark), plate, wire, rites]
+    combines_into: []
+    tech_tier: craft
+    instances: []
+
+  - id: material.gold
+    name: gold
+    material_class: metal
+    in_world_names: [gold, sovereign-metal]
+    found: Panned or mined; rare enough that a sovereign is a thing people have heard of.
+    properties: [precious, incorruptible, very_malleable, does_not_tarnish]
+    known_uses: [coin (the sovereign), regalia, gilding, the highest anchors]
+    combines_into: []
+    tech_tier: craft
+    instances: []
+
+  - id: material.quicksilver
+    name: quicksilver (mercury)
+    material_class: metal
+    in_world_names: [quicksilver, living silver, hydrargyrum]
+    found: Roasted from cinnabar; a liquid metal, prized and feared by apothecaries.
+    properties: [liquid, toxic, dissolves_gold, unnervingly_alive]
+    known_uses: [gilding, apothecary work, mirror-backing, alchemical solvent]
+    combines_into: []
+    tech_tier: craft
+    instances: []
+
+  # ---------- ORES & STONE ----------
+  - id: material.iron_ore
+    name: iron ore
+    material_class: ore
+    in_world_names: [iron ore, bog ore, ironstone]
+    found: Dug from rock seams or raked from bogs; smelted with charcoal in a bloomery.
+    properties: [heavy, reducible, common]
+    known_uses: [source of iron]
+    combines_into:
+      - {product: material.iron, with: [material.charcoal], process: bloomery smelt, tier: craft}
+    tech_tier: mundane
+    instances: []
+
+  - id: material.chalk
+    name: chalk
+    material_class: stone
+    in_world_names: [chalk, downstone]
+    found: The white rock of the downs; cut, burned to lime, or ground.
+    properties: [soft, white, porous, burns_to_lime]
+    known_uses: [building, marking, warding lines (hedge-craft), burned for quicklime]
+    combines_into:
+      - {product: material.quicklime, with: [], process: burn in a lime-kiln, tier: craft}
+    tech_tier: mundane
+    instances: []
+
+  - id: material.limestone
+    name: limestone
+    material_class: stone
+    in_world_names: [limestone, greystone]
+    found: Harder cousin of chalk; the world's mortar-stone and building block.
+    properties: [hard, burns_to_lime, takes_a_face]
+    known_uses: [building, mortar via lime, flux in smelting]
+    combines_into:
+      - {product: material.quicklime, with: [], process: burn in a lime-kiln, tier: craft}
+    tech_tier: mundane
+    instances: []
+
+  - id: material.flint
+    name: flint
+    material_class: stone
+    in_world_names: [flint, firestone, strike-stone]
+    found: Nodules in the chalk; knapped to an edge, struck for a spark.
+    properties: [very_hard, sharp_fracture, sparks_on_steel]
+    known_uses: [fire-lighting (flint and steel), knapped tools, wall-building, the spark for any future lock]
+    combines_into:
+      - {product: tech.firelock, with: [material.steel], process: a spring lock striking flint on steel (sealed prerequisite), tier: sealed}
+    tech_tier: mundane
+    instances: []
+
+  - id: material.granite
+    name: granite
+    material_class: stone
+    in_world_names: [granite, hardstone, moorstone]
+    found: The bones of the high country; quarried with iron and patience.
+    properties: [very_hard, durable, heavy, ill_to_work]
+    known_uses: [bridges, seats, the stone that outlasts kingdoms, millstones]
+    combines_into: []
+    tech_tier: mundane
+    instances: []
+
+  # ---------- SALTS & EARTHS (the alchemical rack — home of the gunpowder trio) ----------
+  - id: material.nitre
+    name: nitre (saltpetre)
+    material_class: salt
+    in_world_names: [nitre, saltpetre, wall-salt, tomb-frost]
+    found: >-
+      The white crust that grows on old cellar walls, stable floors, dung-heaps, and the inside
+      of tombs. Scraped, boiled, and recrystallized by anyone patient. Common and overlooked.
+    properties: [oxidiser, dissolves_in_water, cooling_on_tongue, does_not_burn_alone]
+    known_uses: [meat-curing, a cooling apothecary salt, tomb-frost folk lore]
+    combines_into:
+      - {product: tech.black_powder, with: [material.brimstone, material.charcoal], process: mill in the correct proportion (the sealed synthesis), tier: sealed}
+      - {product: material.vitriol, with: [], process: apothecary distillation route to strong acids, tier: sealed}
+    tech_tier: mundane   # the salt is mundane; its sealed combination is the whole point
+    instances: []
+
+  - id: material.brimstone
+    name: brimstone (sulphur)
+    material_class: salt
+    in_world_names: [brimstone, sulphur, devil's-earth, match-yellow]
+    found: Yellow deposits near hot springs and volcanic country; traded in lumps, ground fine.
+    properties: [flammable, low_melt, chokes_when_burned, yellow]
+    known_uses: [fumigation, apothecary sulphur, matches (sulphur-tipped splints), skin remedies]
+    combines_into:
+      - {product: tech.black_powder, with: [material.nitre, material.charcoal], process: mill in the correct proportion (the sealed synthesis), tier: sealed}
+    tech_tier: mundane
+    instances: []
+
+  - id: material.charcoal
+    name: charcoal
+    material_class: fuel
+    in_world_names: [charcoal, char, collier's-coal]
+    found: Wood charred slow under turf by a charcoal-burner; the smith's fuel and the third leg.
+    properties: [flammable, high_heat, light, carbon_rich]
+    known_uses: [smithing fuel, smelting reductant, drawing, filtering water, apothecary char]
+    combines_into:
+      - {product: tech.black_powder, with: [material.nitre, material.brimstone], process: mill in the correct proportion (the sealed synthesis), tier: sealed}
+      - {product: material.steel, with: [material.iron], process: carburize (smithing), tier: craft}
+    tech_tier: mundane
+    instances: []
+
+  - id: material.common_salt
+    name: common salt
+    material_class: salt
+    in_world_names: [salt, sea-salt, table-salt]
+    found: Boiled from brine or dug from beds; a trade staple the vale must buy in.
+    properties: [preservative, dissolves_in_water, kills_slimes, precious_inland]
+    known_uses: [preserving meat and fish, curing hides, killing small slimes, seasoning]
+    combines_into: []
+    tech_tier: mundane
+    instances: []
+
+  - id: material.quicklime
+    name: quicklime
+    material_class: salt
+    in_world_names: [quicklime, burnt lime, hot-lime]
+    found: Chalk or limestone burned in a kiln; slakes with water, dangerously hot.
+    properties: [caustic, burns_flesh, sets_hard_with_water, whitens]
+    known_uses: [mortar and plaster, tanning, field burials, whitewash, a nasty thrown weapon]
+    combines_into:
+      - {product: item_archetype.mortar, with: [material.limestone], process: slake and mix (building), tier: mundane}
+    tech_tier: craft
+    instances: []
+
+  - id: material.potash
+    name: potash
+    material_class: salt
+    in_world_names: [potash, ash-salt, lye-salt]
+    found: Leached from wood ash and boiled down; the washerwoman's and glassmaker's salt.
+    properties: [alkaline, dissolves_grease, flux, hygroscopic]
+    known_uses: [soap-making (with tallow), glass flux, bleaching cloth, refining saltpetre]
+    combines_into:
+      - {product: item_archetype.soap, with: [material.tallow], process: boil lye with fat, tier: craft}
+      - {product: material.glass, with: [material.sand, material.quicklime], process: melt (glasshouse), tier: craft}
+    tech_tier: craft
+    instances: []
+
+  - id: material.alum
+    name: alum
+    material_class: salt
+    in_world_names: [alum, dye-salt, styptic-stone]
+    found: Boiled from alum shale; the dyer's and the physician's salt.
+    properties: [astringent, mordant, dissolves_in_water]
+    known_uses: [fixing dye to cloth (mordant), stanching blood, tawing white leather, sizing paper]
+    combines_into:
+      - {product: item_archetype.dyed_cloth, with: [material.wool, flora.woad], process: mordant then dye, tier: craft}
+    tech_tier: craft
+    instances: []
+
+  - id: material.vitriol
+    name: vitriol (copperas / oil of vitriol)
+    material_class: reagent
+    in_world_names: [vitriol, copperas, green-salt, oil-of-vitriol]
+    found: >-
+      The green salt weathers from copper/iron ore; the strong "oil" is distilled from it — a
+      guarded apothecary art. The world's strongest known acid, and it is rare and feared.
+    properties: [corrosive, dissolves_metal, blackens_ink, dangerous]
+    known_uses: [iron-gall ink, etching, pickling metal, a sealed route toward stronger acids]
+    combines_into:
+      - {product: item_archetype.iron_gall_ink, with: [flora.oak_gall, material.iron], process: steep and mix, tier: craft}
+      - {product: tech.strong_acids, with: [material.nitre], process: co-distillation (sealed alchemy), tier: sealed}
+    tech_tier: craft
+    instances: []
+
+  - id: material.orpiment
+    name: orpiment (arsenic-yellow)
+    material_class: reagent
+    in_world_names: [orpiment, king's-yellow, fly-stone, arsenic]
+    found: A yellow mineral of hot country; a pigment, a poison, and a depilatory.
+    properties: [toxic, yellow_pigment, sublimes, kills_vermin]
+    known_uses: [yellow paint, rat-poison, removing hair from hides, quiet murder]
+    combines_into: []
+    tech_tier: craft
+    instances: []
+
+  # ---------- FUELS & ORGANICS ----------
+  - id: material.tallow
+    name: tallow
+    material_class: organic
+    in_world_names: [tallow, rendered-fat, dip-fat]
+    found: Rendered animal fat; the vale renders and trades it both directions.
+    properties: [flammable, greasy, keeps, low_light]
+    known_uses: [tallow candles, soap, waterproofing, lamp fuel, cart grease]
+    combines_into:
+      - {product: item_archetype.candle, with: [material.flax], process: dip or mould with a wick, tier: mundane}
+      - {product: item_archetype.soap, with: [material.potash], process: boil with lye, tier: craft}
+    tech_tier: mundane
+    instances: []
+
+  - id: material.lamp_oil
+    name: lamp oil
+    material_class: organic
+    in_world_names: [lamp oil, sealed oil, bright-oil]
+    found: Pressed and clarified oil (Ferrier's sealed oil is the vale's one guild-marked good).
+    properties: [flammable, clean_burning, clear, holds_a_season]
+    known_uses: [lamps, a brighter steadier light than tallow, sealing wax base]
+    combines_into: []
+    tech_tier: craft
+    instances: [item.harrowdown.marriage_seal]   # via Ferrier's wax/oil trade (the chandlery)
+
+  - id: material.beeswax
+    name: beeswax
+    material_class: organic
+    in_world_names: [beeswax, seal-wax, comb-wax]
+    found: Rendered from honeycomb; the material of seals, fine candles, and waterproofing.
+    properties: [mouldable, waterproof, takes_an_impression, keeps]
+    known_uses: [seals (true-name and merchant), fine candles, waxing thread and cloth, wax flowers]
+    combines_into:
+      - {product: item_archetype.true_name_seal, with: [], process: press a true-name into wax at a rite, tier: rite}
+    tech_tier: mundane
+    instances: [item.harrowdown.marriage_seal]
+
+  - id: material.pitch
+    name: pitch (tar)
+    material_class: organic
+    in_world_names: [pitch, tar, wood-tar, black-caulk]
+    found: Cooked from pine resin or coal; the caulker's and roofer's black.
+    properties: [flammable, waterproof, sticky, black]
+    known_uses: [caulking boats, waterproofing rope and roofs, torches, a nasty siege-drop]
+    combines_into: []
+    tech_tier: mundane
+    instances: []
+
+  # ---------- FIBRES, HIDE, WOOD, GLASS ----------
+  - id: material.wool
+    name: wool
+    material_class: fibre
+    in_world_names: [wool, fleece, cloth-wool]
+    found: The vale's main export; shorn, spun, woven, fulled.
+    properties: [warm, felts, takes_dye, common]
+    known_uses: [cloth, felt, blankets, padding under mail, trade wealth]
+    combines_into:
+      - {product: item_archetype.dyed_cloth, with: [flora.woad, material.alum], process: mordant and dye, tier: craft}
+    tech_tier: mundane
+    instances: []
+
+  - id: material.flax
+    name: flax (linen)
+    material_class: fibre
+    in_world_names: [flax, linen, line]
+    found: Retted, scutched, and spun to linen; also pressed for linseed oil.
+    properties: [strong, cool, takes_a_fine_thread, papermaking_fibre]
+    known_uses: [linen cloth, thread, rope, wicks, bandages, rag for paper]
+    combines_into:
+      - {product: tech.rag_paper, with: [], process: ret rag to pulp and couch on a mould (sealed craft), tier: sealed}
+      - {product: material.linseed_oil, with: [], process: press the seed, tier: craft}
+    tech_tier: mundane
+    instances: []
+
+  - id: material.hide
+    name: hide (leather)
+    material_class: hide
+    in_world_names: [hide, leather, skin, tawed-white]
+    found: Flayed, tanned with oak bark or tawed with alum; the farrier and tanner's stock.
+    properties: [tough, flexible, ruined_by_slimes, keeps_if_tanned]
+    known_uses: [jerkins, boots, straps, bindings, parchment (from calf), scabbards]
+    combines_into:
+      - {product: item_archetype.leather_jerkin, with: [], process: cut and stitch tanned hide, tier: craft}
+      - {product: material.parchment, with: [], process: lime, scrape, and dry a skin (scribe-craft), tier: craft}
+    tech_tier: craft
+    instances: []
+
+  - id: material.oak
+    name: oak (and worked timber)
+    material_class: wood
+    in_world_names: [oak, ash, timber, hardwood]
+    found: Felled and seasoned; oak for strength, ash for hafts, yew for bows.
+    properties: [strong, seasons_slowly, tannin_rich_bark, burns_to_charcoal]
+    known_uses: [beams, hafts, wheels, casks, ships, bark for tanning and oak-galls for ink]
+    combines_into:
+      - {product: material.charcoal, with: [], process: char under turf, tier: craft}
+    tech_tier: mundane
+    instances: []
+
+  - id: material.sand
+    name: sand
+    material_class: stone
+    in_world_names: [sand, glass-sand, river-grit]
+    found: River and pit sand; the glassmaker's and caster's base.
+    properties: [melts_with_flux, abrasive, moulds_castings]
+    known_uses: [glass (with flux and lime), casting moulds, mortar, scouring]
+    combines_into:
+      - {product: material.glass, with: [material.potash, material.quicklime], process: melt in a glasshouse, tier: craft}
+      - {product: tech.cast_barrel, with: [material.bronze], process: sand-casting, tier: sealed}
+    tech_tier: mundane
+    instances: []
+
+  - id: material.glass
+    name: glass
+    material_class: glass
+    in_world_names: [glass, greenglass, clearglass]
+    found: >-
+      Melted from sand, ash-flux, and lime. Common green bottle-glass is craft; clear, flat, or
+      ground glass is a costly art and the door to lenses.
+    properties: [transparent, brittle, holds_liquid, grindable]
+    known_uses: [vials (the potion silhouette), bottles, windows-for-the-rich, mirror-backing]
+    combines_into:
+      - {product: tech.lensed_glass, with: [], process: grind and polish a clear blank (sealed optics), tier: sealed}
+      - {product: item_archetype.potion_vial, with: [], process: blow or mould, tier: craft}
+    tech_tier: craft
+    instances: []
+
+  - id: material.parchment
+    name: parchment
+    material_class: hide
+    in_world_names: [parchment, vellum, skin-leaf]
+    found: Limed, scraped, stretched calf or sheep skin; the world's writing surface, costly.
+    properties: [durable, reusable_by_scraping, expensive, keeps_centuries]
+    known_uses: [parish rolls, guild dossiers, contracts, the archives that outlast the fire]
+    combines_into: []
+    tech_tier: craft
+    instances: []

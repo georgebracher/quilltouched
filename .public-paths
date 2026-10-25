@@ -1,0 +1,52 @@
+# Public export allowlist for llm-publish (georgebracher/quilltouched).
+# One glob or folder/ per line; only committed files can match.
+# Left out on purpose: agent routing (AGENTS.md, CLAUDE.md, kb/), deploy and backup
+# scripts tied to the July hosting (client/deploy.sh, tools/, docs/ops/deploy.md,
+# docs/ops/restore-drill.md) and every image: the publish scan rejects media until
+# it can check metadata, so assets/ and the client's sprites, backgrounds and icons
+# stay private.
+README.md
+LICENSE
+.gitignore
+.public-paths
+.github/
+Makefile
+Procfile
+pyproject.toml
+requirements.txt
+constraints.txt
+conftest.py
+api/
+everquill_engine/
+llm/
+tests/
+migrations/
+content/
+evals/
+client/.gitignore
+client/.oxlintrc.json
+client/README.md
+client/index.html
+client/package.json
+client/package-lock.json
+client/tsconfig*.json
+client/vite.config.ts
+client/scripts/
+client/tests/
+client/src/
+client/public/favicon.svg
+client/public/manifest.webmanifest
+client/public/sw.js
+docs/contracts/
+docs/engine/
+docs/design/
+docs/lore/
+docs/art/
+docs/playtests/
+docs/research/
+docs/tickets/
+docs/roadmap.md
+docs/isekai-playbook.md
+docs/ops/release-gate.md
+docs/ops/telemetry.md
+docs/ops/turns-api.md

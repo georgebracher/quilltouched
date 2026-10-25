@@ -1,0 +1,109 @@
+{
+  "comment": "FROZEN roll-site registry (MEDIUM-4). The registry is append-only: tests/test_rng_registry.py fails if any site here changes or vanishes (that would re-key historical dice). NEW sites must be appended here in the same commit with a reason. Sprint-2 baseline (documented pin change): action outcomes moved from the pooled ('character:<id>','action') stream to per-action-type streams, HOPELESS flavor draws got their own site, and chargen/timer-fire streams were registered unchanged.",
+  "sites": {
+    "action:craft": {
+      "stream": [
+        "character:{character_id}",
+        "action:craft"
+      ],
+      "draws": "one 2d6 outcome draw per resolved rollable action of this type; index advances via world_state.rng_counters",
+      "owner": "resolver.resolve_intent"
+    },
+    "action:dialogue": {
+      "stream": [
+        "character:{character_id}",
+        "action:dialogue"
+      ],
+      "draws": "one 2d6 outcome draw per resolved rollable action of this type; index advances via world_state.rng_counters",
+      "owner": "resolver.resolve_intent"
+    },
+    "action:meta": {
+      "stream": [
+        "character:{character_id}",
+        "action:meta"
+      ],
+      "draws": "one 2d6 outcome draw per resolved rollable action of this type; index advances via world_state.rng_counters",
+      "owner": "resolver.resolve_intent"
+    },
+    "action:movement": {
+      "stream": [
+        "character:{character_id}",
+        "action:movement"
+      ],
+      "draws": "one 2d6 outcome draw per resolved rollable action of this type; index advances via world_state.rng_counters",
+      "owner": "resolver.resolve_intent"
+    },
+    "action:observation": {
+      "stream": [
+        "character:{character_id}",
+        "action:observation"
+      ],
+      "draws": "one 2d6 outcome draw per resolved rollable action of this type; index advances via world_state.rng_counters",
+      "owner": "resolver.resolve_intent"
+    },
+    "action:physical": {
+      "stream": [
+        "character:{character_id}",
+        "action:physical"
+      ],
+      "draws": "one 2d6 outcome draw per resolved rollable action of this type; index advances via world_state.rng_counters",
+      "owner": "resolver.resolve_intent"
+    },
+    "action:research": {
+      "stream": [
+        "character:{character_id}",
+        "action:research"
+      ],
+      "draws": "one 2d6 outcome draw per resolved rollable action of this type; index advances via world_state.rng_counters",
+      "owner": "resolver.resolve_intent"
+    },
+    "action:rest": {
+      "stream": [
+        "character:{character_id}",
+        "action:rest"
+      ],
+      "draws": "one 2d6 outcome draw per resolved rollable action of this type; index advances via world_state.rng_counters",
+      "owner": "resolver.resolve_intent"
+    },
+    "action:social": {
+      "stream": [
+        "character:{character_id}",
+        "action:social"
+      ],
+      "draws": "one 2d6 outcome draw per resolved rollable action of this type; index advances via world_state.rng_counters",
+      "owner": "resolver.resolve_intent"
+    },
+    "action:train": {
+      "stream": [
+        "character:{character_id}",
+        "action:train"
+      ],
+      "draws": "one 2d6 outcome draw per resolved rollable action of this type; index advances via world_state.rng_counters",
+      "owner": "resolver.resolve_intent"
+    },
+    "chargen": {
+      "stream": [
+        "chargen",
+        "{character_id}"
+      ],
+      "draws": "six 2d6 draws at indexes 0..5, one per aptitude in APTITUDES order",
+      "owner": "chargen.roll_character"
+    },
+    "hopeless_flavor": {
+      "stream": [
+        "character:{character_id}",
+        "hopeless_flavor"
+      ],
+      "draws": "one 2d6 draw per HOPELESS-band action; the roll picks the failure flavor only (never an outcome tier); index advances via world_state.rng_counters",
+      "owner": "resolver.resolve_intent"
+    },
+    "timer_fire:training": {
+      "stream": [
+        "timerfire",
+        "{timer_key}"
+      ],
+      "draws": "one 2d6 draw at index 0 per timer fire, seeded by timer_fire_seed(timer_key, created_event_id)",
+      "owner": "clock.resolve_timer_fire"
+    }
+  }
+}

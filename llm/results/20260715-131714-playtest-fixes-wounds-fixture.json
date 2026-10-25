@@ -1,0 +1,34 @@
+{
+ "model": "claude-sonnet-5",
+ "fixtures": 1,
+ "per_narration_failing": 0,
+ "batch_fails": [],
+ "batch_warns": [
+  "L6 sentence-length CV 0.44 < 0.45"
+ ],
+ "stats": {
+  "hook_ratio": 0.0,
+  "sentence_cv": 0.44031528592635544,
+  "band_10_22": 0.6666666666666666,
+  "em_dash_mean": 0,
+  "ellipsis_mean": 0
+ },
+ "usage": {
+  "input_mean": 5424,
+  "input_p95": 5424,
+  "output_mean": 52,
+  "output_p95": 52
+ },
+ "cost_per_turn_usd": 0.023812,
+ "narrations": [
+  {
+   "id": "nf-23-wounded-no-new-anatomy",
+   "text": "The second punch lands the same way the first did. Jorun rocks back against the bar, catches himself on the rail, and stays upright. He doesn't swing back.",
+   "input_tokens": 5424,
+   "output_tokens": 52,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  }
+ ]
+}

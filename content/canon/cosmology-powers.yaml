@@ -1,0 +1,220 @@
+# Universe Canon — Cosmology & Powers (the metaphysical base + the magic taxonomy)
+# Team B, Universe Canon v1 (DRAFT). Category: 7 of 8.
+#
+# Mostly LINKS and LIFTS what is already authored in docs/lore up to universe level: the Quill,
+# the veil, the two churches, the component laws, and magic-as-cost-ledger. The rule that binds
+# everything: magic is a COST LEDGER, not a permission list (anchor.low_magic). Every power below
+# has a price the engine collects; nothing here is free.
+#
+# The forbidden-knowledge exposure track and the bottomless Quill mystery (docs/lore/06 hard rule)
+# are the two things that keep the metaphysics inexhaustible: the more you learn, the more knows
+# you, and the last question never closes.
+
+# ---------- BIOME SET (the habitat vocabulary bestiary.yaml and worldgen draw from) ----------
+biomes:
+  [downs, chalk_path, heath, fen, marsh, riverbank, forest, forest_edge, woodland, hills, high_pasture,
+   crag, mountain, mountain_deep, cave, deep_cave, quarry, ruin, barrow_field, cairn, graveyard, crypt,
+   ancient_tomb, thin_place, drowned_quarter, coast, isle, wasteland, volcanic_country, town, road,
+   the_far_side, legend]
+
+# ---------- METAPHYSICAL FORCES (the base physics) ----------
+forces:
+
+  - id: power.the_quill
+    name: The Quill
+    tier: sealed   # its NATURE is unreachable; its EFFECTS (the world exists, is authored) are given
+    what: >-
+      The sole true creator — the instrument that wrote the world into being, and the world's real
+      metaphysics (docs/lore/06). There genuinely IS a System and it WAS authored; the dice are
+      honest, so no story is pre-written, but the world was written. RESOLVED (George, 2026-07-14,
+      decisions-resolved.md decision 3): the Quill is the one true god. What is PLURAL is the
+      worship, not the god — every region reads the same true Quill through its own doctrine, names,
+      and rites (see `quill_worship_regional` below). The two poles are the Open Page (record is
+      reverence) and the Blotted (live unwritten); other regions hold their own readings. Any other
+      "gods" remain local saints and superstition — no rival pantheon, only many faces of one Quill.
+    cost: n/a (a force, not a purchased effect)
+    links: [docs/lore/06-quill-cosmology.md]
+
+  - id: power.the_veil
+    name: The veil
+    tier: sealed
+    what: >-
+      The base physic of death: the dead cross once, outward. Everything the churches argue about
+      sits on top of it. The veil is thinner in some places (thin places) where, under the right
+      components, the crossing can be made the other way — rare, local, dangerous (docs/lore/02).
+    cost: Veil-work is sealed and cost-ledgered; the crossing never rewinds and something notices.
+    links: [docs/lore/02-universe-laws.md]
+
+  - id: power.the_system
+    name: The System / the Quill-touched sight
+    tier: sealed
+    what: >-
+      The player's gift: to SEE the System — the [brackets], the <<dialogs>>, the appraisal — where
+      natives are only written about. Read TO, not merely about (the prophet's mark to one church,
+      the Author's finger to the other). The System records what you KNOW, not what is true
+      (docs/lore/00). It is never software (docs/lore/12): no menus-as-reality.
+    cost: The sight itself is the entry blessing; what it reveals is gated by research (KNOWN, fallible).
+    links: [docs/lore/00-spine.md, docs/lore/01-system-diction.md, docs/lore/06-quill-cosmology.md]
+
+  - id: power.true_names
+    name: True-names
+    tier: rite
+    what: >-
+      A person's true-name can be sealed to a record (a rite, a wax seal) and made an identity
+      anchor — the IDENTITY component of resurrection (docs/lore/laws-format). The base of the
+      Skill Church's appraisal sacrament and the vale's marriage-seal custom.
+    cost: "Legibility is the price: a sealed name can be read by anyone who reaches the rolls."
+    links: [docs/lore/05-skill-church.md, docs/lore/02-universe-laws.md]
+
+  - id: power.forbidden_exposure
+    name: The forbidden-knowledge exposure track
+    tier: sealed
+    what: >-
+      Researching the forbidden domains (veil, true-names, sealed arts, summoning, demons, and the
+      Quill's nature) accrues EXPOSURE — surveillance, corruption, nightmares, faction interest,
+      the attention of things that watch the veil. The Kumo "Taboo" model: the knowledge that lets
+      you act also implicates and isolates you. Time-skips never bypass it.
+    cost: Exposure is the standing price of deep knowledge; it never resets and never rewinds.
+    links: [docs/lore/laws-format.md, docs/lore/06-quill-cosmology.md]
+
+# ---------- QUILL-WORSHIP, PLURAL AND REGIONAL (one true god, many faces) ----------
+# RESOLVED + CANON LOCKED (George, 2026-07-14, decisions-resolved.md decisions 3 & 5 + FINAL CONFIRM):
+# the Quill is the sole true creator; worship of it is interpreted differently by region — and this
+# is a FIRST-CLASS, REPEATABLE PATTERN, not a fixed short list. The Open Page / the Blotted are the
+# two poles (docs/lore/06, peoples-factions.yaml). The three regional readings below (Crown's Hand,
+# Scored Page, Fen Kalendar) are SEEDED EXAMPLES, now confirmed canon. The world is large: each
+# region/major settlement MAY carry its own sect/reading of the same true Quill, and worldgen/authoring
+# MAY add one when it adds a region (see `pattern` below; map.yaml regions carry an optional `sect:`).
+quill_worship_regional:
+  principle: >-
+    One god, many faces. The metaphysics are fixed and universal; the doctrine is local. A deed
+    reads as prophecy in one parish, as plot in the next, and as the crown's writ in a third — the
+    disagreement is the play surface, never a dispute about whether the Quill is real. Each reading
+    is a KNOWN-sheet doctrine that can be wrong about the Quill while the Quill stays real.
+  pattern:
+    status: first_class_repeatable   # RESOLVED — regional sects are a repeatable authoring pattern
+    rule: >-
+      Regional Quill-interpretation extends PER REGION. A region (docs/lore/13-world-map.md,
+      content/canon/map.yaml) may name a sect.<id> in its optional `sect:` field; worldgen or authoring
+      MAY mint a NEW regional reading of the one true Quill when it adds a region, appended to canon on
+      accept (anchor.bottomless_core). The two poles and the three seeded readings below are the base;
+      the base only accretes. Every new reading obeys `binding` (of ONE Quill; never a rival god; may
+      never resolve what the Quill is).
+    seeded: [sect.open_page, sect.blotted, sect.crown_hand, sect.scored_page, sect.fen_kalendar]
+  interpretations:
+    - id: sect.open_page
+      name: The Open Page
+      region: [region.harrowdown, region.lundmarch, the settled heartland]
+      pole: pro-record
+      reading: The Page is open and you hold the pen; what you do is written because you did it. Record is reverence. (docs/lore/06, faction.open_page_church)
+    - id: sect.blotted
+      name: The Blotted
+      region: [the margins everywhere — border camps, drowned quarters, roads between parishes]
+      pole: anti-record
+      reading: The Author writes us into corners; the only free act is the one no one wrote down. They keep no ledgers and pay for it each generation. (docs/lore/06, faction.blotted_movement)
+    - id: sect.crown_hand
+      name: The Crown's Hand (the capital's high church)
+      region: [region.aldcaster, the crown lands]
+      pole: pro-record, statist
+      reading: >-
+        The heartland reading, close to the throne: the Quill wrote the crown's right to rule into
+        the world's first lines, so the master rolls ARE the law and to be unwritten is to be outlaw.
+        The reading the levies and war-colleges are preached under, and the one that leans hardest on
+        the maintained Demon Lord (docs/lore/08) — an enemy in the record is an enemy the crown may
+        lawfully answer. RESOLVED (seeded example, George 2026-07-14).
+    - id: sect.scored_page
+      name: The Scored Page (the burned north)
+      region: [region.cindermarch, the frontier upland]
+      pole: fatalist
+      reading: >-
+        Born in the province the fire took: the Quill blots what it will, and a whole people can be
+        struck from the page in a season. They keep meticulous records OF the loss — tending ruins,
+        reading the names of the dead off stones nobody answers to. A grief-church at the edge of
+        dragon country, in the shadow of the Cinder Dam (bestiary.yaml `mother_dragon`) who burned it.
+        RESOLVED (seeded example, George 2026-07-14).
+    - id: sect.fen_kalendar
+      name: The Fen Kalendar (the western meres)
+      region: [region.dunmere, region.the_meres]
+      pole: folk-syncretic
+      reading: >-
+        Wet-country worship: the Quill is read in water and season rather than ink, and the local
+        saints the heartland calls superstition are honored as its lesser marks. The reading that
+        blurs most into hedge-craft (power.hedge_craft). RESOLVED (seeded example, George 2026-07-14).
+  binding:
+    - all readings are of ONE true Quill; none is a rival god and none is metaphysically "more correct."
+    - no regional sect may resolve what the Quill is; the forbidden deep end of knowledge.theology
+      never closes for any of them (docs/lore/06 hard rule).
+
+# ---------- THE MAGIC LADDER (powers, low to sealed — every one is a purchase) ----------
+powers:
+
+  - id: power.hedge_craft
+    name: hedge-craft
+    tier: hedge
+    what: >-
+      The commonest "magic," barely magic at all: mending poultices, warding chalk cut from a named
+      barrow, folk charms. Herb-and-honesty work (bleeds into flora/apothecary). Real, small, cheap.
+    cost: "Components (vale herbs, barrow chalk) + time; wards fade by season; the warded thing knows a line was laid."
+    links: [docs/lore/02-universe-laws.md, docs/lore/03-magic-cost-ledger.md]
+
+  - id: power.church_rite
+    name: church rites
+    tier: rite
+    what: >-
+      The Open Page sacraments: true-name sealing on the parish rolls, the public appraisal
+      ceremony (a fallible KNOWN entry on a person), reading the dead their lines. Institutional,
+      public, and fallible by doctrine.
+    cost: "Ceremony + a drop of blood + one Quarterday eve; the entry is permanent and public (legibility is the price)."
+    links: [docs/lore/05-skill-church.md, docs/lore/03-magic-cost-ledger.md]
+
+  - id: power.veil_work
+    name: veil-work
+    tier: sealed
+    what: >-
+      Working the crossing at a thin place — the resurrection law and its kin. The high, forbidden
+      end of what mortals can attempt. Component-gated; any route that assembles the components
+      counts (docs/lore/laws-format).
+    cost: "Per the Five Laws: an offered life, the vessel's preservation, the closed thin window, exposure, and the attention of the far side."
+    links: [docs/lore/laws-format.md, docs/lore/02-universe-laws.md]
+
+  - id: power.battle_magic
+    name: battle-magic (UNVERIFIED)
+    tier: unverified
+    what: >-
+      Thrown fire, passage through walls, speech across distance. The vale has NEVER seen these;
+      ballads attribute them to the capital's war-colleges, and the guild dossier on the subject is
+      one fifty-year-old letter (docs/lore/02). Authored as unverified and sealed-if-real — NOT
+      confirmed to exist. Absence of a caster in the vale is a fact about the vale, not a ruling on
+      the universe. RESOLVED (George 2026-07-14): the low-magic ceiling for arcane force stays here —
+      rare, distant, cost-ledgered, never common (anchor.low_magic; CANON LOCKED).
+    cost: "If real, sealed-tier and cost-ledgered like all magic — never a common permission."
+    links: [docs/lore/02-universe-laws.md]
+
+# ---------- THE COMPONENT-LAW REGISTRY (the sealed feats) ----------
+# Sealed feats are component requirement lists, never quest chains (docs/lore/laws-format).
+# Any route that assembles the components counts; accepted novel routes append to canon.
+laws_registry:
+  - law_id: law.resurrection
+    name: The Five Laws of Return
+    status: authored (worked example in docs/lore/laws-format.md; ledger in docs/lore/03)
+    summary: identity + memory + vessel + passage + power. Known early, achieved endgame, never rewinds.
+  - law_id: law.summoning
+    name: The Summoning of Heroes
+    status: authored this canon pass (docs/lore/07-summoning-history.md)
+    summary: The historical sealed feat that pulled otherworld souls in; shares components with resurrection.
+  - hypothesis: demon_lord
+    name: The Demon Lord
+    status: dossier, not a law (docs/lore/08) — church answer + true answer authored separately
+    summary: >-
+      The four-corner board (real / dead / committee / propaganda) stays the narrator-safe KNOWN
+      pinboard. RESOLVED (George 2026-07-14): the TRUE answer is DEAD MYTH and/or PROPAGANDA — not a
+      living being, and the legend MAINTAINED either way. Bottomless via cui bono (who keeps it
+      walking), never a kill. TRUE half never narrator-facing (docs/lore/08).
+
+# ---------- THE UNREACHABLE (the one permanent gap) ----------
+bottomless:
+  rule: >-
+    "Prove what the Quill is" is permanently unsatisfiable (docs/lore/06 hard rule). Component laws
+    may gate REVELATIONS about the Quill; they never gate or grant the final answer. Every
+    revelation is real and opens a deeper question. There is no end state — defeat the biggest
+    threat and the victory uncovers the next. This is the metaphysical form of anchor.bottomless_core.

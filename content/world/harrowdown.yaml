@@ -1,0 +1,690 @@
+# Everquill — seed region v1: HARROWDOWN (Team B, Sprint 1, ticket B1)
+# Format: docs/tickets/sprint-1.md interface decision 3 (LOCKED). Do not add fields.
+# Region name HARROWDOWN is locked canon (George decisions, Sprint 2 header, 2026-07-13).
+# All prices are copper pennies (100 pennies = 1 silver mark); see docs/lore/10-economy-prices.md.
+# true_sheet blocks are ENGINE-ONLY. They never serialize to the client or the narrator context.
+# Aptitude scale assumed 1 weak / 3 average adult / 5 trained / 7 veteran / 10+ elite,
+# calibrated against everquill_engine/ladder.py band_for_gap thresholds. Renumber when
+# Team A publishes docs/engine/stats.md if chargen averages differ from 3.
+
+locations:
+  # ---------- the town ----------
+  - id: loc.harrowdown.market_row
+    name: Market Row
+    type: square
+    region: harrowdown
+    connections:
+      - {to: loc.harrowdown.tavern, carriage_days: 0}
+      - {to: loc.harrowdown.guild_hall, carriage_days: 0}
+      - {to: loc.harrowdown.chapel, carriage_days: 0}
+      - {to: loc.harrowdown.chandlery, carriage_days: 0}
+      - {to: loc.harrowdown.cairn_road, carriage_days: 0}
+      - {to: loc.harrowdown.south_road, carriage_days: 0}
+      - {to: loc.harrowdown.drove_road, carriage_days: 0}
+      - {to: loc.harrowdown.wool_row, carriage_days: 0}
+
+  - id: loc.harrowdown.wool_row
+    name: The Wool Row Granary
+    type: square
+    region: harrowdown
+    connections:
+      - {to: loc.harrowdown.market_row, carriage_days: 0}
+
+  - id: loc.harrowdown.tavern
+    name: The Drowned Ram
+    type: tavern
+    region: harrowdown
+    connections:
+      - {to: loc.harrowdown.market_row, carriage_days: 0}
+
+  - id: loc.harrowdown.guild_hall
+    name: Harrowdown Guild Hall
+    type: guild_hall
+    region: harrowdown
+    connections:
+      - {to: loc.harrowdown.market_row, carriage_days: 0}
+
+  - id: loc.harrowdown.chapel
+    name: Chapel of the Open Page
+    type: church
+    region: harrowdown
+    connections:
+      - {to: loc.harrowdown.market_row, carriage_days: 0}
+
+  - id: loc.harrowdown.chandlery
+    name: Ferrier's Chandlery
+    type: shop
+    region: harrowdown
+    connections:
+      - {to: loc.harrowdown.market_row, carriage_days: 0}
+
+  # ---------- roads out ----------
+  - id: loc.harrowdown.cairn_road
+    name: The Cairn Road
+    type: road
+    region: harrowdown
+    connections:
+      - {to: loc.harrowdown.market_row, carriage_days: 0}
+      - {to: loc.dunmere.market_square, carriage_days: 2}
+
+  - id: loc.harrowdown.south_road
+    name: The South Road
+    type: road
+    region: harrowdown
+    connections:
+      - {to: loc.harrowdown.market_row, carriage_days: 0}
+      - {to: loc.severwick.market_square, carriage_days: 4}
+
+  - id: loc.harrowdown.drove_road
+    name: The Drove Road
+    type: road
+    region: harrowdown
+    connections:
+      - {to: loc.harrowdown.market_row, carriage_days: 0}
+      - {to: loc.harrowdown.quarry_track, carriage_days: 0}
+      - {to: loc.cranholt.market_square, carriage_days: 3}
+
+  - id: loc.harrowdown.quarry_track
+    name: The Quarry Track
+    type: road
+    region: harrowdown
+    connections:
+      - {to: loc.harrowdown.drove_road, carriage_days: 0}
+
+  # ---------- neighbor stubs: named, unauthored, future sprints ----------
+  # Arrival-point squares only. No "town" type exists in the locked location enum,
+  # so each stub is its market square. Do not author these regions in this file.
+  - id: loc.dunmere.market_square
+    name: Dunmere Market
+    type: square
+    region: dunmere
+    connections:
+      - {to: loc.harrowdown.cairn_road, carriage_days: 2}
+
+  - id: loc.cranholt.market_square
+    name: Cranholt Green
+    type: square
+    region: cranholt
+    connections:
+      - {to: loc.harrowdown.drove_road, carriage_days: 3}
+
+  - id: loc.severwick.market_square
+    name: Severwick Market
+    type: square
+    region: severwick
+    connections:
+      - {to: loc.harrowdown.south_road, carriage_days: 4}
+
+entities:
+  # ---------- NPCs ----------
+  - id: npc.harrowdown.maren_ostler
+    name: Maren Ostler
+    descriptor: the barkeep, working the taps and listening more than she says
+    kind: npc
+    location: loc.harrowdown.tavern
+    true_sheet:
+      aptitudes: {might: 3, finesse: 2, wits: 5, will: 4, presence: 4, lore: 3}
+      threat_band: 2
+      tags: [rumor_hub, hears_everything, ex_carter, trades_in_confidences]
+    common_knowledge:
+      - Keeper of the Drowned Ram for eleven years; drove a carrier cart on the South Road before that.
+      - Widowed once, robbed twice, never surprised.
+      - Pays a penny for road news worth hearing and remembers who told her what.
+    knowledge_scope:
+      # Team B SOURCE 2 (harrowdown-scopes.yaml): road talk — low-strength,
+      # comfortable. Her error is the road-consensus comfort-lie: true of one
+      # incident, told as a law.
+      max_appraisal_tier: 2
+      subjects:
+        - subject: creature.harrowdown.quarryman
+          reveals:
+            - tier: 0
+              predicate: common_knowledge
+              value_text: it took oxen off the high pasture below Redcliff Scar in open daylight
+              claim_text: >-
+                The road's fresh talk: the Quarryman took two oxen off the high
+                pasture below Redcliff Scar in open daylight, not a week gone.
+          error:
+            predicate: common_knowledge
+            value_text: stand still, give up the oxen, and the Quarryman lets men be
+            claim_text: >-
+              Every carter on the South Road tells it the same: stand still, give
+              up the oxen, and the Quarryman lets men be. It only wants the
+              livestock. A comfort-story built from the one man who froze and
+              lived — two parties who "kept still" went up the track on it and did
+              not come down.
+            distortion: local_mistaken_for_universal
+        - subject: creature.harrowdown.barrow_wight
+          error:
+            predicate: threat_assessed
+            value_text: RISKY
+            claim_text: >-
+              The barkeep's line on the tor: the dead thing keeps to its barrows and to
+              daylight, and a carter who rolls through by noon has nothing to
+              fear. Nervous folk make it worse than it is. A summer truth told as
+              a year-round one.
+            distortion: local_mistaken_for_universal
+        - subject: creature.harrowdown.downland_wolf
+        - subject: npc.harrowdown.rold_tanner
+        - subject: npc.harrowdown.jorun_pike
+      lead:
+        to: loc.severwick.market_square
+        claim_text: >-
+          The barkeep trades in what came up the road this week, not in dragon-lore.
+          "You want the far stuff, you want Severwick," she says, "and a season's
+          patience." The deep wyvern rolls are four days south; the dragon rolls,
+          she's heard, are kept further still.
+    portrait: null
+
+  - id: npc.harrowdown.fenn_bracey
+    name: Fenn Bracey
+    descriptor: a clerk at the ledger desk, counting bounty tails
+    kind: npc
+    location: loc.harrowdown.guild_hall
+    true_sheet:
+      aptitudes: {might: 2, finesse: 3, wits: 5, will: 3, presence: 3, lore: 4}
+      threat_band: 1
+      tags: [guild_clerk, keeps_board_honest, knows_exam_calendar]
+    common_knowledge:
+      - Receptionist and ledger-keeper at the Harrowdown hall; holds an F plate himself and has never taken a posting.
+      - Reads every posting aloud twice to anyone who cannot read.
+      - Will not backdate a registration for any coin. People have tried.
+    portrait: null
+
+  - id: npc.harrowdown.sister_odile
+    name: Sister Odile
+    descriptor: a sister of the Open Page in grey robes
+    kind: npc
+    location: loc.harrowdown.chapel
+    true_sheet:
+      aptitudes: {might: 2, finesse: 2, wits: 4, will: 5, presence: 5, lore: 5}
+      threat_band: 2
+      tags: [open_page, appraisal_tier_2, keeps_parish_rolls]
+    common_knowledge:
+      - Sister of the Open Page; has run the Harrowdown chapel alone for nine years.
+      - Performs the appraisal ceremony on Quarterday eves; entered half the town on the rolls herself.
+      - Walks the Cairn Road to Sedge Ford each spring to read the drowned their lines.
+    knowledge_scope:
+      # Team B SOURCE 3 (harrowdown-scopes.yaml): the parish rolls of the Open
+      # Page. Reads PEOPLE at category depth, stamped as a tier-2 church record.
+      # Her error is insufficient_appraisal_tier: deep talent surfaces no
+      # craft-mark and the record follows the person for years. On Reyla she is
+      # HONESTLY ABSENT — the fire burned the record — which she surfaces as the
+      # lead to Toller (reyla_grave deliberately OUT of scope so the lead fires),
+      # setting up the contested pair with Toller's fabrication.
+      max_appraisal_tier: 2
+      subjects:
+        - subject: npc.harrowdown.elam_ferrier
+          reveals:
+            - tier: 0
+              predicate: common_knowledge
+              value_text: a quiet chandler and thirty-year widower who tends Reyla's grave
+              claim_text: >-
+                A quiet chandler on Market Row since the year of the roll fire; a
+                widower who tends his drowned wife's grave and leaves wax flowers
+                every Quarterday.
+            - tier: 1
+              predicate: common_knowledge
+              value_text: a tradesman and a widower — the public story understates him
+              claim_text: >-
+                A tradesman and a thirty-year widower, and nothing else surfaces.
+                The public story understates him, by his own long design.
+          error:
+            predicate: observed_statement
+            value_text: fit for the wax trade; no craft-mark surfaced
+            claim_text: >-
+              The roll reads him as it read him at his appraisal: fit for the wax
+              trade, no craft-mark. "The Page showed no more," the sister says, and
+              stands behind the writing.
+            distortion: insufficient_appraisal_tier
+        - subject: npc.harrowdown.fenn_bracey
+        - subject: npc.harrowdown.jorun_pike
+        - subject: npc.harrowdown.rold_tanner
+        - subject: npc.harrowdown.maren_ostler
+        - subject: npc.harrowdown.toller_whin
+      lead:
+        to: npc.harrowdown.toller_whin
+        claim_text: >-
+          "Her ceremony burned with the rest of the old roll," the sister says. "The
+          Page keeps no copy the fire took. If any line of her survives, it
+          survives in what the lay-clerk salvaged off the barge."
+    portrait: null
+
+  - id: npc.harrowdown.toller_whin
+    name: Toller Whin
+    descriptor: a stooped lay-clerk among the parish rolls
+    kind: npc
+    location: loc.harrowdown.chapel
+    true_sheet:
+      aptitudes: {might: 2, finesse: 2, wits: 5, will: 3, presence: 2, lore: 6}
+      threat_band: 1
+      # Lore 6 is a strong lay reader, pointedly BELOW Elam Ferrier's hidden
+      # lore 8 (npc.harrowdown.elam_ferrier) — Toller is the vale's real, modest
+      # research site; Elam is the secret one. Toller's error is causal, not
+      # incompetence: he trusts water-blurred salvage he has reconstructed. See
+      # this entity's inline knowledge_scope below (folded from Team B's
+      # harrowdown-scopes.yaml, Sprint 3 wave 1 reconciliation).
+      tags:
+        - parish_clerk
+        - lay_scholar
+        - keeps_salvage_rolls
+        - reads_for_a_fee
+        - trusts_the_written_line
+    common_knowledge:
+      - Lay clerk at the Chapel of the Open Page; came the year after the roll fire to salvage what the water and smoke left, and stayed.
+      - Reads, copies, and settles who-was-kin-to-whom for the price of a candle; charges by the page and squints at everything close.
+      - Trusts a written line over any living memory, and will tell you so before he answers.
+    knowledge_scope:
+      # Team B SOURCE 4 (harrowdown-scopes.yaml): Toller's salvage-rolls & lay
+      # archive — the vale's real local research node. He CORRECTS the guild's
+      # cairn-rat / wolf / roost errors by cross-reference and holds the deep
+      # re-tiering truths (the Quarryman's south roost + cache-ledge weak point,
+      # the wight's binding radius). His own error is a transcription_error /
+      # reconstruction-as-fact: he trusts water-blurred salvage he has filled in
+      # (Reyla's fabricated appraisal). max_appraisal_tier stays 3 (B's value);
+      # the resolver caps single-roll research depth at 2, so deep truths and
+      # weak points are folded to reachable tier-2 reveals (see scope-world.yaml
+      # fixture, which places its weak_point at tier 2).
+      max_appraisal_tier: 3
+      subjects:
+        - subject: creature.harrowdown.cairn_rat
+          reveals:
+            - tier: 2
+              predicate: common_knowledge
+              value_text: barrow-denned rats carry a trace of the barrows; a bite left weeping turns to a slow wight's-grip
+              claim_text: >-
+                The lay-clerk cross-references the salvage: barrow-denned cairn rats
+                carry a trace of what the barrows hold, and a bite left weeping too
+                long starts a slower version of a wight's grip. The hall's "only
+                dirt" rests on a Severwick healer's forty-year-old letter on
+                granary rats caught on Wool Row — never barrow stock.
+        - subject: creature.harrowdown.downland_wolf
+          reveals:
+            - tier: 2
+              predicate: common_knowledge
+              value_text: downland packs cross the Lund at Sedge Ford in the dry months
+              claim_text: >-
+                "The water-line note is copied off a Dunmere fen-pack roll, where
+                it holds only in flood season," the lay-clerk says. Downland packs cross
+                the Lund at Sedge Ford in the dry months — two dead shepherds'
+                families can date when trusting the note stopped being safe.
+        - subject: creature.harrowdown.chalk_adder
+        - subject: creature.harrowdown.barrow_wight
+          reveals:
+            - tier: 2
+              predicate: weak_point
+              value_text: it cannot leave sight of its own barrow — break the sight-line and it cannot follow
+              claim_text: >-
+                The salvage-rolls are plain where the dossier is silent: the wight
+                cannot leave sight of its own mound. Break its sight-line to the
+                barrow and it cannot follow — the grave-goods in the outer barrows
+                are reachable by anyone who stays off that line.
+        - subject: creature.harrowdown.quarryman
+          reveals:
+            - tier: 1
+              predicate: common_knowledge
+              value_text: it roosts the south overhang now, not the north face; its hunting is thermal-bound
+              claim_text: >-
+                "I can give you the year they blasted the north face and the year
+                the warrant was cut — they don't match," the lay-clerk says. It roosts the
+                south overhang now, and it flies when the thermals rise off the
+                chalk: weather-tied, predictable to within an hour by anyone who
+                watches for a week.
+            - tier: 2
+              predicate: weak_point
+              value_text: the cache-ledge below the south overhang, revisited at the same dead hour the next day
+              claim_text: >-
+                It caches what it takes on a ledge below the south overhang and
+                returns to the cache at the same hour the following day. A party
+                that reaches the cache unseen and downwind, in that dead hour, has
+                the only angle the vale's scale allows — enough to make a HOPELESS
+                fight a DESPERATE one, never a routine one.
+          # No error on the Quarryman: Toller is the source that CORRECTS the
+          # guild's outdated roost, so he is never confidently-wrong here.
+        - subject: prop.harrowdown.reyla_grave
+          reveals:
+            - tier: 0
+              predicate: observed_statement
+              value_text: Reyla Ferrier, appraised fit for the water trade — the copy has it
+              claim_text: >-
+                The lay-clerk turns to a water-stained leaf and reads it off without a
+                flicker of doubt: "Reyla Ferrier, appraised the autumn before the
+                fire — fit for the water trade. The copy has it." He does not
+                mention the leaf is half-illegible and the line reconstructed.
+          error:
+            predicate: observed_statement
+            value_text: Reyla Ferrier, appraised fit for the water trade — the copy has it
+            claim_text: >-
+              Pressed harder, the lay-clerk only grows more certain, filling the
+              water-blur from memory: "Fit for the water trade. The copy has it."
+              The line he trusts as fact never survived the fire — it contests the
+              church's honest "her record burned."
+            distortion: transcription_error
+        - subject: npc.harrowdown.elam_ferrier
+      lead:
+        to: loc.severwick.market_square
+        claim_text: >-
+          "What a hunt does with a wyvern beyond what I can give you — the wider
+          wyvern-hunt doctrine, and any dragon-lore — that's not in a leaf I own,"
+          the lay-clerk says. "That's the Severwick monastery's book, and it's four days
+          of road."
+    portrait: null
+
+  - id: npc.harrowdown.jorun_pike
+    name: Jorun Pike
+    descriptor: a wary man with a ruined left arm, his back to the wall and his eyes on the door
+    kind: npc
+    location: loc.harrowdown.tavern
+    true_sheet:
+      aptitudes: {might: 5, finesse: 3, wits: 5, will: 7, presence: 3, lore: 4}
+      threat_band: 6
+      tags: [c_plate, wyvern_survivor, walking_lesson, keeps_room_above_tavern, guarded]
+    common_knowledge:
+      - C plate, twenty years carried. Keeps a room above the Drowned Ram.
+      - Left arm ruined at the Redcliff quarry nine years back. Six went up the track; two came down.
+      - Buys his own ale. Answers questions about the wyvern once per asker, then never again.
+    portrait: null
+
+  - id: npc.harrowdown.elam_ferrier
+    name: Elam Ferrier
+    descriptor: the chandler, totting a sum behind his counter
+    kind: npc
+    location: loc.harrowdown.chandlery
+    true_sheet:
+      aptitudes: {might: 2, finesse: 3, wits: 6, will: 6, presence: 2, lore: 8}
+      threat_band: 2
+      # SECRET (engine-only): the public story is a quiet tradesman. The lore 8 is
+      # thirty years of sealed-law scholarship. See docs/lore/02-universe-laws.md,
+      # "Research targets" — never narrator context.
+      tags:
+        - five_laws_researcher
+        - soul_anchor_holder
+        - knows_hollow_tor_window
+        - public_story_understates_him
+    common_knowledge:
+      - Chandler on Market Row since the year of the roll fire; sells the only sealed lamp oil between Harrowdown and Severwick.
+      - Widower. His wife Reyla drowned at Sedge Ford thirty years back.
+      - Tends her grave in the chapel yard; leaves wax flowers every Quarterday.
+    portrait: null
+
+  - id: npc.harrowdown.rold_tanner
+    name: Rold Tanner
+    descriptor: a hard-faced man working the row, counting coin into a pouch
+    kind: npc
+    location: loc.harrowdown.market_row
+    true_sheet:
+      aptitudes: {might: 5, finesse: 3, wits: 2, will: 3, presence: 4, lore: 1}
+      threat_band: 4
+      tags: [stall_tax, two_cousins_back_him, kicks_up_to_bailiff, town_menace]
+    common_knowledge:
+      - Collects a "stall tax" on Market Row that no town law names. Two big cousins stand behind him on collection days.
+      - Broke a potter's hand in the spring over three pennies.
+      - The reeve's bailiff looks away when he works the row.
+    portrait: null
+
+  # ---------- creatures (regional ladder, low to apex) ----------
+  - id: creature.harrowdown.ditch_slime
+    name: ditch slime
+    kind: creature
+    location: loc.harrowdown.tavern
+    true_sheet:
+      aptitudes: {might: 2, finesse: 1, wits: 0, will: 0, presence: 0, lore: 0}
+      threat_band: 1
+      tags: [vermin, wet_places, dissolves_leather]
+    common_knowledge:
+      - Gathers in wet cellars, ditches, and under bridges after rain.
+      - A walking pace outruns one. Given a night, it ruins leather, rope, and drunks who sleep in ditches.
+      - Salt kills small ones. Big ones get carved and salted.
+    portrait: null
+
+  - id: creature.harrowdown.cairn_rat
+    name: cairn rat
+    kind: creature
+    location: loc.harrowdown.market_row
+    true_sheet:
+      aptitudes: {might: 1, finesse: 3, wits: 1, will: 1, presence: 0, lore: 0}
+      threat_band: 2
+      tags: [vermin, pack_forager, dens_in_barrows]
+    common_knowledge:
+      - Big grey rats that den in the old barrows and raid granaries in autumn.
+      - Bites go bad more often than they should. Wash the wound, see a healer if it weeps.
+      - The guild posts rat work at F rank. Dunmere pays standing bounties for a reason.
+    portrait: null
+
+  - id: creature.harrowdown.granary_rat
+    name: granary rat
+    kind: creature
+    location: loc.harrowdown.wool_row
+    true_sheet:
+      aptitudes: {might: 1, finesse: 3, wits: 1, will: 1, presence: 0, lore: 0}
+      threat_band: 1
+      tags: [vermin, granary_nest, tail_bounty]
+    common_knowledge:
+      - The granary rats nest in the wool bales and spilled grain. Twenty tails is a morning's work if you are quick.
+      - Their tails are the proof the guild pays on, cleaner than carrying the whole rat back.
+    portrait: null
+
+  - id: creature.harrowdown.chalk_adder
+    name: chalk adder
+    kind: creature
+    location: loc.harrowdown.drove_road
+    true_sheet:
+      aptitudes: {might: 1, finesse: 5, wits: 1, will: 1, presence: 1, lore: 0}
+      threat_band: 3
+      tags: [venomous, basks_on_paths, strikes_when_stepped_near]
+    common_knowledge:
+      - Pale snake, hard to see on chalk paths. Basks on the drove road in the warm months.
+      - The bite kills sheep and children; a grown adult has a day to reach a healer.
+      - It does not chase. Step back and it goes.
+    portrait: null
+
+  - id: creature.harrowdown.downland_wolf
+    name: downland wolf
+    kind: creature
+    location: loc.harrowdown.drove_road
+    true_sheet:
+      aptitudes: {might: 4, finesse: 4, wits: 2, will: 2, presence: 2, lore: 0}
+      threat_band: 5
+      tags: [pack_hunter, tests_before_committing, winter_bold]
+    common_knowledge:
+      - Runs in packs of four to eight on the high downs; takes lambs in spring and grown sheep in winter.
+      - A pack tests you before it commits. Shouting and fire end most encounters.
+      - A lone traveler at dusk is a different arithmetic than two carters with staves at noon.
+    portrait: null
+
+  - id: creature.harrowdown.barrow_wight
+    name: barrow wight
+    kind: creature
+    location: loc.harrowdown.cairn_road
+    true_sheet:
+      aptitudes: {might: 5, finesse: 3, wits: 2, will: 6, presence: 4, lore: 1}
+      threat_band: 7
+      tags: [dead_thing, bound_to_barrow, strong_near_thin_nights, cold_grip]
+    common_knowledge:
+      - Something dead that walks the barrow field on Hollow Tor. Shepherds will not graze the tor.
+      - Carters on the Cairn Road roll through by daylight and do not overnight below the barrows.
+      - Grave-goods come out of barrows. So do funerals for the people who went in after them.
+    portrait: null
+
+  - id: creature.harrowdown.quarryman
+    name: the Quarryman
+    kind: creature
+    location: loc.harrowdown.quarry_track
+    true_sheet:
+      aptitudes: {might: 12, finesse: 8, wits: 3, will: 6, presence: 8, lore: 0}
+      threat_band: 14
+      tags: [wyvern, apex_regional, roosts_redcliff_scar, closed_the_quarry, named_threat]
+    common_knowledge:
+      - The wyvern that closed the Redcliff quarry nine years ago. Locals named it the Quarryman.
+      - It takes oxen and horses off the high pasture. It has killed every party sent up the track.
+      - A wyvern is an apex beast and still no dragon. Nobody living in the vale has seen a dragon.
+    portrait: null
+
+  # ---------- props ----------
+  - id: prop.harrowdown.guild_board
+    name: the guild board
+    kind: prop
+    location: loc.harrowdown.guild_hall
+    true_sheet:
+      aptitudes: {might: 0, finesse: 0, wits: 0, will: 0, presence: 0, lore: 0}
+      threat_band: 0
+      tags: [posting_board, world_facts_surface]
+    common_knowledge:
+      - "Posting: rats in the Wool Row granary. F rank. 40 pennies on proof of twenty tails."
+      - "Posting: wolf pack taking lambs above the Drove Road. D rank. 250 pennies."
+      - "Warrant: the Redcliff wyvern. A-threat. Severwick seal required to open. Unclaimed nine years."
+      - "Notice: next Quarterday trials at the Severwick seat in fifty-one days. Guild wagon leaves Harrowdown seven days before. Exam fee 100 pennies."
+    knowledge_scope:
+      # Team B SOURCE 1 (harrowdown-scopes.yaml): the guild board & hall ledger,
+      # the institutional KNOWN. Home of the deterministic wrong-intel plants
+      # (docs/lore/09-bestiary.md). Surface/band source: good rolls give the
+      # surface facts and the (correct) threat band; bad rolls give the
+      # confidently-WRONG dossier value.
+      max_appraisal_tier: 2
+      subjects:
+        - subject: creature.harrowdown.quarryman
+          reveals:
+            - tier: 0
+              predicate: common_knowledge
+              value_text: the wyvern that closed the Redcliff quarry and takes stock off the high pasture
+              claim_text: >-
+                A wyvern. It closed the Redcliff quarry nine years ago, takes oxen
+                and horses off the high pasture, and has killed every party sent up
+                the track.
+            - tier: 1
+              predicate: common_knowledge
+              value_text: an apex regional beast — a wyvern, and still no dragon
+              claim_text: >-
+                Apex regional beast — a wyvern, and still no dragon. A
+                weather-bound flier that hunts on the wing when the air off the
+                chalk lets it.
+            - tier: 2
+              predicate: threat_assessed
+              value_text: HOPELESS
+              claim_text: >-
+                Threat HOPELESS for any plate the vale can field — A-threat,
+                warrant, Severwick seal required, unclaimed nine years.
+          error:
+            predicate: common_knowledge
+            value_text: roosts the north face of Redcliff Scar; strikes at dawn from the sun-side
+            claim_text: >-
+              The warrant is specific: the Quarryman roosts the north face of
+              Redcliff Scar and strikes at dawn from the sun-side. Provenance is
+              the survivors' debrief, nine years old — the quarry blasting scarred
+              that face before the entry was written.
+            distortion: outdated
+        - subject: creature.harrowdown.barrow_wight
+          reveals:
+            - tier: 0
+              predicate: common_knowledge
+              value_text: a dead thing walks the barrow field on Hollow Tor
+              claim_text: >-
+                Something dead walks the barrow field on Hollow Tor. Shepherds will
+                not graze the tor; carters will not overnight below it.
+            - tier: 1
+              predicate: common_knowledge
+              value_text: a revenant, bound to its ground
+              claim_text: "A revenant, bound to its ground — the guild's C, revenant class, bound ground."
+            - tier: 2
+              predicate: threat_assessed
+              value_text: DESPERATE
+              claim_text: >-
+                C, revenant class. Do not engage after dark. Last verified
+                encounter thirty-four years ago, one survivor — the dossier is
+                honest that it has no fresh data.
+          # No error on the wight: the guild's failing here is honest
+          # incompleteness, not a false claim (the wight's ballad-lie is Maren's
+          # road-rumor under-read).
+        - subject: creature.harrowdown.cairn_rat
+          error:
+            predicate: common_knowledge
+            value_text: cairn-rat bite-rot is only dirt in the wound — wash and poultice
+            claim_text: >-
+              The hall dossier is firm: cairn-rat bite-rot is only dirt in the
+              wound. Wash it, poultice it, and it passes.
+            distortion: sample_contamination
+        - subject: creature.harrowdown.downland_wolf
+          error:
+            predicate: common_knowledge
+            value_text: a downland pack will not cross running water
+            claim_text: "The dossier says it plain: a downland pack will not cross running water."
+            distortion: inherited_note_missing_qualifier
+        - subject: creature.harrowdown.chalk_adder
+          error:
+            predicate: common_knowledge
+            value_text: boot leather stops a strike below the knee, and the bitten have a day of grace
+            claim_text: >-
+              The dossier repeats it to every F plate: boot leather defeats a
+              strike below the knee, and the bitten have a day to reach a healer.
+            distortion: outdated
+        - subject: creature.harrowdown.ditch_slime
+      lead:
+        to: loc.severwick.market_square
+        claim_text: >-
+          The board reads no deeper than a warrant. For a wyvern hunt you want the
+          Severwick monastery record-halls — the kingdom's wyvern-hunt archives —
+          four days south.
+    portrait: null
+
+  - id: prop.harrowdown.reyla_grave
+    name: Reyla Ferrier's grave
+    kind: prop
+    location: loc.harrowdown.chapel
+    true_sheet:
+      aptitudes: {might: 0, finesse: 0, wits: 0, will: 0, presence: 0, lore: 0}
+      threat_band: 0
+      tags: [grave, chapel_yard, tended_thirty_years]
+    common_knowledge:
+      - Reyla Ferrier, drowned at Sedge Ford the winter of the roll fire, thirty years past.
+      - Her husband keeps the plot. Wax flowers, replaced every Quarterday, never a dead one left standing.
+    portrait: null
+
+  # ---------- items ----------
+  - id: item.harrowdown.marriage_seal
+    name: Reyla's marriage seal
+    kind: item
+    location: loc.harrowdown.chandlery
+    true_sheet:
+      aptitudes: {might: 0, finesse: 0, wits: 0, will: 0, presence: 0, lore: 0}
+      threat_band: 0
+      # SECRET (engine-only): anchor-class. Qualifies as the identity component of
+      # law.resurrection for Reyla Ferrier — crafted at the wedding, decades before
+      # her death. Elam keeps it hidden. See docs/lore/02-universe-laws.md.
+      tags: [anchor_class, bound_to_reyla_ferrier, hidden, crafted_before_death]
+    common_knowledge:
+      - Vale wedding custom - each spouse presses their true name into a wax seal and gives it into the other's keeping.
+      - Old couples keep the seals on the mantel. Widows and widowers keep them closer than that.
+    portrait: null
+
+prices:
+  # copper pennies. 100 pennies = 1 silver mark, 100 marks = 1 gold sovereign.
+  inn_night_copper: 2              # common-room straw at the Drowned Ram
+  inn_room_night_copper: 8         # private room above the taproom
+  meal_common_copper: 2            # stew, bread, greens
+  ale_pint_copper: 1
+  bread_loaf_copper: 1
+  candle_tallow_copper: 1
+  lamp_oil_pint_copper: 8          # Ferrier's sealed oil
+  day_wage_laborer_copper: 10
+  knife_copper: 60
+  spear_copper: 150
+  leather_jerkin_copper: 300
+  shortsword_copper: 600
+  mail_shirt_copper: 4000
+  poultice_copper: 20              # hedge-grade, unsealed
+  potion_lesser_copper: 300        # healer-brewed, unsealed
+  potion_field_copper: 1200        # healer-brewed, journey-stable
+  potion_sealed_copper: 6000       # healers' guild wax seal; the seal buys recourse, not potency
+  guild_registration_copper: 20
+  guild_plate_deposit_copper: 50
+  guild_exam_fee_copper: 100
+  appraisal_offering_copper: 10
+  carriage_seat_day_copper: 30
+  ford_toll_cart_copper: 5         # Sedge Ford, per cart, paid to the Dunmere-side warden
+
+rumor_seeds:
+  - {deed: "The Quarryman took two oxen off the high pasture below Redcliff Scar in open daylight", notoriety: 6}
+  - {deed: "Lights walked the barrow field on Hollow Tor three nights running past midwinter", notoriety: 4}
+  - {deed: "Rold Tanner broke a potter's hand on Market Row over three pennies of stall tax", notoriety: 3}
+  - {deed: "Elam Ferrier paid silver for a water-ruined crate of pre-fire parish rolls off a Severwick barge", notoriety: 2}
+  - {deed: "Dunmere posted rat bounties again, third season running, and is short of takers", notoriety: 2}

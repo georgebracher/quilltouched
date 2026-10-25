@@ -1,0 +1,105 @@
+# Everquill — Harrowdown narrator content (Team B, Sprint 2)
+# WHY A SEPARATE FILE: everquill_engine/world.py hard-rejects unknown keys at
+# every level (_reject_unknown), so `atmosphere:` on locations and `voice:` on
+# entities cannot live in harrowdown.yaml until Team A1 extends the loader.
+# PROPOSED SHAPES for the loader (both optional, defaulting to empty):
+#   Location.atmosphere: list[str]   — 3-5 concrete sensory facts, narrator-safe
+#   WorldEntity.voice:   list[str]   — 1-2 lines: cadence, vocabulary, one thing
+#                                      they never say (npc kind only)
+# Until then this file is keyed by id for trivial merging: when A1 adds the
+# fields, fold each entry into its owner in harrowdown.yaml and delete this file.
+#
+# CONTENT RULES: everything here reaches narrator context. Public knowledge
+# only — nothing from TRUE/SECRET blocks (Elam's research, the marriage seal,
+# the wight's binding, the Quarryman's true roost). Register per
+# docs/research/ai-tells-fiction.md: flat, concrete, usable facts.
+# Every id below resolves in content/world/harrowdown.yaml.
+
+atmosphere:
+  loc.harrowdown.market_row:
+    - The row is chalk mud from the first autumn rain to spring; stall-holders lay plank walkways between pitches.
+    - The wool weigh-beam mid-row is town property and the one thing on the row the tax-man leaves alone.
+    - The Severwick factor's pitch stands empty except market days; his shears-marks chart stays nailed to the post all week.
+    - Stall-holders keep a second, smaller coin pouch for collection days.
+    - Wagon ruts run deepest toward the South Road; everything worth selling leaves on the weekly wagon.
+
+  loc.harrowdown.tavern:
+    - The barkeep waters the third cask; regulars tap the bar once or twice to say which of the first two they want.
+    - The hearth smokes when the wind sits over the downs; the flue is cracked and Severwick mason rates have kept it that way.
+    - The floorboards dip in front of the bar, worn by eleven years of standing drinkers.
+    - The cork board by the bar carries road news; the barkeep pins what she has paid for and strips what stops earning.
+    - One corner table keeps a clear line to the door, and more often than not it sits empty.
+
+  loc.harrowdown.guild_hall:
+    - The plate rail by the door shows who is inside before anyone speaks.
+    - The board holds three columns, postings, warrants, notices; the warrant column has carried one sheet for nine years.
+    - The proof-scales on the clerk's ledger desk weigh bounty tails and nothing else, cleaned after every count.
+    - The trophy nook holds a single wyvern tail-barb, mounted without a plaque.
+    - The back-room door is thin, and members lower their voices anyway.
+
+  loc.harrowdown.chapel:
+    - The old roll-room doorway is bricked up; the whitewash over the brick has never matched the wall.
+    - The roll cabinet's lock is newer than anything else in the building.
+    - One plot in the yard carries wax flowers, replaced every Quarterday, never a dead one left standing.
+    - A box of candle-stubs by the door empties between market days.
+    - The parish book lies open on the lectern whether or not a ceremony is due.
+
+  loc.harrowdown.chandlery:
+    - The shop smells of tallow and hot wax; the dipping room in back runs most mornings.
+    - Sealed lamp oil lives behind the counter; candles sit in front. The chandler hands the oil over himself.
+    - A pair of wax flowers sits half-finished on the back bench most weeks.
+    - The chandler totals a purchase in his head before his pencil touches the ledger.
+    - The shutters close at dusk to the minute; a light burns upstairs later.
+
+  loc.harrowdown.cairn_road:
+    - Carters start at first light to clear Hollow Tor by dark; a late start waits a day at either end rather than camp below the barrows.
+    - The barrow field shows from the road as a line of humps on the western skyline.
+    - The Sedge Ford warden takes five pennies a cart on the Dunmere side and notches the tally post.
+    - Storm-rain closes the ford for days; waiting carts stack at the Harrowdown end, never under the tor.
+
+  loc.harrowdown.south_road:
+    - The weekly market wagon leaves market-day morning and is back six days later; seats book through the barkeep at the Drowned Ram.
+    - The Lund runs beside the road most of the way south; the stone bridge at Stanwick is the only dry crossing.
+    - Coaching inns stand at Stanwick and Ford Bridge; walkers sleep in hedges or pay carriage rates.
+    - Wool moves south, iron and salt move north; the wagonloads tell the season.
+
+  loc.harrowdown.drove_road:
+    - No carriage runs it; three days over the downs at a carrier's pace, fair weather only.
+    - Chalk adders bask on the white stretches in the warm months; drovers walk the grass verge.
+    - The Blotted camp moves along the road with the drovers; you smell their fires before you see the camp.
+    - Sheep drives at the season turns double the traffic and the dung.
+
+  loc.harrowdown.quarry_track:
+    - Grass grows in the wheel ruts.
+    - The last quarry sledge sits where its team was cut loose, nine years weathered.
+    - Redcliff Scar stands over the dead end, its blast faces pale against the older rock.
+    - Sheep graze the lower track and no higher; the flocks draw their own line.
+
+voice:
+  npc.harrowdown.maren_ostler:
+    - Short questions, then a silence she lets the other person fill. Prices everything in trade terms; news is "worth a penny" or it is idle noise.
+    - Never says where she heard a thing.
+
+  npc.harrowdown.fenn_bracey:
+    - Clerk's even meter, reading voice and speaking voice the same. Exact figures, exact dates, regulation quoted by clause.
+    - Never says "just this once."
+
+  npc.harrowdown.sister_odile:
+    - Plain declaratives with a scope line on the end; liturgy words worn soft by daily use ("it showed no more").
+    - Never promises what the Page will show; calls a disputed entry "read at tier two" rather than wrong.
+
+  npc.harrowdown.toller_whin:
+    - Cites the roll and the year before the answer; dates every claim and reads a water-blurred line in the same even voice as a clean one.
+    - Never says "I think" or "I misremember"; says "the copy has it" - even for the parts he reconstructed.
+
+  npc.harrowdown.jorun_pike:
+    - Single sentences with long gaps; counts things aloud (paces, wolves, pennies) and calls odds "arithmetic."
+    - Never says the word "hero." Answers a wyvern question once per asker, then goes back to his ale.
+
+  npc.harrowdown.elam_ferrier:
+    - Quiet, exact, a tradesman's understatement; answers the question asked and nothing beside it.
+    - Never speaks his dead wife's name aloud; says "my wife," or says nothing.
+
+  npc.harrowdown.rold_tanner:
+    - Loud and friendly the way a hand on your shoulder is friendly; calls every man "neighbor" and money "a consideration."
+    - Never says the word "tax."

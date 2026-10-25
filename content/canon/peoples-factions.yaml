@@ -1,0 +1,244 @@
+# Universe Canon — Peoples & Factions (base, broad strokes)
+# Team B, Universe Canon v1 (DRAFT). Category: 8 of 8.
+#
+# Broad-strokes only (per ticket scope). Humans dominant; elves/dwarves/beastfolk rare and
+# regional (docs/research world-furniture playbook). Racial politics are RUMOR-driven, never
+# stat-driven (a people's reputation is a KNOWN sheet that may not match any individual's TRUE
+# sheet). Institutions are all KNOWN-sheet builders (docs/lore/00) — their ranks, seals, and
+# dossiers are claims that can be wrong. Harrowdown's guilds and churches are regional INSTANCES
+# of these universe factions.
+#
+# RESOLVED (George, 2026-07-14, decisions-resolved.md decision 2 + FINAL CONFIRM): demihumans EXIST —
+# attested but rare, humans dominant, none in Harrowdown. Elves/dwarves/beastfolk confirmed. PLUS the
+# two more grounded peoples below — halfling-kin (the steadfolk) and orc-kin (the marchfolk) — are
+# CONFIRMED (names and the people-vs-feral split locked; no longer flagged). Interbreeding is canon
+# (people.mixed_heritage). Churches gained regional sect variations (decisions 3 & 5) — authored in
+# cosmology-powers.yaml `quill_worship_regional`, cross-referenced from the two church factions below.
+# CANON LOCKED 2026-07-14 (George).
+
+peoples:
+
+  - id: people.humans
+    name: humans
+    prevalence: Dominant everywhere the game currently reaches; the default of every region and institution.
+    common_sense:
+      - The people of the vale, the seats, and the crown. Everyone you meet, unless told otherwise.
+    notes: The baseline. Every authored region is human unless a demihuman presence is specifically seated.
+
+  - id: people.elves
+    name: elves
+    prevalence: Rare, withdrawn, regional. Attested in ballad and old chronicle; none in the vale.
+    common_sense:
+      - Long-lived and reclusive, the songs say — a people who keep to their own country and their
+        own long memory. Most vale folk have never seen one and half doubt they exist.
+    notes: >-
+      Seat them at the edges (a distant wood, an old treaty) or as legend. Long memory = a walking
+      archive (living history the summoning era did not erase). RESOLVED (George 2026-07-14): exists,
+      attested-but-rare, humans dominant.
+
+  - id: people.dwarves
+    name: dwarves
+    prevalence: Rare, regional; hill-and-mountain craftsfolk, allied where present.
+    common_sense:
+      - Smiths and delvers of the high stone, the songs say. Their work outlasts kingdoms; the good
+        steel in a lord's armory is half-rumored to be theirs.
+    notes: >-
+      The natural keepers of crucible steel and deep-metallurgy secrets (tech.crucible_steel) — a
+      demihuman research node where seated. RESOLVED (George 2026-07-14): exists, attested-but-rare,
+      humans dominant.
+
+  - id: people.beastfolk
+    name: beastfolk
+    prevalence: Rare, frontier, discriminated against where present.
+    common_sense:
+      - Frontier folk who wear the marks of beasts, the songs say — feared and used and seldom
+        trusted. The vale has opinions and no experience.
+    notes: >-
+      Where seated, their treatment is a KNOWN-sheet injustice to investigate, never a slavery beat
+      (docs/lore/12 hard absence). RESOLVED (George 2026-07-14): exists, attested-but-rare, humans dominant.
+
+  # RESOLVED (George 2026-07-14, decisions-resolved.md decision 2 + FINAL CONFIRM): two more grounded
+  # peoples on the low-magic, wool-and-tallow pattern — CONFIRMED IN (names + split locked). Why these two:
+  #  - halfling-kin (the steadfolk): the integrated farm-country demihuman — the "present, intermarried,
+  #    cozy" slot the reclusive elves / set-apart dwarves / feared beastfolk all leave open. Native to a
+  #    wool-and-tallow world, and the people mixed heritage runs through most (seeds interbreeding).
+  #  - orc-kin (the marchfolk): a settled frontier PEOPLE, distinct from feral warband orcs (bestiary.orc)
+  #    — the sharpest fit for the KNOWN-vs-TRUE doctrine (the dossier grades "orc" a monster; a marchfolk
+  #    citizen is that reputation libeled) and it ties straight to the frontier map (region.fellmarch) and
+  #    to half-orcs (people.mixed_heritage).
+  #  Runner-up NOT taken: gnome-kin (tinker-folk). Cut because a clever-inventor people pushes on the
+  #  pre-gunpowder / low-magic ceiling (anchor) and risks a high-craft enclave; parked for George.
+
+  - id: people.halfling_kin
+    name: halfling-kin (the steadfolk)
+    prevalence: >-
+      Uncommon but present — farm shires and river-meadows of the settled heartland; so intermixed
+      with humans that many folk barely count them separate. None seated in Harrowdown.
+    common_sense:
+      - Small, long-settled farming folk of the steadings and mills. Not reclusive like the elves nor set apart like the dwarves — they keep the same markets, rolls, and chapels as their human neighbors.
+      - Where a vale has them it has had them for centuries, and half its old families are some part steadfolk without making anything of it.
+    notes: >-
+      The integrated demihuman: the one most present in daily human life and the one mixed heritage
+      runs through most (people.mixed_heritage). A flavor/research node for cheap-food and hedge-craft
+      country, never a stat bonus. RESOLVED + name CONFIRMED (George 2026-07-14): the steadfolk exist,
+      attested. Seated example: region.milbury (the steadfolk farm-and-mill town, docs/lore/13-world-map.md).
+
+  - id: people.orc_kin
+    name: orc-kin (the marchfolk)
+    prevalence: >-
+      Rare, frontier — the upland borderlands (region.fellmarch) and the margins near them;
+      discriminated against wherever the road reaches, on a reputation earned by a different thing entirely.
+    common_sense:
+      - Big, frontier-born folk who carry the marks the ballads pin on monsters. A settled people with steadings, kin, and dead of their own — not a warband.
+      - The vale has never met one and has firm opinions all the same. The guild board grades "orc" a threat; it has never been asked to grade a neighbor.
+    notes: >-
+      DISTINCT from bestiary.orc (the feral warband monster). The canonical KNOWN-sheet injustice
+      engine: a people's reputation (a KNOWN sheet) libels individuals whose TRUE sheets it never
+      measured — investigable, never a slavery beat (docs/lore/12 hard absence). Ties to the frontier
+      map (region.fellmarch, the orc-kin borderland) and to half-orcs (people.mixed_heritage).
+      RESOLVED + CONFIRMED (George 2026-07-14): the marchfolk exist; the name and the people-vs-feral
+      split are locked canon.
+
+  - id: people.mixed_heritage
+    name: mixed heritage (half-kin)
+    prevalence: >-
+      Real and rare; attitudes vary by region, never by any true trait. Present anywhere two peoples
+      have long shared ground — commonest among steadfolk-and-human farm families, sharpest-judged
+      where orc-kin and human meet.
+    common_sense:
+      - Interbreeding happens where peoples live together. Half-elf, half-dwarf, half-orc, part-steadfolk — a real and ordinary lineage in the mixed country, a rumor in a vale that has only ever seen humans.
+      - How a half-kin is treated is a fact about the parish, not the person. One town's respected miller is the next town's suspicion, on the same blood.
+    notes: >-
+      RESOLVED (George 2026-07-14, decision 2 + FINAL CONFIRM): interbreeding is canon; mixed heritage
+      is a real, playable lineage. Attitude is a KNOWN-sheet reputation (regional, rumor-driven), never a
+      TRUE-sheet stat — a half-kin carries no innate bonus or penalty. Commonest seat: region.milbury
+      (steadfolk-and-human farm families). Ties forward to the heir/legacy system (roadmap §3.7): a
+      bloodline can carry mixed heritage across heirs. Canon is locked; the chargen/heir SURFACE (how
+      it is picked/played) is downstream implementation scope, not an open canon decision.
+
+  - id: people.the_blotted
+    name: the Blotted
+    prevalence: A movement, not a race — present as camps and margins anywhere records reach.
+    common_sense:
+      - People who sign nothing, keep no ledgers, and live unwritten (docs/lore/06). A camp moves
+        the Drove Road with the drovers; the chapel buries their dead unrecorded and does not report them.
+    notes: >-
+      The anti-Quill culture. Their cost is mechanical: unrecorded knowledge dies each generation.
+      Present at universe level as the counter-institution to every KNOWN-sheet builder.
+
+  - id: people.mazoku
+    name: demons / mazoku (CONTESTED)
+    prevalence: Existence itself is the flagship question (docs/lore/08).
+    common_sense:
+      - The enemy the church preaches against and few have seen. Whether they are a people, a
+        propaganda, or something else is the Demon Lord question.
+    notes: Deferred to the demon-lord dossier — do not resolve here. TRUE nature never narrator-facing.
+
+factions:
+
+  - id: faction.crown_and_seats
+    name: The Crown & the seats
+    kind: state
+    reach: Kingdom-wide; the seats (Severwick is the vale's) are the regional centers of authority.
+    common_sense:
+      - The crown levies, charters the guilds, mints the sovereign coin, and holds the seats. Far
+        away and slow; the vale feels it as tax, coin, and the occasional warrant.
+    known_sheet_note: The crown's official history and its summoning annals are controlled — it omits what implicates it.
+
+  - id: faction.adventurers_guild
+    name: The Adventurers' Guild
+    kind: guild
+    reach: Chartered kingdom-wide; a hall in most towns (one clerk and a board in a vale like Harrowdown).
+    common_sense:
+      - Licenses who may take on what; F -> SSS plates gate legal permissions, not true capability.
+      - Grades monsters on the same letter scale (a KNOWN read of a true gradient it cannot measure).
+    known_sheet_note: >-
+      Rank is certified KNOWN, never a reading of TRUE capability, and the System's deed-minted
+      titles are allowed to disagree with it. Home of the confidently-wrong monster dossier
+      (docs/lore/04, /09). Instantiated by the Harrowdown hall.
+
+  - id: faction.merchants_guild
+    name: The Merchants' Guild
+    kind: guild
+    reach: Chartered kingdom-wide; factors visit market towns, seats hold the chapters.
+    common_sense:
+      - Controls registration, stall tokens, weights, and coin-trust; issues trade seals (a trade
+        mark, not a craft warranty). Runs the scales that weigh old coin.
+    known_sheet_note: A seal is a claim about goods; provenance and clipping make coin itself a KNOWN sheet.
+
+  - id: faction.smiths_guild
+    name: The Smiths' Guild
+    kind: guild
+    reach: Chartered; seats and larger towns. Small vales use uncertified farriers below the guild-work threshold.
+    common_sense:
+      - Certifies smith-work and quality; holds the best metallurgy secrets (the proportions the
+        treatise omits).
+    known_sheet_note: The keeper of tech.crucible_steel-adjacent secrets; a research vendor and a monopoly.
+
+  - id: faction.healers_guild
+    name: The Healers' Guild
+    kind: guild
+    reach: Chartered; chapter houses at seats. Vales without one use hedge-craft and pray.
+    common_sense:
+      - Certifies healers and seals potions; the wax seal buys RECOURSE (blood-price if it proves
+        false), never guaranteed potency. The serious version of what is a seal worth.
+    known_sheet_note: Potion grades are the seller's KNOWN claim; a sealed bottle can still be a bad batch.
+
+  - id: faction.scribes_guild
+    name: The Scribes' Guild
+    kind: guild
+    reach: Chartered; seats. Resents the parish clerks and hedge-scribes who do town letters uncertified.
+    common_sense:
+      - Certifies letters, copies, and contracts. Guards the written word as its trade.
+    known_sheet_note: The natural loser if the printing press (tech.printing_press) is ever invented — a faction with a stake in suppressing it.
+
+  - id: faction.open_page_church
+    name: The Open Page (pro-Quill orthodoxy)
+    kind: church
+    reach: Kingdom-wide; a chapel in most parishes, a cathedral chapter at the seats.
+    common_sense:
+      - The Page is open, and you hold the pen. Runs the appraisal ceremonies and keeps the parish
+        rolls; record is reverence. Sincere, useful, and FALLIBLE — corruption is local (a bishop), never the faith.
+    known_sheet_note: >-
+      Its rolls are institutional KNOWN and it says so ("it showed no more"). Working name pending
+      George sign-off (docs/lore/06). Instantiated by the Harrowdown chapel. RESOLVED (decision 3/5):
+      the pro-record pole (sect.open_page) — one regional reading of the one true Quill; other regions
+      hold their own (cosmology-powers.yaml `quill_worship_regional`).
+
+  - id: faction.blotted_movement
+    name: The Blotted (anti-Quill)
+    kind: church
+    reach: Margins everywhere — border camps, drowned quarters, roads between parishes.
+    common_sense:
+      - The Author writes us into corners. They live unwritten, refuse the ceremonies, and let
+        their knowledge die with them by principle (docs/lore/06). Working name pending George.
+    known_sheet_note: >-
+      The counter-institution — they build NO KNOWN sheets, and pay for it every generation. RESOLVED
+      (decision 3/5): the anti-record pole (sect.blotted); the regional Quill-readings live in
+      cosmology-powers.yaml `quill_worship_regional`.
+
+  - id: faction.war_colleges
+    name: The capital war-colleges (UNVERIFIED)
+    kind: institution
+    reach: The distant capital; unverified from the vale.
+    common_sense:
+      - Ballads say the capital's war-colleges throw fire. Nobody in the vale can confirm a ballad.
+    known_sheet_note: The seat of battle-magic-if-it-exists (power.battle_magic). Authored as rumor, not confirmed fact.
+
+  - id: faction.monastery_record_halls
+    name: The monastery record-halls
+    kind: institution
+    reach: The seats (Severwick's are the vale's deep archive), four carriage-days south.
+    common_sense:
+      - The kingdom's deep archives — the wyvern-hunt records, the chronicles, the copied rolls.
+        Peak knowledge lives here, and you must travel to it (docs/lore/11).
+    known_sheet_note: The premium research node; distance is the real price of a good answer.
+
+  - id: faction.local_law
+    name: Reeves & local law
+    kind: institution
+    reach: Every settlement; the reeve, his bailiff, and a schedule of fines.
+    common_sense:
+      - Keeps the peace and collects fines on a schedule. Where a bailiff looks away, an unofficial
+        tax fills the gap (Rold Tanner's stall tax is the vale's instance).
+    known_sheet_note: Justice is who adjudicates, not who is right (knowledge.statecraft).

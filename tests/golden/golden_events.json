@@ -1,0 +1,882 @@
+{
+  "comment": "GOLDEN CORPUS (synthesis \u00a72.6 rule 5). One frozen sample event per (event_type, payload_version) ever shipped \u2014 the pair list is everquill_engine.upcasters.SHIPPED_PAYLOAD_VERSIONS and tests/test_folds.py fails if any shipped pair lacks a fixture. Rows change ONLY with a documented fold-contract reason; new payload versions ADD rows. S1 review-fix updates (documented): CRITICAL-2 \u2014 entity_committed for damageable entities (npc|creature) now carries seed hp/hp_max facts and hp deltas targeting unseeded entities RAISE instead of silently dropping, so event 2 gains hp/hp_max (the old shape survives only for non-damageable entities); MEDIUM-3 \u2014 timer_started now records due_at as a real-timestamp fact at creation (event 8 keeps the legacy shape to exercise the documented epoch-mapping shim; event 12 covers the current shape); MEDIUM-7 \u2014 content_manifest added (event 11). S2 wave-1 additions (documented): MEDIUM-4 \u2014 action outcomes moved to per-action-type streams and HOPELESS flavor draws to their own site, so events 13-14 freeze the new rng stream shapes (event 5 keeps the retired pooled 'action' stream \u2014 historical logs must fold forever); decision-5 cluster \u2014 event 15 freezes the trivial '[Already dispatched.]' outcome shape (zero deltas, no dice; only the envelope advances clock/counters). S2 wave-3 additions (documented, Team A2): HIGH-5 claim schema v2 \u2014 claim_written v2 (event 18: typed predicate + value columns + stamped strength) and the four lifecycle transition events (19 corroborated with a distinct-root flip, 20 the conflicting claim, 21 contested, 22 superseded, 23 retracted \u2014 targeting the UPCAST v1 claim of event 6, proving the migration path folds); HIGH-3 \u2014 old v1 rows (events 4-6) now exercise the pure upcaster chain on every fold; HIGH-8 \u2014 intent_parsed v2 (event 16) freezes the envelope-encrypted player-text shape ($enc markers are opaque to folds); outcome_resolved v2 (event 17) freezes typed intel claims + position transit_hint; narration_generated (event 24) freezes prose-bound-to-outcome canon.",
+  "events": [
+    {
+      "id": 1,
+      "stream_id": "world",
+      "stream_version": 1,
+      "world_time": 0,
+      "event_type": "world_created",
+      "location_id": null,
+      "command_id": "genesis",
+      "rng": null,
+      "payload": {
+        "seed": 42,
+        "content_source": "dev-fixture.yaml"
+      },
+      "payload_version": 1
+    },
+    {
+      "id": 2,
+      "stream_id": "world",
+      "stream_version": 2,
+      "world_time": 0,
+      "event_type": "entity_committed",
+      "location_id": "loc.dev.tavern",
+      "command_id": "genesis#1",
+      "rng": null,
+      "payload": {
+        "entity_id": "npc.dev.hedda",
+        "entity_class": "npc",
+        "origin": "authored",
+        "name": "Hedda Marle",
+        "location_id": "loc.dev.tavern",
+        "region": "dev",
+        "common_knowledge": [
+          "Hedda Marle has kept the Inkwell Rest for twenty years and forgets no tab."
+        ],
+        "portrait": null,
+        "hp": 9,
+        "hp_max": 9
+      },
+      "payload_version": 1
+    },
+    {
+      "id": 3,
+      "stream_id": "character:pc",
+      "stream_version": 1,
+      "world_time": 0,
+      "event_type": "character_created",
+      "location_id": "loc.dev.tavern",
+      "command_id": "chargen:pc",
+      "rng": {
+        "stream": [
+          "chargen",
+          "pc"
+        ],
+        "index": 5,
+        "rolls": [
+          2,
+          3,
+          3,
+          4,
+          5,
+          5,
+          3,
+          4,
+          1,
+          3,
+          3,
+          4
+        ]
+      },
+      "payload": {
+        "character_id": "pc",
+        "name": "the Quill-touched",
+        "origin": "quill_touched_stranger",
+        "aptitudes": {
+          "might": 5,
+          "finesse": 7,
+          "wits": 10,
+          "will": 7,
+          "presence": 4,
+          "lore": 7
+        },
+        "rolls": {
+          "might": [
+            2,
+            3
+          ],
+          "finesse": [
+            3,
+            4
+          ],
+          "wits": [
+            5,
+            5
+          ],
+          "will": [
+            3,
+            4
+          ],
+          "presence": [
+            1,
+            3
+          ],
+          "lore": [
+            3,
+            4
+          ]
+        },
+        "hp": 9,
+        "hp_max": 9,
+        "coin": 30,
+        "location_id": "loc.dev.tavern",
+        "region": "dev"
+      },
+      "payload_version": 1
+    },
+    {
+      "id": 4,
+      "stream_id": "character:pc",
+      "stream_version": 2,
+      "world_time": 0,
+      "event_type": "intent_parsed",
+      "location_id": "loc.dev.tavern",
+      "command_id": "turn_pc_1",
+      "rng": null,
+      "payload": {
+        "character_id": "pc",
+        "intent": {
+          "action_type": "physical",
+          "target_entity_ids": [
+            "npc_dev_hedda"
+          ],
+          "approach": "arm-wrestle the barkeep",
+          "stat_hint": "might",
+          "dialogue": null,
+          "plausibility_hint": "plausible",
+          "duration_hint": null,
+          "ambiguity_flags": []
+        },
+        "source": "canned"
+      },
+      "payload_version": 1
+    },
+    {
+      "id": 5,
+      "stream_id": "character:pc",
+      "stream_version": 3,
+      "world_time": 10,
+      "event_type": "outcome_resolved",
+      "location_id": "loc.dev.tavern",
+      "command_id": "turn_pc_1#1",
+      "rng": {
+        "stream": [
+          "character:pc",
+          "action"
+        ],
+        "index": 0,
+        "rolls": [
+          3,
+          4
+        ]
+      },
+      "payload": {
+        "character_id": "pc",
+        "intent_event": 4,
+        "tier_resolved": "routine",
+        "risk_label_shown": "guarded",
+        "outcome_tier": "hit_with_complication",
+        "hopeless_flavor": null,
+        "dice": {
+          "rolls": [
+            3,
+            4
+          ],
+          "modifiers": [
+            {
+              "label": "might",
+              "value": 1
+            }
+          ],
+          "total": 8
+        },
+        "state_deltas": [
+          {
+            "delta_type": "hp",
+            "entity_id": "npc.dev.hedda",
+            "amount": -2,
+            "cause": "struck by the Quill-touched"
+          },
+          {
+            "delta_type": "hp",
+            "entity_id": "pc",
+            "amount": -1,
+            "cause": "caught by Hedda Marle"
+          },
+          {
+            "delta_type": "coin",
+            "entity_id": "pc",
+            "amount": -2,
+            "reason": "a wager lost"
+          },
+          {
+            "delta_type": "inventory",
+            "entity_id": "pc",
+            "item_id": "crafted_trinket_1",
+            "op": "add",
+            "quantity": 1
+          },
+          {
+            "delta_type": "flag",
+            "entity_id": "pc",
+            "flag_key": "owes_favor_npc_dev_hedda",
+            "value": true
+          },
+          {
+            "delta_type": "title",
+            "entity_id": "pc",
+            "title": "Elbow of the Inkwell",
+            "deed_ref": "5"
+          },
+          {
+            "delta_type": "intel",
+            "claim": {
+              "subject_entity_id": "npc.dev.hedda",
+              "claim_text": "Hedda favors her left arm.",
+              "value_or_range": null,
+              "layer": "inquiry",
+              "source": "the bout itself",
+              "observer": "pc",
+              "method": "witnessed",
+              "world_date": "Day 1, 06:10",
+              "scope": "firsthand",
+              "confidence": "consistent"
+            }
+          },
+          {
+            "delta_type": "deed",
+            "actor_entity_id": "pc",
+            "description": "the Quill-touched traded blows with Hedda Marle",
+            "location_id": "loc.dev.tavern",
+            "witness_ids": [
+              "npc.dev.sorrel"
+            ],
+            "notoriety": 2,
+            "world_date": "Day 1, 06:10"
+          },
+          {
+            "delta_type": "reputation",
+            "entity_id": "pc",
+            "scope": "disposition",
+            "subject_id": "npc_harrowdown_maren_ostler",
+            "amount": 2
+          },
+          {
+            "delta_type": "reputation",
+            "entity_id": "pc",
+            "scope": "standing",
+            "subject_id": "loc.harrowdown",
+            "amount": 1
+          }
+        ],
+        "narration_constraints": [
+          "entity_facts_only",
+          "no_chronicle_contradiction",
+          "no_npc_awe_unearned",
+          "no_invented_witnesses"
+        ],
+        "law_id": null,
+        "law_notes": [],
+        "world_time_cost": 10
+      },
+      "payload_version": 1
+    },
+    {
+      "id": 6,
+      "stream_id": "character:pc",
+      "stream_version": 4,
+      "world_time": 10,
+      "event_type": "claim_written",
+      "location_id": "loc.dev.tavern",
+      "command_id": "turn_pc_1#2",
+      "rng": null,
+      "payload": {
+        "claim_id": "claim_pc_1_1",
+        "believer_id": "pc",
+        "claim": {
+          "subject_entity_id": "npc.dev.hedda",
+          "claim_text": "Hedda favors her left arm.",
+          "value_or_range": null,
+          "layer": "inquiry",
+          "source": "the bout itself",
+          "observer": "pc",
+          "method": "witnessed",
+          "world_date": "Day 1, 06:10",
+          "scope": "firsthand",
+          "confidence": "consistent"
+        },
+        "provenance_root_event_id": 5,
+        "hop_count": 0,
+        "journal_flag": false
+      },
+      "payload_version": 1
+    },
+    {
+      "id": 7,
+      "stream_id": "region:dev",
+      "stream_version": 1,
+      "world_time": 10,
+      "event_type": "deed_recorded",
+      "location_id": "loc.dev.tavern",
+      "command_id": "turn_pc_1#3",
+      "rng": null,
+      "payload": {
+        "deed": {
+          "actor_entity_id": "pc",
+          "description": "the Quill-touched traded blows with Hedda Marle",
+          "location_id": "loc.dev.tavern",
+          "witness_ids": [
+            "npc.dev.sorrel"
+          ],
+          "notoriety": 2,
+          "world_date": "Day 1, 06:10"
+        },
+        "caused_by": 5
+      },
+      "payload_version": 1
+    },
+    {
+      "id": 8,
+      "stream_id": "character:pc",
+      "stream_version": 5,
+      "world_time": 15,
+      "event_type": "timer_started",
+      "location_id": "loc.dev.tavern",
+      "command_id": "turn_pc_2",
+      "rng": null,
+      "payload": {
+        "timer_key": "timer_pc_2",
+        "kind": "training",
+        "subject_id": "pc",
+        "world_due": 495,
+        "payload": {
+          "aptitude": "might",
+          "owner_id": "pc"
+        },
+        "created_event_id": 5
+      },
+      "payload_version": 1
+    },
+    {
+      "id": 9,
+      "stream_id": "world",
+      "stream_version": 3,
+      "world_time": 500,
+      "event_type": "time_advanced",
+      "location_id": null,
+      "command_id": "clockadv_3",
+      "rng": null,
+      "payload": {
+        "minutes": 485
+      },
+      "payload_version": 1
+    },
+    {
+      "id": 10,
+      "stream_id": "character:pc",
+      "stream_version": 6,
+      "world_time": 495,
+      "event_type": "timer_completed",
+      "location_id": null,
+      "command_id": "timer:timer_pc_2",
+      "rng": {
+        "stream": [
+          "timerfire",
+          "timer_pc_2"
+        ],
+        "index": 0,
+        "rolls": [
+          6,
+          5
+        ]
+      },
+      "payload": {
+        "timer_key": "timer_pc_2",
+        "kind": "training",
+        "owner_id": "pc",
+        "completed_at_world_time": 495,
+        "gains": [
+          {
+            "delta_type": "aptitude",
+            "entity_id": "pc",
+            "aptitude": "might",
+            "amount": 1
+          },
+          {
+            "delta_type": "flag",
+            "entity_id": "pc",
+            "flag_key": "breakthrough_might",
+            "value": true
+          }
+        ],
+        "skipped": false
+      },
+      "payload_version": 1
+    },
+    {
+      "id": 11,
+      "stream_id": "world",
+      "stream_version": 4,
+      "world_time": 0,
+      "event_type": "content_manifest",
+      "location_id": null,
+      "command_id": "genesis",
+      "event_ordinal": 1,
+      "rng": null,
+      "payload": {
+        "content_source": "dev-fixture.yaml",
+        "sha256": "0f7c2b4d3a1e5f60718293a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4",
+        "loader_version": "world-loader.v1"
+      },
+      "payload_version": 1
+    },
+    {
+      "id": 12,
+      "stream_id": "character:pc",
+      "stream_version": 7,
+      "world_time": 500,
+      "event_type": "timer_started",
+      "location_id": "loc.dev.tavern",
+      "command_id": "turn_pc_g42_9",
+      "event_ordinal": 1,
+      "rng": null,
+      "payload": {
+        "timer_key": "timer_pc_9",
+        "kind": "training",
+        "subject_id": "pc",
+        "world_due": 985,
+        "due_at": "1970-01-01T16:25:00+00:00",
+        "payload": {
+          "aptitude": "will",
+          "owner_id": "pc"
+        },
+        "created_event_id": 5
+      },
+      "payload_version": 1
+    },
+    {
+      "id": 13,
+      "stream_id": "character:pc",
+      "stream_version": 8,
+      "world_time": 510,
+      "event_type": "outcome_resolved",
+      "location_id": "loc.dev.tavern",
+      "command_id": "turn_pc_g42_10",
+      "event_ordinal": 1,
+      "rng": {
+        "stream": [
+          "character:pc",
+          "hopeless_flavor"
+        ],
+        "index": 0,
+        "rolls": [
+          2,
+          5
+        ]
+      },
+      "payload": {
+        "character_id": "pc",
+        "intent_event": 4,
+        "tier_resolved": "hopeless",
+        "risk_label_shown": "suicidal",
+        "outcome_tier": "miss",
+        "hopeless_flavor": "punishing",
+        "dice": {
+          "rolls": [
+            2,
+            5
+          ],
+          "modifiers": [
+            {
+              "label": "might",
+              "value": 0
+            }
+          ],
+          "total": 7
+        },
+        "state_deltas": [
+          {
+            "delta_type": "flag",
+            "entity_id": "pc",
+            "flag_key": "journal_hook_turn_10",
+            "value": "spared by Torvald Ashmane"
+          }
+        ],
+        "narration_constraints": [
+          "entity_facts_only",
+          "no_chronicle_contradiction",
+          "no_npc_awe_unearned",
+          "no_success_framing"
+        ],
+        "law_id": null,
+        "law_notes": [],
+        "world_time_cost": 10
+      },
+      "payload_version": 1
+    },
+    {
+      "id": 14,
+      "stream_id": "character:pc",
+      "stream_version": 9,
+      "world_time": 520,
+      "event_type": "outcome_resolved",
+      "location_id": "loc.dev.tavern",
+      "command_id": "turn_pc_g42_11",
+      "event_ordinal": 1,
+      "rng": {
+        "stream": [
+          "character:pc",
+          "action:physical"
+        ],
+        "index": 0,
+        "rolls": [
+          3,
+          5
+        ]
+      },
+      "payload": {
+        "character_id": "pc",
+        "intent_event": 4,
+        "tier_resolved": "routine",
+        "risk_label_shown": "guarded",
+        "outcome_tier": "hit_with_complication",
+        "hopeless_flavor": null,
+        "dice": {
+          "rolls": [
+            3,
+            5
+          ],
+          "modifiers": [
+            {
+              "label": "might",
+              "value": 1
+            }
+          ],
+          "total": 9
+        },
+        "state_deltas": [
+          {
+            "delta_type": "hp",
+            "entity_id": "npc.dev.hedda",
+            "amount": -2,
+            "cause": "struck by the Quill-touched"
+          },
+          {
+            "delta_type": "hp",
+            "entity_id": "pc",
+            "amount": -1,
+            "cause": "caught by Hedda Marle"
+          }
+        ],
+        "narration_constraints": [
+          "entity_facts_only",
+          "no_chronicle_contradiction",
+          "no_npc_awe_unearned"
+        ],
+        "law_id": null,
+        "law_notes": [],
+        "world_time_cost": 10
+      },
+      "payload_version": 1
+    },
+    {
+      "id": 15,
+      "stream_id": "character:pc",
+      "stream_version": 10,
+      "world_time": 530,
+      "event_type": "outcome_resolved",
+      "location_id": "loc.dev.tavern",
+      "command_id": "turn_pc_g42_12",
+      "event_ordinal": 1,
+      "rng": null,
+      "payload": {
+        "character_id": "pc",
+        "intent_event": 4,
+        "tier_resolved": "trivial",
+        "risk_label_shown": null,
+        "outcome_tier": null,
+        "hopeless_flavor": null,
+        "dice": null,
+        "state_deltas": [],
+        "narration_constraints": [
+          "entity_facts_only",
+          "no_chronicle_contradiction",
+          "no_npc_awe_unearned"
+        ],
+        "law_id": null,
+        "law_notes": [],
+        "world_time_cost": 10
+      },
+      "payload_version": 1
+    },
+    {
+      "id": 16,
+      "stream_id": "character:pc",
+      "stream_version": 11,
+      "world_time": 540,
+      "event_type": "intent_parsed",
+      "location_id": "loc.dev.tavern",
+      "command_id": "turn_pc_g42_13",
+      "event_ordinal": 0,
+      "rng": null,
+      "payload": {
+        "character_id": "pc",
+        "intent": {
+          "action_type": "social",
+          "target_entity_ids": [
+            "npc_dev_hedda"
+          ],
+          "approach": {
+            "$enc": {
+              "v": 1,
+              "key_id": "dek_0123456789abcdef",
+              "n": "q83vEjRWeJq83vEj",
+              "ct": "3q2+7wAAAAABBBBBCCCCDDDDEEEE"
+            }
+          },
+          "stat_hint": "presence",
+          "dialogue": {
+            "addressee_id": "npc_dev_hedda",
+            "quoted_speech": {
+              "$enc": {
+                "v": 1,
+                "key_id": "dek_0123456789abcdef",
+                "n": "VGhlIG5vbmNlIQ==",
+                "ct": "U2hyZWRkYWJsZSBjaXBoZXJ0ZXh0"
+              }
+            }
+          },
+          "plausibility_hint": "plausible",
+          "duration_hint": null,
+          "ambiguity_flags": []
+        },
+        "source": "parser"
+      },
+      "payload_version": 2
+    },
+    {
+      "id": 17,
+      "stream_id": "character:pc",
+      "stream_version": 12,
+      "world_time": 550,
+      "event_type": "outcome_resolved",
+      "location_id": "loc.dev.tavern",
+      "command_id": "turn_pc_g42_14",
+      "event_ordinal": 0,
+      "rng": null,
+      "payload": {
+        "character_id": "pc",
+        "intent_event": 16,
+        "tier_resolved": "trivial",
+        "risk_label_shown": null,
+        "outcome_tier": null,
+        "hopeless_flavor": null,
+        "dice": null,
+        "state_deltas": [
+          {
+            "delta_type": "position",
+            "entity_id": "pc",
+            "from_location_id": "loc.dev.tavern",
+            "to_location_id": "loc.dev.yard",
+            "transit_hint": "walked"
+          },
+          {
+            "delta_type": "intel",
+            "claim": {
+              "subject_entity_id": "npc.dev.torvald",
+              "predicate": "threat_assessed",
+              "value_text": "DESPERATE",
+              "value_num": null,
+              "value_range": null,
+              "world_valid": null,
+              "claim_text": "You take Torvald Ashmane's measure.",
+              "layer": "inquiry",
+              "source": "your own eyes",
+              "observer": "pc",
+              "method": "witnessed",
+              "acquisition_method": "observed",
+              "source_agent_id": null,
+              "world_date": "Day 1, 15:10",
+              "scope": "firsthand",
+              "confidence": "consistent"
+            }
+          }
+        ],
+        "narration_constraints": [
+          "entity_facts_only",
+          "no_chronicle_contradiction",
+          "no_npc_awe_unearned"
+        ],
+        "law_id": null,
+        "law_notes": [],
+        "world_time_cost": 15
+      },
+      "payload_version": 2
+    },
+    {
+      "id": 18,
+      "stream_id": "character:pc",
+      "stream_version": 13,
+      "world_time": 550,
+      "event_type": "claim_written",
+      "location_id": "loc.dev.tavern",
+      "command_id": "turn_pc_g42_14",
+      "event_ordinal": 1,
+      "rng": null,
+      "payload": {
+        "claim_id": "claim_pc_13_1",
+        "believer_id": "pc",
+        "claim": {
+          "subject_entity_id": "npc.dev.torvald",
+          "predicate": "threat_assessed",
+          "value_text": "DESPERATE",
+          "value_num": null,
+          "value_range": null,
+          "world_valid": null,
+          "claim_text": "You take Torvald Ashmane's measure.",
+          "layer": "inquiry",
+          "source": "your own eyes",
+          "observer": "pc",
+          "method": "witnessed",
+          "acquisition_method": "observed",
+          "source_agent_id": null,
+          "world_date": "Day 1, 15:10",
+          "scope": "firsthand",
+          "confidence": "consistent"
+        },
+        "provenance_root_event_id": 17,
+        "derived_from_claim_id": null,
+        "hop_count": 0,
+        "journal_flag": false,
+        "strength": 100
+      },
+      "payload_version": 2
+    },
+    {
+      "id": 19,
+      "stream_id": "character:pc",
+      "stream_version": 14,
+      "world_time": 560,
+      "event_type": "claim_corroborated",
+      "location_id": "loc.dev.tavern",
+      "command_id": "turn_pc_g42_15",
+      "event_ordinal": 0,
+      "rng": null,
+      "payload": {
+        "claim_id": "claim_pc_13_1",
+        "believer_id": "pc",
+        "evidence": {
+          "event_id": null,
+          "root_event_id": 999,
+          "acquisition_method": "observed",
+          "base_weight": 100,
+          "world_time": 560
+        },
+        "strength": 200,
+        "status": "corroborated"
+      },
+      "payload_version": 1
+    },
+    {
+      "id": 20,
+      "stream_id": "character:pc",
+      "stream_version": 15,
+      "world_time": 570,
+      "event_type": "claim_written",
+      "location_id": "loc.dev.tavern",
+      "command_id": "turn_pc_g42_16",
+      "event_ordinal": 0,
+      "rng": null,
+      "payload": {
+        "claim_id": "claim_pc_14_1",
+        "believer_id": "pc",
+        "claim": {
+          "subject_entity_id": "npc.dev.torvald",
+          "predicate": "threat_assessed",
+          "value_text": "RISKY",
+          "value_num": null,
+          "value_range": null,
+          "world_valid": null,
+          "claim_text": "At a glance, Torvald Ashmane seems manageable.",
+          "layer": "inquiry",
+          "source": "your own eyes",
+          "observer": "pc",
+          "method": "misjudged_glance",
+          "acquisition_method": "observed",
+          "source_agent_id": null,
+          "world_date": "Day 1, 15:30",
+          "scope": "firsthand",
+          "confidence": "uncorroborated"
+        },
+        "provenance_root_event_id": 20,
+        "derived_from_claim_id": null,
+        "hop_count": 0,
+        "journal_flag": false,
+        "strength": 100
+      },
+      "payload_version": 2
+    },
+    {
+      "id": 21,
+      "stream_id": "character:pc",
+      "stream_version": 16,
+      "world_time": 570,
+      "event_type": "claim_contested",
+      "location_id": "loc.dev.tavern",
+      "command_id": "turn_pc_g42_16",
+      "event_ordinal": 1,
+      "rng": null,
+      "payload": {
+        "claim_id": "claim_pc_13_1",
+        "contested_by_claim_id": "claim_pc_14_1"
+      },
+      "payload_version": 1
+    },
+    {
+      "id": 22,
+      "stream_id": "character:pc",
+      "stream_version": 17,
+      "world_time": 580,
+      "event_type": "claim_superseded",
+      "location_id": "loc.dev.tavern",
+      "command_id": "turn_pc_g42_17",
+      "event_ordinal": 0,
+      "rng": null,
+      "payload": {
+        "claim_id": "claim_pc_14_1",
+        "superseded_by_claim_id": "claim_pc_13_1",
+        "superseded_reason": "better_evidence"
+      },
+      "payload_version": 1
+    },
+    {
+      "id": 23,
+      "stream_id": "character:pc",
+      "stream_version": 18,
+      "world_time": 590,
+      "event_type": "claim_retracted",
+      "location_id": "loc.dev.tavern",
+      "command_id": "turn_pc_g42_18",
+      "event_ordinal": 0,
+      "rng": null,
+      "payload": {
+        "claim_id": "claim_pc_1_1",
+        "reason": "canon_sealed"
+      },
+      "payload_version": 1
+    },
+    {
+      "id": 24,
+      "stream_id": "character:pc",
+      "stream_version": 19,
+      "world_time": 590,
+      "event_type": "narration_generated",
+      "location_id": "loc.dev.tavern",
+      "command_id": "narrate:01ARZ3NDEKTSV4RRFFQ69G5FAV",
+      "event_ordinal": 0,
+      "rng": null,
+      "payload": {
+        "character_id": "pc",
+        "outcome_event_id": 17,
+        "outcome_event_ulid": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+        "prose": "You cross the yard. Torvald does not look up, which is somehow worse.",
+        "assembler_version": "assembler.v1",
+        "content_hash": "9c56cc51b374c3ba189210d5b6d4bf57790d351c96c47c02190ecf1e430635ab",
+        "model": "claude-sonnet-5"
+      },
+      "payload_version": 1
+    }
+  ]
+}

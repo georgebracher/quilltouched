@@ -1,0 +1,2025 @@
+/*
+ * Quilltouched shell styles — layout v3 (2026-10-24, desktop first).
+ *
+ * Palette: vellum-dark fill, parchment text, a restrained ink-cyan for the
+ * System's voice and an ember for coin and warmth. Three type families with
+ * one job each: serif for story (narration, place names, Codex facts), sans
+ * for the interface, monospace ONLY for the System's <<...>> lines and dice.
+ *
+ * Layout law: the page never scrolls; every scrolling region owns its own
+ * overflow, and nothing scrolls sideways. Desktop puts the scene and the
+ * actions on the left and the Chronicle down the right; a phone stacks scene,
+ * Chronicle and actions above a bottom tab bar.
+ */
+
+:root {
+  --vellum-dark: #17140f;
+  --vellum-raised: #221c15;
+  --vellum-sunk: #110e0a;
+  --ink-line: #3a3226;
+  --parchment: #e4d9c0;
+  --parchment-dim: #a69a7c;
+  --ink-accent: #6cc2d6;
+  --ink-accent-dim: #3d7484;
+  --ember: #d9a066;
+  --fault: #d38e64;
+
+  --font-ui: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-story: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
+  --font-system: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono',
+    monospace;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+html {
+  /* The shell must never scroll sideways on a phone. */
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  background: var(--vellum-dark);
+  color: var(--parchment);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+}
+
+button {
+  font-family: inherit;
+}
+
+.app {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  /* Respect notches / home bars; viewport-fit=cover is set in index.html. */
+  padding-top: calc(env(safe-area-inset-top, 0px) + 12px);
+  padding-right: calc(env(safe-area-inset-right, 0px) + 16px);
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+  padding-left: calc(env(safe-area-inset-left, 0px) + 16px);
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+.masthead h1 {
+  margin: 8px 0 0;
+  font-family: var(--font-story);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  color: var(--parchment-dim);
+  text-align: center;
+}
+
+.masthead-tagline {
+  margin: 10px 0 0;
+  font-family: var(--font-story);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--parchment-dim);
+  text-align: center;
+}
+
+.boot {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.boot .system-frame {
+  max-width: 28rem;
+}
+
+/* System messages live in bordered frames; narrator prose does not. */
+.system-frame {
+  width: 100%;
+  border: 1px solid var(--ink-line);
+  border-left: 3px solid var(--ink-accent);
+  background: var(--vellum-raised);
+  border-radius: 6px;
+  padding: 18px;
+}
+
+.system-frame--fault {
+  border-left-color: var(--fault);
+}
+
+.system-line {
+  margin: 0;
+  font-family: var(--font-system);
+  font-size: 0.9rem;
+  color: var(--ink-accent);
+  overflow-wrap: anywhere;
+}
+
+.system-frame--fault .system-line {
+  color: var(--fault);
+}
+
+.system-detail {
+  margin: 8px 0 0;
+  color: var(--parchment-dim);
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+}
+
+.system-action {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  /* Touch target: comfortably past the 44px minimum. */
+  min-height: 48px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 6px;
+  background: var(--ink-accent);
+  color: var(--vellum-sunk);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: filter 120ms var(--ease-out), transform 80ms var(--ease-out);
+}
+
+.system-action:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.system-action:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.system-action:disabled {
+  background: var(--ink-line);
+  color: var(--parchment-dim);
+  cursor: default;
+}
+
+.system-action:focus-visible {
+  outline: 2px solid var(--ink-accent);
+  outline-offset: 2px;
+}
+
+/* --- onboarding (accounts v1) --- */
+
+.claim-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.claim-input {
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 1px solid var(--ink-line);
+  border-radius: 6px;
+  background: var(--vellum-sunk);
+  color: var(--parchment);
+  font: inherit;
+  /* >=16px so iOS does not zoom the page on focus. */
+  font-size: 16px;
+}
+
+.claim-input:focus-visible {
+  outline: 2px solid var(--ink-accent);
+  outline-offset: 2px;
+}
+
+.claim-form .system-action {
+  margin-top: 0;
+}
+
+.claim-fault {
+  color: var(--fault);
+}
+
+/*
+ * ------------------------------------------------------------------
+ * Play screen layout v3: top bar, then a grid of scene / Chronicle /
+ * actions, then (phone only) a bottom tab bar. The page never scrolls.
+ * ------------------------------------------------------------------
+ */
+
+.app--play {
+  height: 100dvh;
+  min-height: 0;
+  max-width: 1240px;
+  overflow: hidden;
+  padding-bottom: 0;
+}
+
+.app--creation {
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* --- top bar: place, facts, tabs (desktop) --- */
+
+.topbar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ink-line);
+}
+
+.topbar-place {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 16px;
+  row-gap: 2px;
+}
+
+.place-name {
+  margin: 0;
+  font-family: var(--font-story);
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--parchment);
+}
+
+.place-facts {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-size: 0.85rem;
+  color: var(--parchment-dim);
+}
+
+.fact-coin {
+  color: var(--ember);
+  white-space: nowrap;
+}
+
+.fact-coin::before {
+  content: '⬥ ';
+}
+
+.fact-date {
+  white-space: nowrap;
+}
+
+.fact-timer {
+  color: var(--ink-accent);
+}
+
+.screen {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding-top: 12px;
+}
+
+/* Codex and Character read as a centred column on wide screens. */
+.screen > .codex-screen,
+.screen > .self-screen {
+  width: 100%;
+  max-width: 46rem;
+  margin: 0 auto;
+}
+
+/* --- screen tabs: bottom bar on a phone, pills in the top bar on desktop --- */
+
+.tabs {
+  display: flex;
+}
+
+.tabs--top {
+  display: none;
+}
+
+.tabs--bottom {
+  flex: none;
+  margin: 0 -16px;
+  padding: 0 8px env(safe-area-inset-bottom, 0px);
+  border-top: 1px solid var(--ink-line);
+  background: var(--vellum-sunk);
+}
+
+.tab {
+  flex: 1;
+  min-height: 52px;
+  padding: 0 12px;
+  border: none;
+  background: none;
+  color: var(--parchment-dim);
+  font-size: 0.92rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: color 120ms var(--ease-out), background 120ms var(--ease-out);
+}
+
+.tabs--bottom .tab[aria-current='page'] {
+  color: var(--parchment);
+  box-shadow: inset 0 2px 0 var(--ink-accent);
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--ink-accent);
+  outline-offset: -2px;
+}
+
+/* --- the play grid --- */
+
+/* Phone: a column. The scene takes the height the Chronicle does not need
+   (34-52% of the screen), so a short Chronicle leaves no dead band. */
+.play-grid {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 12px;
+}
+
+/* --- scene --- */
+
+.scene-canvas {
+  grid-area: scene;
+  position: relative;
+  flex: 1 1 0;
+  min-height: max(34dvh, 200px);
+  max-height: 52dvh;
+  border: 1px solid var(--ink-line);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--vellum-sunk); /* fallback for location types without art */
+}
+
+/* A weak vignette so the room reads as lit from within, not pasted on. */
+.scene-canvas::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 70px rgba(10, 6, 2, 0.4);
+}
+
+/*
+ * The stage preserves the background's authored 1536x1024 composition:
+ * height-locked, center-cropped horizontally. Slot x/y percentages are
+ * measured against this stage, so figures stay glued to the floor at any
+ * viewport. Longhand offsets, not `inset` (old Samsung Internet drops the
+ * shorthand).
+ */
+.scene-stage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 100%;
+  aspect-ratio: 1536 / 1024;
+  min-width: 100%;
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* A figure's box is sized and lifted inline (scene-art.ts) so its visible
+   feet sit on the slot's foot line. */
+.sprite {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.sprite-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  transform-origin: 50% 90%;
+  transition:
+    transform 160ms var(--ease-out),
+    filter 160ms var(--ease-out);
+}
+
+.sprite:hover .sprite-img {
+  transform: translateY(-1.5%) scale(1.02);
+}
+
+.sprite[aria-pressed='true'] .sprite-img {
+  filter: drop-shadow(0 0 8px rgba(108, 194, 214, 0.85));
+}
+
+.sprite:focus-visible {
+  outline: 2px solid var(--ink-accent);
+  outline-offset: 2px;
+}
+
+/* Contact shadow on the foot line: figures stand IN the room, not on it. */
+.sprite-shadow {
+  position: absolute;
+  height: 2.6%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(28, 16, 6, 0.5) 0%, rgba(28, 16, 6, 0) 70%);
+  pointer-events: none;
+}
+
+/* Dispatched: knocked over at the feet, faded, with a quiet System mark. */
+.sprite--dispatched .sprite-img {
+  transform: rotate(80deg);
+  transform-origin: 50% 85%;
+  opacity: 0.5;
+  filter: grayscale(0.8);
+}
+
+.sprite-tag {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-system);
+  font-size: 0.6rem;
+  color: var(--parchment);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* An entity with no art: its name, standing where it stands. */
+.entity-label {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  max-width: 34%;
+  padding: 4px 10px;
+  border: 1px solid var(--ink-line);
+  border-radius: 999px;
+  background: rgba(23, 20, 15, 0.85);
+  color: var(--parchment);
+  font-size: 0.75rem;
+  line-height: 1.3;
+  text-align: center;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.entity-label[aria-pressed='true'] {
+  border-color: var(--ink-accent);
+}
+
+.entity-label--dispatched {
+  opacity: 0.55;
+  text-decoration: line-through;
+}
+
+/* Known card (v1): name / kind / conditions from the manifest. */
+.known-card {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  max-width: min(22rem, calc(100% - 20px));
+  padding: 8px 12px;
+  border: 1px solid var(--ink-line);
+  border-left: 3px solid var(--ink-accent);
+  border-radius: 6px;
+  background: rgba(23, 20, 15, 0.92);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.known-name {
+  margin: 0;
+  font-family: var(--font-story);
+  font-weight: 600;
+  color: var(--parchment);
+}
+
+.known-kind {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--parchment-dim);
+}
+
+.known-conditions {
+  margin: 3px 0 0;
+  font-size: 0.8rem;
+  color: var(--ink-accent);
+}
+
+/* --- the Chronicle --- */
+
+.transcript {
+  grid-area: log;
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 4px 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.transcript-empty {
+  margin: auto 0;
+  text-align: center;
+  font-family: var(--font-story);
+  font-style: italic;
+  color: var(--parchment-dim);
+}
+
+.chronicle-open {
+  flex: none;
+  align-self: center;
+  margin: 0;
+  padding: 4px 12px;
+  border: 1px solid var(--ink-line);
+  border-radius: 999px;
+  background: none;
+  color: var(--parchment-dim);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.chronicle-open:hover {
+  color: var(--parchment);
+}
+
+.turn {
+  border-left: 2px solid var(--ink-line);
+  padding-left: 14px;
+}
+
+.turn--fault {
+  border-left-color: var(--fault);
+}
+
+.turn--note {
+  border-left-color: var(--ink-accent-dim);
+}
+
+.turn-declared {
+  margin: 0 0 6px;
+  color: var(--parchment);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* System voice: monospace, small, ink-cyan. */
+.turn-line {
+  margin: 3px 0 0;
+  font-family: var(--font-system);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.turn-system {
+  color: var(--ink-accent);
+}
+
+/* Paid-layer degrade note (audit #4): the deed committed, the Quill rested its
+   prose. System voice, set apart as a quiet aside, never a fault. */
+.turn-degrade {
+  margin: 8px 0 2px;
+  color: var(--ink-accent);
+  opacity: 0.85;
+}
+
+.turn-dice {
+  color: var(--parchment);
+}
+
+.turn-outcome {
+  color: var(--parchment);
+}
+
+.turn-outcome--strong_hit {
+  color: var(--ink-accent);
+}
+
+.turn-outcome--miss {
+  color: var(--fault);
+}
+
+/* Narrator prose: the star. Serif, roomier, unmistakably NOT a System line. */
+.turn-narration {
+  margin: 10px 0 2px;
+  font-family: var(--font-story);
+  font-size: 1.06rem;
+  line-height: 1.6;
+  color: var(--parchment);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* The Quill writing in: a faint ink caret at the tail while it types. */
+.turn-narration--typing {
+  cursor: pointer;
+}
+.turn-narration--typing > span[aria-hidden]::after {
+  content: '';
+  display: inline-block;
+  width: 0.5ch;
+  height: 1.05em;
+  margin-left: 1px;
+  vertical-align: -0.18em;
+  background: var(--ink-accent);
+  opacity: 0.75;
+  animation: eq-caret 0.9s steps(1) infinite;
+}
+@keyframes eq-caret {
+  50% {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .turn-narration--typing > span[aria-hidden]::after {
+    animation: none;
+  }
+}
+
+.turn-delta {
+  color: var(--parchment-dim);
+}
+
+/* Collapsed delta brackets: tap to unfold the marks. */
+.turn-marks {
+  display: block;
+  margin: 4px 0 0;
+  padding: 2px 0;
+  border: none;
+  background: none;
+  color: var(--parchment-dim);
+  font-family: var(--font-system);
+  font-size: 0.78rem;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.turn-marks:hover {
+  color: var(--parchment);
+}
+
+.turn-absorbed {
+  color: var(--parchment-dim);
+  font-style: italic;
+}
+
+.turn-fault-line {
+  color: var(--fault);
+}
+
+.turn-waiting {
+  margin: 0;
+  font-family: var(--font-system);
+  color: var(--parchment-dim);
+  font-size: 0.8rem;
+}
+
+/* The workings: the form the engine decided from, folded under a turn. */
+.workings-toggle {
+  display: block;
+  margin: 8px 0 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--ink-accent);
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.workings-toggle:hover {
+  text-decoration: underline;
+}
+
+.workings {
+  margin: 8px 0 2px;
+  padding: 10px 12px;
+  border: 1px solid var(--ink-line);
+  border-radius: 6px;
+  background: var(--vellum-sunk);
+}
+
+.workings-lead {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--parchment-dim);
+}
+
+.workings-form {
+  margin: 8px 0;
+  display: grid;
+  gap: 3px;
+}
+
+.workings-row {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 10px;
+  font-size: 0.8rem;
+}
+
+.workings-row dt {
+  color: var(--parchment-dim);
+}
+
+.workings-row dd {
+  margin: 0;
+  font-family: var(--font-system);
+  color: var(--parchment);
+  overflow-wrap: anywhere;
+}
+
+.workings-row--advice dd {
+  color: var(--parchment-dim);
+}
+
+.workings-row em {
+  font-family: var(--font-ui);
+  font-style: italic;
+  opacity: 0.85;
+}
+
+/* --- actions: suggestion chips, then free text --- */
+
+.composer {
+  grid-area: act;
+  flex: none;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chips-for {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-story);
+  color: var(--parchment-dim);
+}
+
+.chips-for-clear {
+  min-width: 28px;
+  min-height: 28px;
+  border: 1px solid var(--ink-line);
+  border-radius: 50%;
+  background: none;
+  color: var(--parchment-dim);
+  cursor: pointer;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  /* Opened on a phone, the list scrolls rather than pushing the box away. */
+  max-height: 30dvh;
+  overflow-y: auto;
+}
+
+/* A phone shows the first few until the player asks for more. Whole chips
+   are hidden, never clipped: a clipped box still scrolls to a focused chip. */
+.chips--collapsed .suggestion-chip--extra {
+  display: none;
+}
+
+.suggestion-chip {
+  min-height: 38px;
+  padding: 6px 14px;
+  border: 1px solid var(--ink-line);
+  border-radius: 999px;
+  background: var(--vellum-raised);
+  color: var(--parchment);
+  font-size: 0.88rem;
+  line-height: 1.2;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    background 120ms var(--ease-out),
+    border-color 120ms var(--ease-out),
+    transform 80ms var(--ease-out);
+}
+
+.suggestion-chip:hover:not(:disabled) {
+  border-color: var(--ink-accent-dim);
+  background: #2a2319;
+}
+
+.suggestion-chip:active:not(:disabled) {
+  transform: scale(0.97);
+  border-color: var(--ink-accent);
+}
+
+.suggestion-chip:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.suggestion-chip:focus-visible {
+  outline: 2px solid var(--ink-accent);
+  outline-offset: 2px;
+}
+
+.suggestion-chip--go {
+  color: var(--ember);
+}
+
+.suggestion-chip--go::before {
+  content: '→ ';
+}
+
+.chips-more {
+  align-self: flex-start;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--ink-accent);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.composer-row {
+  display: flex;
+  gap: 8px;
+}
+
+.composer-freetext {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  padding: 8px 14px;
+  border: 1px solid var(--ink-line);
+  border-radius: 8px;
+  background: var(--vellum-sunk);
+  color: var(--parchment);
+  font: inherit;
+  /* >=16px so iOS does not zoom the page on focus. */
+  font-size: 16px;
+}
+
+.composer-freetext::placeholder {
+  color: var(--parchment-dim);
+}
+
+.composer-commit {
+  flex: none;
+  min-height: 48px;
+  min-width: 84px;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 8px;
+  background: var(--ink-accent);
+  color: var(--vellum-sunk);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: filter 120ms var(--ease-out), transform 80ms var(--ease-out);
+}
+
+.composer-commit:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.composer-commit:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.composer-commit:disabled {
+  background: var(--ink-line);
+  color: var(--parchment-dim);
+  cursor: default;
+}
+
+.composer-commit:focus-visible,
+.composer-freetext:focus-visible {
+  outline: 2px solid var(--ink-accent);
+  outline-offset: 2px;
+}
+
+/* --- desktop: scene and actions left, the Chronicle down the right --- */
+
+@media (min-width: 960px) {
+  .app--play {
+    padding-top: 18px;
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+
+  .topbar {
+    padding-bottom: 14px;
+  }
+
+  .place-name {
+    font-size: 1.6rem;
+  }
+
+  .tabs--top {
+    display: flex;
+    gap: 6px;
+  }
+
+  .tabs--bottom {
+    display: none;
+  }
+
+  .tabs--top .tab {
+    flex: none;
+    min-height: 38px;
+    padding: 0 18px;
+    border-radius: 999px;
+  }
+
+  .tabs--top .tab:hover {
+    color: var(--parchment);
+  }
+
+  .tabs--top .tab[aria-current='page'] {
+    background: var(--vellum-raised);
+    color: var(--parchment);
+    box-shadow: inset 0 0 0 1px var(--ink-line);
+  }
+
+  .screen {
+    padding-top: 18px;
+  }
+
+  .play-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(340px, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-areas:
+      'scene log'
+      'act log';
+    gap: 18px 28px;
+    padding-bottom: 20px;
+  }
+
+  .scene-canvas {
+    min-height: 0;
+    max-height: none;
+    aspect-ratio: 3 / 2;
+  }
+
+  .composer {
+    overflow-y: auto;
+  }
+
+  .transcript {
+    padding: 4px 4px 4px 28px;
+    border-left: 1px solid var(--ink-line);
+  }
+
+  .chips--collapsed .suggestion-chip--extra {
+    display: inline-block;
+  }
+
+  .chips {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .chips-more {
+    display: none;
+  }
+}
+
+/* --- modals: <<Proceed?>> beat + the full Chronicle --- */
+
+.modal-scrim {
+  position: fixed;
+  /* Longhand, not `inset` — old Samsung Internet drops the shorthand. */
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px calc(env(safe-area-inset-bottom, 0px) + 24px);
+  background: rgba(10, 8, 5, 0.72);
+}
+
+.beat-dialog {
+  max-width: 26rem;
+}
+
+.beat-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.beat-actions .system-action {
+  flex: 1;
+  margin-top: 16px;
+}
+
+.system-action--decline {
+  border-color: var(--ink-line);
+  color: var(--parchment-dim);
+}
+
+.system-action--decline:active {
+  background: var(--ink-line);
+  color: var(--parchment);
+}
+
+.chronicle-modal {
+  width: 100%;
+  max-width: 40rem;
+  height: 86dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--ink-line);
+  border-radius: 8px;
+  background: var(--vellum-dark);
+}
+
+.chronicle-head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--ink-line);
+}
+
+.chronicle-title {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--parchment-dim);
+}
+
+.chronicle-close {
+  min-height: 40px;
+  padding: 6px 14px;
+  border: 1px solid var(--ink-line);
+  border-radius: 4px;
+  background: none;
+  color: var(--parchment-dim);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.chronicle-close:active {
+  color: var(--ink-accent);
+  border-color: var(--ink-accent);
+}
+
+.chronicle-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/*
+ * ------------------------------------------------------------------
+ * Codex screen (Sprint 3, Team D) — the deep one. Scrolls vertically
+ * inside the play column (status strip + rail stay fixed; the page
+ * itself still never scrolls). Fact cards, filters, contradiction
+ * badges, the hypothesis pinboard, map-in-Codex v0.
+ * ------------------------------------------------------------------
+ */
+
+.codex-screen {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 10px 2px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.codex-screen--boot {
+  gap: 12px;
+}
+
+.codex-head {
+  flex: none;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.codex-title {
+  margin: 0;
+  font-family: var(--font-story);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--parchment-dim);
+}
+
+.codex-count {
+  flex: none;
+  color: var(--parchment-dim);
+  font-size: 0.75rem;
+}
+
+/* --- filters --- */
+
+.codex-filters {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.codex-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1 1 8rem;
+}
+
+.codex-filter-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--parchment-dim);
+}
+
+.codex-select {
+  min-height: 40px;
+  min-width: 0;
+  max-width: 100%;
+  padding: 6px 10px;
+  border: 1px solid var(--ink-line);
+  border-radius: 4px;
+  background: var(--vellum-raised);
+  color: var(--parchment);
+  font: inherit;
+  font-size: 0.85rem;
+}
+
+.codex-order {
+  flex: none;
+  min-height: 40px;
+  padding: 6px 14px;
+  border: 1px solid var(--ink-line);
+  border-radius: 999px;
+  background: var(--vellum-raised);
+  color: var(--parchment);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.codex-order:active {
+  border-color: var(--ink-accent);
+  color: var(--ink-accent);
+}
+
+.codex-select:focus-visible,
+.codex-order:focus-visible {
+  outline: 2px solid var(--ink-accent);
+  outline-offset: 2px;
+}
+
+/* --- fact cards --- */
+
+.codex-cards {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.codex-empty {
+  margin: 8px 0;
+  color: var(--parchment-dim);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.codex-card {
+  border: 1px solid var(--ink-line);
+  border-left: 3px solid var(--ink-accent-dim);
+  border-radius: 5px;
+  background: var(--vellum-raised);
+  padding: 10px 12px;
+}
+
+.codex-card--pinned {
+  border-left-color: var(--ink-accent);
+  box-shadow: 0 0 6px rgba(98, 182, 203, 0.22);
+}
+
+.codex-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.codex-card-subject {
+  font-weight: 600;
+  color: var(--parchment);
+  letter-spacing: 0.02em;
+  overflow-wrap: anywhere;
+}
+
+.codex-card-badges {
+  flex: none;
+  display: flex;
+  gap: 6px;
+}
+
+.codex-badge {
+  flex: none;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.codex-badge--contested {
+  color: var(--fault);
+}
+
+.codex-badge--journal {
+  color: var(--parchment-dim);
+}
+
+.codex-card-text {
+  margin: 6px 0 0;
+  color: var(--parchment);
+  font-family: var(--font-story);
+  font-size: 1rem;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.codex-card-value {
+  color: var(--ink-accent);
+}
+
+.codex-card-contradiction {
+  margin: 5px 0 0;
+  padding-left: 8px;
+  border-left: 2px solid var(--fault);
+  color: var(--fault);
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+}
+
+.codex-card-prov {
+  margin: 7px 0 0;
+  color: var(--parchment-dim);
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+.codex-prov-source {
+  color: var(--parchment);
+}
+
+.codex-prov-conf {
+  color: var(--ink-accent-dim);
+  font-style: italic;
+}
+
+.codex-pin {
+  margin: 8px 0 0;
+  padding: 5px 12px;
+  min-height: 36px;
+  border: 1px solid var(--ink-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--parchment-dim);
+  font: inherit;
+  font-size: 0.76rem;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.codex-pin[aria-pressed='true'] {
+  border-color: var(--ink-accent);
+  color: var(--ink-accent);
+}
+
+.codex-pin:focus-visible {
+  outline: 2px solid var(--ink-accent);
+  outline-offset: 2px;
+}
+
+/* --- map-in-Codex v0 --- */
+
+.codex-map {
+  flex: none;
+  padding: 10px 12px;
+  border: 1px solid var(--ink-line);
+  border-radius: 5px;
+  background: var(--vellum-raised);
+}
+
+.codex-map-title {
+  margin: 0 0 6px;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--parchment-dim);
+}
+
+.codex-map-list {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.codex-map-place {
+  color: var(--parchment);
+  font-size: 0.86rem;
+}
+
+.codex-map-region {
+  color: var(--parchment-dim);
+  font-size: 0.78rem;
+}
+
+.codex-map-edge {
+  margin: 8px 0 0;
+  color: var(--parchment-dim);
+  font-size: 0.78rem;
+  font-style: italic;
+}
+
+/* --- hypothesis pinboard: sticky footer of the deep screen --- */
+
+.codex-pinboard {
+  position: sticky;
+  bottom: 0;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px calc(env(safe-area-inset-bottom, 0px) + 4px);
+  border: 1px solid var(--ink-accent-dim);
+  border-radius: 6px 6px 0 0;
+  background: var(--vellum-dark);
+  box-shadow: 0 -6px 16px rgba(10, 8, 5, 0.55);
+}
+
+.codex-pinboard-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.codex-pinboard-count {
+  color: var(--parchment);
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+}
+
+.codex-pinboard-clear {
+  flex: none;
+  padding: 2px 8px;
+  border: none;
+  background: none;
+  color: var(--parchment-dim);
+  font: inherit;
+  font-size: 0.76rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.codex-pinboard-hint {
+  margin: 0;
+  color: var(--parchment-dim);
+  font-size: 0.8rem;
+}
+
+.codex-note {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 1px solid var(--ink-line);
+  border-radius: 4px;
+  background: var(--vellum-raised);
+  color: var(--parchment);
+  font: inherit;
+  font-size: 16px; /* >=16px so iOS does not zoom on focus */
+  resize: vertical;
+}
+
+.codex-note:focus-visible {
+  outline: 2px solid var(--ink-accent);
+  outline-offset: 2px;
+}
+
+.codex-frame,
+.codex-research-chip {
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--ink-accent-dim);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ink-accent);
+  font: inherit;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.codex-research-chip {
+  border-color: var(--ink-accent);
+  background: var(--ink-accent-dim);
+  color: var(--vellum-dark);
+  font-weight: 600;
+}
+
+.codex-frame:active {
+  background: var(--ink-accent-dim);
+  color: var(--vellum-dark);
+}
+
+.codex-frame:focus-visible,
+.codex-research-chip:focus-visible {
+  outline: 2px solid var(--ink-accent);
+  outline-offset: 2px;
+}
+
+/* --- Self screen (Sprint 4, The Self view — Claude/design) ------------------
+   Vertical scroll only; never sideways. Standing is BELIEVED (word + meter,
+   no raw number). Matches the vellum/parchment/ink aesthetic. */
+.self-screen {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px 4px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.self-head {
+  padding: 0 8px;
+}
+.self-name {
+  margin: 0;
+  font-family: var(--font-story);
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--parchment);
+}
+.self-origin {
+  margin: 6px 0 0;
+  font-family: var(--font-story);
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: var(--parchment-dim);
+  font-style: italic;
+  overflow-wrap: anywhere;
+}
+.self-condition {
+  margin: 8px 0 0;
+  font-size: 0.85rem;
+  color: var(--parchment);
+}
+.self-sep {
+  color: var(--ink-line);
+}
+.self-titles {
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+  color: var(--ink-accent);
+  overflow-wrap: anywhere;
+}
+
+.self-section {
+  border: 1px solid var(--ink-line);
+  border-left: 3px solid var(--ink-accent);
+  background: var(--vellum-raised);
+  border-radius: 4px;
+  padding: 12px 14px;
+}
+.self-section-title {
+  margin: 0 0 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--parchment);
+}
+.self-section-note {
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--parchment-dim);
+}
+
+/* build / aptitudes — your own hand, on an OPEN (uncapped) scale; tap to learn */
+.self-aptitudes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.self-aptitude {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 6px 8px;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+}
+.self-aptitude:hover {
+  background: var(--vellum-dark);
+  border-color: var(--ink-line);
+}
+.self-aptitude:focus-visible {
+  outline: none;
+  background: var(--vellum-dark);
+  border-color: var(--ink-accent);
+}
+.self-aptitude-name {
+  flex: 0 0 5.4em; /* fits 'presence'/'finesse' so every track starts level */
+  font-size: 0.8rem;
+  color: var(--parchment-dim);
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+.self-aptitude-val {
+  flex: 0 0 1.7em;
+  text-align: right;
+  font-size: 0.84rem;
+  color: var(--parchment);
+  font-variant-numeric: tabular-nums;
+}
+.self-aptitude-more {
+  flex: 0 0 auto;
+  width: 1.15em;
+  height: 1.15em;
+  line-height: 1.05em;
+  text-align: center;
+  border-radius: 50%;
+  font-size: 0.64rem;
+  color: var(--parchment-dim);
+  border: 1px solid var(--ink-line);
+}
+.self-aptitude:hover .self-aptitude-more,
+.self-aptitude:focus-visible .self-aptitude-more {
+  color: var(--ink-accent);
+  border-color: var(--ink-accent-dim);
+}
+
+/* open scale: a marker on a track that FADES off the right. No cap, no end. */
+.self-scale {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.self-scale-track {
+  position: relative;
+  display: block;
+  height: 8px;
+  background: linear-gradient(
+    90deg,
+    var(--ink-line) 0%,
+    var(--ink-line) 52%,
+    transparent 100%
+  );
+  border-radius: 2px;
+}
+.self-scale-common {
+  position: absolute;
+  top: -2px;
+  width: 1px;
+  height: 12px;
+  background: var(--parchment-dim);
+  opacity: 0.4;
+  transform: translateX(-50%);
+}
+.self-scale-mark {
+  position: absolute;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ink-accent);
+  box-shadow: 0 0 0 2px var(--vellum-raised);
+  transform: translate(-50%, -50%);
+}
+.self-scale--lg {
+  display: block;
+  margin: 8px 0 2px;
+}
+.self-scale--lg .self-scale-track {
+  height: 10px;
+}
+
+.self-build-hint {
+  margin: 10px 2px 0;
+  font-size: 0.74rem;
+  color: var(--parchment-dim);
+  font-style: italic;
+}
+
+/* standing (believed) — name on its own line, then meter + read */
+.self-caveat {
+  margin: 0 0 12px;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  color: var(--parchment-dim);
+  font-style: italic;
+}
+.self-standing-list {
+  list-style: none;
+  margin: 0 0 6px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.self-standing-list--towns {
+  border-top: 1px solid var(--ink-line);
+  padding-top: 11px;
+}
+.self-standing {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.self-standing-name {
+  font-size: 0.84rem;
+  color: var(--parchment);
+  overflow-wrap: anywhere;
+}
+.self-standing-read-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.self-standing-read {
+  font-size: 0.8rem;
+  color: var(--parchment-dim);
+  font-style: italic;
+  overflow-wrap: anywhere;
+}
+
+/* diverging meter: cold (left) <-> warm (right), centre-anchored, no number */
+.self-meter {
+  flex: 0 0 68px;
+}
+.self-meter-track {
+  position: relative;
+  display: block;
+  height: 6px;
+  width: 68px;
+  background: var(--vellum-dark);
+  border-radius: 3px;
+}
+.self-meter-centre {
+  position: absolute;
+  left: 50%;
+  top: -1px;
+  width: 1px;
+  height: 8px;
+  background: var(--ink-line);
+  transform: translateX(-50%);
+}
+.self-meter-fill {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-radius: 3px;
+}
+.self-meter-fill--warm {
+  background: #c9976a;
+}
+.self-meter-fill--cold {
+  background: #5b7683;
+}
+
+.self-empty,
+.self-renown {
+  margin: 8px 0 0;
+  font-size: 0.82rem;
+  color: var(--parchment-dim);
+}
+.self-renown-word {
+  color: var(--ink-accent);
+  font-style: italic;
+}
+
+/* --- aptitude explainer modal (tap a stat) --------------------------------- */
+.self-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(8, 6, 4, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.self-modal {
+  width: 100%;
+  max-width: 340px;
+  background: var(--vellum-raised);
+  border: 1px solid var(--ink-line);
+  border-top: 3px solid var(--ink-accent);
+  border-radius: 6px;
+  padding: 18px 18px 16px;
+  box-shadow: 0 24px 60px -20px #000;
+}
+.self-modal-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.self-modal-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: capitalize;
+  color: var(--parchment);
+}
+.self-modal-score {
+  font-size: 1.4rem;
+  color: var(--ink-accent);
+  font-variant-numeric: tabular-nums;
+}
+.self-modal-blurb {
+  margin: 0 0 4px;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--parchment);
+}
+.self-modal-nocap {
+  margin: 12px 0 16px;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--parchment-dim);
+  font-style: italic;
+  border-left: 2px solid var(--ink-line);
+  padding-left: 10px;
+}
+.self-modal-close {
+  width: 100%;
+  background: var(--vellum-dark);
+  border: 1px solid var(--ink-line);
+  border-radius: 4px;
+  color: var(--parchment);
+  padding: 9px;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  font-family: inherit;
+}
+.self-modal-close:hover,
+.self-modal-close:focus-visible {
+  border-color: var(--ink-accent);
+  outline: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .self-modal { animation: self-modal-in 140ms ease-out; }
+  @keyframes self-modal-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* --- guided-dice creation screen + arrival (Sprint 4, Claude/design) ------- */
+.creation {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 14px 10px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.creation-head { padding: 0 4px; }
+.creation-title {
+  margin: 0;
+  font-family: var(--font-story);
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--parchment);
+}
+.creation-lead {
+  margin: 7px 0 0;
+  font-family: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--parchment-dim);
+}
+
+/* rolled pool: chips to place */
+.creation-pool { padding: 0 4px; }
+.creation-chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.creation-chip {
+  position: relative;
+  min-width: 48px;
+  min-height: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--vellum-raised);
+  border: 1px solid var(--ink-line);
+  border-radius: 6px;
+  color: var(--parchment);
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.creation-chip-val { font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.creation-chip--spare { border-style: dashed; }
+.creation-chip-tag {
+  font-size: 0.52rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--parchment-dim);
+}
+.creation-chip--sel {
+  border-color: var(--ink-accent);
+  box-shadow: 0 0 0 1px var(--ink-accent);
+  color: var(--ink-accent);
+}
+.creation-chip--used { opacity: 0.28; cursor: default; }
+.creation-pool-hint {
+  margin: 9px 0 0;
+  font-size: 0.74rem;
+  color: var(--parchment-dim);
+  font-style: italic;
+}
+
+/* aptitude slots */
+.creation-slots { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.creation-slot {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(7.5rem, 13rem) 1fr 2em;
+  grid-template-areas: 'name scale val' 'hint scale val';
+  align-items: center;
+  column-gap: 10px;
+  background: var(--vellum-raised);
+  border: 1px solid var(--ink-line);
+  border-radius: 5px;
+  padding: 9px 12px;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.creation-slot--armed { border-color: var(--ink-accent-dim); }
+.creation-slot--filled { border-left: 3px solid var(--ink-accent); }
+.creation-slot-name { grid-area: name; font-size: 0.86rem; color: var(--parchment); text-transform: capitalize; }
+.creation-slot-hint { grid-area: hint; font-size: 0.68rem; color: var(--parchment-dim); }
+.creation-slot-scale { grid-area: scale; }
+.creation-slot-empty { grid-area: scale; font-size: 0.74rem; color: var(--parchment-dim); font-style: italic; }
+.creation-slot-val { grid-area: val; text-align: right; font-size: 1rem; color: var(--parchment); font-variant-numeric: tabular-nums; }
+.creation-scale-track {
+  position: relative; display: block; height: 8px;
+  background: linear-gradient(90deg, var(--ink-line) 0%, var(--ink-line) 52%, transparent 100%);
+  border-radius: 2px;
+}
+.creation-scale-common { position: absolute; top: -2px; width: 1px; height: 12px; background: var(--parchment-dim); opacity: 0.4; transform: translateX(-50%); }
+.creation-scale-mark { position: absolute; top: 50%; width: 9px; height: 9px; border-radius: 50%; background: var(--ink-accent); box-shadow: 0 0 0 2px var(--vellum-raised); transform: translate(-50%, -50%); }
+
+/* actions */
+.creation-actions { display: flex; gap: 10px; padding: 4px 4px 0; }
+.creation-go {
+  flex: 1; min-height: 48px;
+  background: transparent; border: 1px solid var(--ink-accent-dim); border-radius: 5px;
+  color: var(--ink-accent); font: inherit; letter-spacing: 0.04em; cursor: pointer; touch-action: manipulation;
+}
+.creation-go:disabled { opacity: 0.4; cursor: default; color: var(--parchment-dim); border-color: var(--ink-line); }
+.creation-go:active:not(:disabled) { background: var(--ink-accent-dim); color: var(--vellum-dark); }
+.creation-back {
+  flex: 0 0 auto; min-height: 48px; padding: 0 16px;
+  background: transparent; border: 1px solid var(--ink-line); border-radius: 5px;
+  color: var(--parchment-dim); font: inherit; cursor: pointer;
+}
+
+/* arrival beat */
+.creation-arrival { padding: 6px 6px 0; display: flex; flex-direction: column; gap: 14px; }
+.creation-arrival-prose {
+  margin: 0;
+  font-family: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+  font-size: 0.96rem;
+  line-height: 1.62;
+  color: var(--parchment);
+}
+.creation-name { display: flex; flex-direction: column; gap: 8px; }
+.creation-name-label { font-size: 0.82rem; color: var(--parchment-dim); }
+.creation-name-input {
+  min-height: 48px; padding: 8px 12px;
+  background: var(--vellum-dark); border: 1px solid var(--ink-line); border-radius: 5px;
+  color: var(--parchment); font: inherit; font-size: 16px;
+}
+.creation-name-input:focus-visible { outline: 2px solid var(--ink-accent); outline-offset: 2px; }
+.creation-fault { margin: 0; color: var(--fault); font-size: 0.82rem; }
+
+/* composer: one dropdown for actions + exits (no horizontal scroll) + clear */
+.action-select {
+  width: 100%;
+  min-height: 44px;
+  margin-bottom: 8px;
+  padding: 8px 12px;
+  background: var(--vellum-raised);
+  border: 1px solid var(--ink-line);
+  border-radius: 5px;
+  color: var(--parchment);
+  font: inherit;
+  font-size: 16px; /* >=16px: no iOS zoom on focus */
+}
+.action-select:focus-visible { outline: 2px solid var(--ink-accent); outline-offset: 2px; }
+.action-select:disabled { opacity: 0.5; }
+
+.composer-clear {
+  flex: 0 0 auto;
+  min-width: 40px;
+  min-height: 44px;
+  background: transparent;
+  border: 1px solid var(--ink-line);
+  border-radius: 5px;
+  color: var(--parchment-dim);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.composer-clear:hover,
+.composer-clear:focus-visible { border-color: var(--ink-accent); color: var(--parchment); outline: none; }

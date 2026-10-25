@@ -1,0 +1,117 @@
+{
+  "overall": 0.967741935483871,
+  "passed": 30,
+  "total": 31,
+  "fields": {
+    "schema_valid": {
+      "ok": 3,
+      "n": 3
+    },
+    "action_type": {
+      "ok": 3,
+      "n": 3
+    },
+    "target_entity_ids": {
+      "ok": 2,
+      "n": 3
+    },
+    "stat_hint": {
+      "ok": 3,
+      "n": 3
+    },
+    "plausibility_hint": {
+      "ok": 3,
+      "n": 3
+    },
+    "ambiguity_flags": {
+      "ok": 3,
+      "n": 3
+    },
+    "dialogue.presence": {
+      "ok": 3,
+      "n": 3
+    },
+    "duration_hint.presence": {
+      "ok": 3,
+      "n": 3
+    },
+    "approach": {
+      "ok": 3,
+      "n": 3
+    },
+    "dialogue.addressee_id": {
+      "ok": 1,
+      "n": 1
+    },
+    "dialogue.quoted_speech": {
+      "ok": 1,
+      "n": 1
+    },
+    "duration_hint.mode": {
+      "ok": 1,
+      "n": 1
+    },
+    "duration_hint.text": {
+      "ok": 1,
+      "n": 1
+    }
+  },
+  "gates_ok": false,
+  "api_errors": [],
+  "misses": [
+    {
+      "id": "gu-020",
+      "utterance": "I rest at the inn until morning",
+      "field": "target_entity_ids",
+      "pass": false,
+      "expected": [
+        "loc_inn_dunmere"
+      ],
+      "actual": []
+    }
+  ],
+  "raw": {
+    "gu-001": {
+      "action_type": "physical",
+      "target_entity_ids": [
+        "crt_dragon_vermithrax"
+      ],
+      "approach": "a deceptive feint, testing the dragon's reaction without committing to a true strike",
+      "stat_hint": "finesse",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": [
+        "could_be_feint_or_fight"
+      ]
+    },
+    "gu-004": {
+      "action_type": "dialogue",
+      "target_entity_ids": [
+        "npc_guard_captain_bren"
+      ],
+      "approach": "commanding tone, asserting authority or urgent business to bypass the guard",
+      "stat_hint": "presence",
+      "dialogue": {
+        "addressee_id": "npc_guard_captain_bren",
+        "quoted_speech": "Stand down, we have business with the duke"
+      },
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": []
+    },
+    "gu-020": {
+      "action_type": "rest",
+      "target_entity_ids": [],
+      "approach": "taking rest at the inn",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": {
+        "mode": "until_condition",
+        "text": "until morning"
+      },
+      "ambiguity_flags": []
+    }
+  }
+}

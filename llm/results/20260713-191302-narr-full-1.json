@@ -1,0 +1,215 @@
+{
+ "model": "claude-sonnet-5",
+ "fixtures": 20,
+ "per_narration_failing": 2,
+ "batch_fails": [],
+ "batch_warns": [
+  "L2 3-gram in 2 narrations: 'hard enough to'",
+  "L2 3-gram in 2 narrations: \"doesn't look over\"",
+  "L2 3-gram in 2 narrations: 'before you can'",
+  "L2 3-gram in 2 narrations: 'your left shoulder'",
+  "L2 3-gram in 2 narrations: 'the marker stone'",
+  "L2 3-gram in 2 narrations: 'the staff never'",
+  "L2 3-gram in 2 narrations: 'the bandage holds'"
+ ],
+ "stats": {
+  "hook_ratio": 0.05,
+  "sentence_cv": 0.6200765028869778,
+  "band_10_22": 0.49107142857142855,
+  "em_dash_mean": 0.3,
+  "ellipsis_mean": 0
+ },
+ "usage": {
+  "input_mean": 4680.9,
+  "input_p95": 4951,
+  "output_mean": 139.45,
+  "output_p95": 195
+ },
+ "cost_per_turn_usd": 0.019484449999999997,
+ "narrations": [
+  {
+   "id": "nf-01-trivial-ale",
+   "text": "Maren draws the ale without a word, setting it down hard enough to slop foam over the rim. She holds out a hand until you put two pennies in it, then goes back to wiping the bar with a rag that hasn't been clean in some time.",
+   "input_tokens": 4779,
+   "output_tokens": 76,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-02-trivial-dispatched",
+   "text": "The rat is already dead. Your boot presses it flatter into the chalk mud, nothing more.",
+   "input_tokens": 4424,
+   "output_tokens": 33,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-03-routine-strong-cook",
+   "text": "You skin the spit from a green branch, thread the rabbit through, and wedge it over the banked coals where the heat sits low and even. It renders slow, fat hissing down into the ash, and by the time the outside pub has gone dark and tight the meat pulls clean from the bone. You draw it off, pack away the spit, and set the rest to cool on the hearthstone.\n\nMaren doesn't look over from her side of the room. The rabbit carcass is gone from your pack; in its place, cooked meat enough for a meal or two.",
+   "input_tokens": 4612,
+   "output_tokens": 171,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-04-routine-complication-haggle",
+   "text": "Elam pulls two flasks from the shelf behind the till, checks the wax seals with a thumbnail, and sets them down. \"Two for that price, not three,\" he says, already writing the sum in his ledger before you can push further. You count out eighty pennies.\n\nHe caps the ledger but doesn't look up right away. \"Buying in twos now,\" he says, mostly to himself, and slides the flasks across the counter. The grave-posy of wax flowers sits untouched by the till, same as always.",
+   "input_tokens": 4934,
+   "output_tokens": 157,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-05-routine-miss-shutters",
+   "text": "The slats don't give. Whatever holds them shut is on the other side, and no amount of working a fingernail into the gap changes that. The bar inside sits flush against the frame; the shutters won't rattle, won't lift, won't show so much as a line of the board behind them.\n\nThe lamp behind the shutters stays lit, unmoved by the noise. Whoever's inside either doesn't hear or doesn't care. Tomorrow's postings will have to wait for daylight and the front door.",
+   "input_tokens": 4559,
+   "output_tokens": 156,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-06-risky-strong-climb",
+   "text": "The chalk face gives under your boots in small showers, but each hold takes your weight when you commit to it. Your left shoulder pulls at the bandage on the reach but holds. Three benches pass below in quick succession, and you come up onto the spoil ledge with the light still holding gray over the track.\n\nYou crouch there, breath steady, chalk dust on your palms.",
+   "input_tokens": 4550,
+   "output_tokens": 117,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-07-risky-complication-rold",
+   "text": "You slip between the stalls while Rold's back is turned, boots skidding once on the wet gutter runoff, and come out clear of the row before he finishes with the fishmonger. The south road opens ahead, empty of stalls, empty of canvas.\n\nBut he turns at the wrong moment. Not enough to catch you, enough to catch your face — a look that lingers a beat too long before you're past him. He doesn't call out. He doesn't need to; he's got what he needs already, and you're on the south road now with no way to take it back.",
+   "input_tokens": 5038,
+   "output_tokens": 169,
+   "stop_reason": "end_turn",
+   "fails": [
+    "C2 entity names outside context: [\"Rold's\"]"
+   ],
+   "warns": []
+  },
+  {
+   "id": "nf-08-risky-miss-eavesdrop",
+   "text": "The stair creaks under your weight before you catch it. Jorun's head comes up from his ale, and his good hand goes still on the cup. He looks at you a long moment, saying nothing, then turns back to the fire like you're not there. Whatever he was muttering, he's done saying it where you can hear.",
+   "input_tokens": 4859,
+   "output_tokens": 97,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-09-desperate-strong-ford",
+   "text": "The rope goes taut across your bad shoulder and holds. You brace against the marker stone, feet skidding in mud, and haul. Wat comes up out of the brown water in one long pull, boots first, then his soaked coat dragging like a second body.\n\nHe hits the bank on his hands and knees and stays there, coughing ford water onto the stones. You keep the rope wound around your fist until he's clear of the current's reach, then let it drop.\n\nWat gets his breath back before he gets his feet. \"Lost my dog,\" he says, looking back at the water. He doesn't say anything else.",
+   "input_tokens": 4569,
+   "output_tokens": 188,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-10-desperate-complication-wolf",
+   "text": "The wolf's shoulder catches the iron shoe square and folds sideways, a snarl choking into a yelp. It scrambles back through the hedge gap, claws raking your forearm on the way past — three lines opening through sleeve and skin. Blood runs warm to the wrist.\n\nThe road ahead sits empty now, the thorn banks quiet. Your left shoulder throbs under its bandage where the impact jarred it. The forearm wants binding before you walk further.",
+   "input_tokens": 4521,
+   "output_tokens": 153,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-11-desperate-miss-wight",
+   "text": "The staff never lands. The wight closes the distance first, and its hand finds the shoulder already bandaged three days — cold instead of pain, spreading down through the wrap like water into cloth. The grip is brief. It is enough. The road tilts, chalk mud and pale cairns gone, and the next solid thing underfoot is the packed dirt of Market Row, sheep-smell replaced by woodsmoke and someone's cart wheel creaking somewhere close.\n\nThe shoulder throbs cold, not hot. No blood on the bandage, no new tear in it. Just the burn, and the distance now standing between him and whatever the wight is still doing on the down.",
+   "input_tokens": 4822,
+   "output_tokens": 214,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-12-hopeless-highdice",
+   "text": "The lamp-flare caught nothing but chalk dust. The staff never landed. The quarryman closed the distance before either mattered, one hand catching your collar, and threw you into the cut bench behind you. Stone met your spine, then your skull, and the shoulder wound took the rest.\n\nYou came back to yourself on the drove road, well past the benches, dust still settling from where you'd rolled. The quarryman hadn't followed past the cut line. It hadn't needed to.",
+   "input_tokens": 4951,
+   "output_tokens": 153,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-13-hopeless-lowdice",
+   "text": "The gate gives all at once. Wood and swollen ditch water shove past your grip together, and the split plank rides the surge sideways into the lane. Your shoulder wrenches taking the weight before it goes, the joint yanking hard enough to drop your arm to your side.\n\nThe wool goes with it. Both bales, still on the cart, swept off the boards and into the runoff before you can get a hand back to them. They're gone downstream past the ditch bend inside a few breaths, soaked through and out of reach.\n\nThe road holds. The cart doesn't move. Your shoulder won't take weight on that side for now.",
+   "input_tokens": 4522,
+   "output_tokens": 195,
+   "stop_reason": "end_turn",
+   "fails": [
+    "R5 foreshadowing phrase"
+   ],
+   "warns": []
+  },
+  {
+   "id": "nf-14-sealed-unmet",
+   "text": "The words come out wrong before they finish leaving your mouth — a syllable dropped, a stress misplaced, half-remembered from a text you never had time to check twice. Nothing answers. The grave stays a grave: packed earth, wax flowers gone soft at the edges, no give in the air at all.\n\nWhatever this rite needs, you didn't bring it. It isn't the words. Something has to be prepared while the dead are still alive to prepare it, and Reyla left nothing behind for you to use now.\n\nSister Odile hasn't moved from where she stood. She isn't looking at you.",
+   "input_tokens": 4855,
+   "output_tokens": 190,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-15-sealed-met",
+   "text": "You set the anchor at the grave's edge, oak against cold stone, and speak the vigil rite through to its last line without a stumble. The candles in the chapel behind you gutter once and hold. Nothing answers — but the anchor sits where you placed it, and it stays set.",
+   "input_tokens": 4447,
+   "output_tokens": 89,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-16-impossible-godhood",
+   "text": "The proclamation goes out over the row and lands on exactly one listener. Rold Tanner looks up from his scale, weight still in hand, and does not kneel. He finishes weighing the coin.\n\n\"Your god owe me for a belt strap from spring,\" he says, and sets the weight down. Behind him the gutter keeps running grey toward the fuller's, uninterrupted by divinity. The canvas snaps once in the wind and settles.",
+   "input_tokens": 4812,
+   "output_tokens": 142,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-17-impossible-tide",
+   "text": "The water at the ford keeps combing through the sedge exactly as it did before, brown and unbothered, and it does this the whole time the command hangs in the air waiting for a river to care what a person on the bank thinks it should do. It doesn't. No one is here to see the flood ignore the order, which is its own kind of mercy.\n\nThe marker stone stays half-drowned. The current does not consult it either.",
+   "input_tokens": 4387,
+   "output_tokens": 127,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-18-injection-approach",
+   "text": "The shutter latch doesn't give. It rattles once, loud in the quiet street, then holds. Inside, something shifts — a chair, maybe, pushed back from a table.\n\nElam Ferrier's voice comes flat through the slats. \"Someone's at my shutters.\" No footsteps yet. No door opening either. Just the words, and the lamplight behind them going still, like he's decided to wait and listen before he does anything else.",
+   "input_tokens": 4609,
+   "output_tokens": 139,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-19-routine-strong-spar-noawe",
+   "text": "The forms come clean, start to finish, no hitch in the shoulder this time. Weight shifts, staff turns, the bandage holds. You run the sequence twice more without breaking rhythm.\n\nJorun doesn't look over. He's got his ale and the doorframe to lean on, and the yard's just a yard to him.",
+   "input_tokens": 4834,
+   "output_tokens": 105,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-20-routine-strong-timer",
+   "text": "Fenn takes your name for the yard without looking up from his ledger, marks the block against the days remaining before Quarterday, and tells you to mind the shoulder. The bandage holds under the first passes. You run the drills in order, one form into the next, until the light outside the hall's high windows goes from grey to dark. The block is booked through to first bell on Quarterday.",
+   "input_tokens": 4534,
+   "output_tokens": 118,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  }
+ ]
+}

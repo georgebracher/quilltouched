@@ -1,0 +1,244 @@
+{
+ "model": "claude-sonnet-5",
+ "fixtures": 23,
+ "per_narration_failing": 2,
+ "batch_fails": [
+  "L2 3-gram tic in 3/20 narrations: 'back into the'"
+ ],
+ "batch_warns": [
+  "L2 3-gram in 2 narrations: 'the chalk mud'",
+  "L2 3-gram in 2 narrations: 'way a man'",
+  "L2 3-gram in 2 narrations: \"doesn't call out\"",
+  "L2 3-gram in 2 narrations: \"doesn't say anything\"",
+  "L2 3-gram in 2 narrations: 'the standing water'",
+  "L2 3-gram in 2 narrations: 'the slime settles'",
+  "L4 em-dash >1 in 2 narrations"
+ ],
+ "stats": {
+  "hook_ratio": 0.08695652173913043,
+  "sentence_cv": 0.6075057247972908,
+  "band_10_22": 0.41379310344827586,
+  "em_dash_mean": 0.2608695652173913,
+  "ellipsis_mean": 0
+ },
+ "usage": {
+  "input_mean": 5616.565217391304,
+  "input_p95": 5948,
+  "output_mean": 138.52173913043478,
+  "output_p95": 204
+ },
+ "cost_per_turn_usd": 0.025687521739130435,
+ "narrations": [
+  {
+   "id": "nf-01-trivial-ale",
+   "text": "Maren draws the ale without a word wasted on it, sets the cup down, and scrapes two pennies off the bar into her palm. The fire behind her is banked low, more coal than flame, and she turns back to the shelf where she was already busy before you came in.",
+   "input_tokens": 5691,
+   "output_tokens": 83,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-02-trivial-dispatched",
+   "text": "The rat is already dead, already still. Your boot comes down on it once, flattening what's left into the chalk mud. Nothing about it changes.",
+   "input_tokens": 5336,
+   "output_tokens": 47,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-03-routine-strong-cook",
+   "text": "The rabbit goes on a green stick, propped low over the banked coals where the heat is steady rather than hot. It takes the fat first, then the meat, turning easy on the spit without catching. By the time it's done the skin has gone tight and brown all the way round, and it comes off the fire whole, ready to eat.",
+   "input_tokens": 5524,
+   "output_tokens": 101,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-04-routine-complication-haggle",
+   "text": "Elam sets two flasks of sealed lamp oil on the counter and taps a number into the air between them before you've finished your offer. You go back and forth twice; he lands somewhere short of his asking price and calls it done, sliding both flasks across. Eighty pennies changes hands.\n\nHe doesn't wrap them. Instead he looks at you a beat longer than the transaction requires, the way a man does when he's deciding whether to remember a face. \"Two flasks,\" he says, more to himself than to you, and turns to mark it in the ledger under the till.",
+   "input_tokens": 5843,
+   "output_tokens": 177,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-05-routine-miss-shutters",
+   "text": "The slats won't give. You work fingers into the gap and find a bar set solid on the far side, wood against wood, no play in it at all. Whatever tomorrow's postings say stays behind the shutter tonight.\n\nThe lamp burns on regardless, low behind the boards, and the board itself keeps its news to itself.",
+   "input_tokens": 5537,
+   "output_tokens": 102,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-06-risky-strong-climb",
+   "text": "The chalk face gives under each grip, but you keep moving before the grit lets go, hands finding stone before the loose stuff finishes crumbling. Three benches pass under your boots without a slip. You come up onto the spoil ledge with the light still holding, breath steady, shoulder unbothered by the climb.\n\nThe ledge is bare rock and spilled chalk, wide enough to stand square. Below, the track's three benches drop away into the dusk you just outclimbed.",
+   "input_tokens": 5475,
+   "output_tokens": 153,
+   "stop_reason": "end_turn",
+   "fails": [
+    "L1 banned phrase: /\\bunbothered\\b/"
+   ],
+   "warns": []
+  },
+  {
+   "id": "nf-07-risky-complication-rold",
+   "text": "You slip between the stalls while Rold has the fishmonger backed against her own table, his voice low and his hand flat on her scale. Nobody stops you. The canvas snaps overhead and the gutter runs grey underfoot, and then the stalls thin out and you're past them, onto the packed dirt of the south road with Market Row behind you.\n\nBut Rold turns his head as you go. Just a flick of it, tracking you past the fishmonger's shoulder — he clocks you leaving, whatever he makes of it. He doesn't call out. He goes back to the scale.\n\nYou're on the south road now, the market noise falling off behind you.",
+   "input_tokens": 5969,
+   "output_tokens": 204,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-08-risky-miss-eavesdrop",
+   "text": "The stair creaks under your weight before you've caught a single word. Jorun's head comes up from his ale, his good hand going still around the cup. He looks at you on the stair, not through you, not past you. Whatever he was muttering, he's done with it now.\n\nHe doesn't say anything. He just watches, waiting to see what you'll do about being seen.",
+   "input_tokens": 5776,
+   "output_tokens": 111,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-09-desperate-strong-ford",
+   "text": "The rope goes taut and holds. Wat comes up sideways through the brown water, one arm hooked over it, and the current drags at his legs the whole way to the bank before you get a fist in his collar and haul him onto the sedge. He lies there coughing up ford water, soaked through, the marker stone above them both still dry.\n\nHe gets an arm under himself, spits, and looks at the rope like he's counting it. Doesn't say anything yet, just breathes.",
+   "input_tokens": 5481,
+   "output_tokens": 148,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-10-desperate-complication-wolf",
+   "text": "The wolf comes in low, and the staff's iron shoe catches it under the jaw before teeth find anything to close on. It goes down sideways into the hedge, scrabbles, and does not get up to try again. The strike costs its own price: something in your side pulls wrong as you plant your feet, and pain runs hot down to the hip. You're bleeding somewhere new now, the road quiet again, the hedges dark on either side.",
+   "input_tokens": 5355,
+   "output_tokens": 138,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-11-desperate-miss-wight",
+   "text": "The staff catches nothing. The wight moves through the swing like the space where it stood was never true, and the answer comes back through the shaft into both arms before whatever hits you actually lands. The chalk mud takes you off your feet.\n\nThere's a gap after that. When it closes, the down is gone. Torchlight, stalls shuttered for the night, the smell of tallow and old fish — Market Row. The staff is still in your hand. The wound isn't.",
+   "input_tokens": 5731,
+   "output_tokens": 144,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-12-hopeless-highdice",
+   "text": "The lamp-flare catches nothing but chalk dust; the staff meets no resistance where the quarryman should be. Then it is on you, and there is no driving it anywhere. Something takes hold — not a blow you can place, not a grip you can name — and the track drops away.\n\nYou come back to yourself on the drove road, some unknown distance from the cut benches, the fresh hurt already stiffening under whatever ran you off. The quarryman did not follow past the spoil line. It didn't have to.",
+   "input_tokens": 5926,
+   "output_tokens": 159,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-13-hopeless-lowdice",
+   "text": "The gate wins. It goes sideways under your hands, the split plank shearing wider, and the water that follows isn't a trickle anymore. It takes the cart at the wheel first, tips it, and the two bales go into the ditch current and out of reach before you've got your feet back under you. You go down with the surge, take the edge of the frame across you on the way, and come up wet, wooded, and short two bales of guild wool.\n\nThe lane keeps eating itself a plank at a time behind you. The cart sits canted in the ditch, empty.",
+   "input_tokens": 5418,
+   "output_tokens": 171,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-14-sealed-unmet",
+   "text": "The words come apart before they finish. You reach the third line of the rite and there's nothing under it to hold — no anchor, no thread from the woman who's under the wax flowers back to whatever you're saying at her. The syllables just stop mattering. Reyla's grave stays a grave: packed dirt, a name, nothing listening.\n\nYou know now, the way a failed lock tells you its shape, that this rite needs something laid down while she still breathed — a token, a promise, something prepared, not improvised over a stranger's plot two days before Quarterday. Sister Odile is across the chapel, working the parish rolls chained to their post, and does not look up from the column she's counting.",
+   "input_tokens": 5833,
+   "output_tokens": 214,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-15-sealed-met",
+   "text": "The oak anchor sits at the grave's edge where the ground breaks from stone to earth. You speak the vigil rite through to its last word, and the words hold their shape, unhurried, unbroken. Nothing answers. Nothing needs to.\n\nThe candles at the night office gutter low behind you, the chapel empty as it was when you came in. The anchor stays where you set it, finished, whole, doing whatever it does in silence.",
+   "input_tokens": 5296,
+   "output_tokens": 138,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-16-impossible-godhood",
+   "text": "The declaration goes out over the stalls, over the snap of canvas, over the gutter running grey from the fuller's. Nobody kneels. Rold Tanner looks up from his scale, weighs the coin in his hand a moment longer, sets it down, and picks up the next one.\n\nA trader across the row keeps folding a bolt of cloth. The wind takes the words the way it takes everything else on Market Row, without paying for them.",
+   "input_tokens": 5724,
+   "output_tokens": 139,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-17-impossible-tide",
+   "text": "The ford keeps combing through the sedge exactly as it did before anyone spoke to it. Brown water, marker stone, the same width it was a moment ago. No one stands on the far bank to see a man address a river and be ignored by it equally.\n\nThe current does not pause to consider the command. It has somewhere to be.",
+   "input_tokens": 5299,
+   "output_tokens": 100,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-18-injection-approach",
+   "text": "The shutter catch bites down before it gives, a sharp crack of metal that carries further than it should in the evening quiet. Elam Ferrier is at the counter inside, and turns toward the sound.\n\nThrough the slats, lamplight shifts as he crosses the floor. The latch holds. Nothing opens.",
+   "input_tokens": 5521,
+   "output_tokens": 101,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-19-routine-strong-spar-noawe",
+   "text": "The forms come clean, one into the next, weight settling through the shoulder without complaint. Out past the swollen threshold the yard is mud and old straw, enough room to swing without catching a post. Jorun sits by the door with his cup and his ruined arm and doesn't stop drinking, doesn't call out a correction or a jeer, just watches the staff go through its arcs the way a man watches weather he isn't walking in.\n\nThe last form ends clean, staff grounded, breath even. Inside, Maren is still stacking cups behind the bar.",
+   "input_tokens": 5681,
+   "output_tokens": 175,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-20-routine-strong-timer",
+   "text": "Fenn takes the booking without looking up from the posting board, marks the yard against your name for the block running to Quarterday. No argument, no fuss about the shoulder still bandaged under your sleeve. The slot's yours until first bell.\n\nYou start in, working the drills at a pace the wound allows, the spear finding its lines again by feel more than force. Nothing breaks, nothing catches. The block holds through the evening, steady enough to trust.",
+   "input_tokens": 5446,
+   "output_tokens": 143,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-21-observation-slime-maren-lead",
+   "text": "The thing at the ditch's edge moves the way water moves, low and gathering, no legs to speak of. It slides forward through the reeds, then stops dead at the edge of the tavern lamp's reach, drawing back into the shadow of the bank. Whatever pulls at it, the light stops it as sure as a wall, and it stays put at the black waterline, unwilling or unable to cross the lit ground.\n\nMaren Ostler goes on stacking crates by the tavern door, the lamp between her and the ditch. The slime settles into the standing water and doesn't try again.",
+   "input_tokens": 5947,
+   "output_tokens": 185,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-22-observation-slime-maren-lead-npc-category",
+   "text": "The thing shifts low against the reed, a slick lump the color of dishwater, and when you edge closer with the lamp its edge draws back from the light like fabric pulled taut. It doesn't chase the retreat far. It stops where the standing water ends, hugging the wet margin, and won't cross the dry lip of the ditch bank no matter how it strains toward the dark beyond the light's reach.\n\nMaren stands off at the ditch's rim, watching her own business, unbothered by what you're doing with the lamp. The slime settles back into the water once you hold still, content to wait out the light rather than test the dry ground.",
+   "input_tokens": 5948,
+   "output_tokens": 199,
+   "stop_reason": "end_turn",
+   "fails": [
+    "L1 banned phrase: /\\bunbothered\\b/"
+   ],
+   "warns": []
+  },
+  {
+   "id": "nf-23-wounded-no-new-anatomy",
+   "text": "The second punch lands the same as the first. Jorun staggers back into the bar's edge, catches himself on it, and stays down against it a moment before pushing upright again.",
+   "input_tokens": 5424,
+   "output_tokens": 54,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  }
+ ]
+}

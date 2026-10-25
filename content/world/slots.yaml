@@ -1,0 +1,76 @@
+# Everquill — anchor slot maps per location type (Team B, Sprint 2, interface decision 5)
+# Format (LOCKED): {location_type: {slots: [{slot_id, x_pct, y_pct}]}}
+#
+# Coordinate system:
+#   x_pct — percent of scene-canvas width, measured from the LEFT edge.
+#   y_pct — percent of scene-canvas height, measured from the TOP edge.
+#   A slot is the sprite's ANCHOR POINT: bottom-center (the foot line). The
+#   renderer places the sprite so its feet stand on (x_pct, y_pct) and draws
+#   higher-y slots in front (painter's order by y_pct).
+#
+# Authoring rules applied (style-bible §10 + Team E batch-2 notes):
+#   - All slots sit in the sprite-safe floor band: y_pct 70-93 (lower third
+#     of the 1536x1024 background, feet never above the band).
+#   - All slots keep x_pct within 33-68 so a portrait center-crop on mobile
+#     (which shows roughly the central half of the landscape background)
+#     never cuts a slotted sprite. Sprites render at ~120 px on mobile
+#     portrait; slots are spaced >= ~10% in x or >= ~7% in y so two occupied
+#     slots read as separate figures, with y-stagger providing depth.
+#   - tavern is measured against the generated background
+#     assets/backgrounds/everquill-bg-tavern-interior.png: clear floorboards
+#     run x ~33-70 in the lower third (left table/benches intrude below
+#     x ~33, right bench beyond x ~70, bar front bottoms out at y ~72).
+#   - guild_hall / church / square / shop / road backgrounds are not yet
+#     generated; per the Sprint-2 Team E ticket, backgrounds must leave
+#     these authored slot zones clear. Zones follow the same conservative
+#     envelope as the tavern.
+#
+# slot_ids are globally unique (type-prefixed) so a scene manifest line is
+# unambiguous without carrying the location type beside it.
+
+tavern:
+  slots:
+    - {slot_id: tavern_bar, x_pct: 64, y_pct: 72}      # standing at the bar front
+    - {slot_id: tavern_board, x_pct: 40, y_pct: 73}    # under the notice board
+    - {slot_id: tavern_center, x_pct: 52, y_pct: 81}   # open taproom floor
+    - {slot_id: tavern_left, x_pct: 37, y_pct: 88}     # foreground, left of center
+    - {slot_id: tavern_right, x_pct: 66, y_pct: 90}    # foreground, right of center
+
+guild_hall:
+  slots:
+    - {slot_id: guild_board, x_pct: 38, y_pct: 72}     # at the posting board
+    - {slot_id: guild_desk, x_pct: 62, y_pct: 74}      # before the ledger desk
+    - {slot_id: guild_center, x_pct: 50, y_pct: 82}    # middle of the hall
+    - {slot_id: guild_door, x_pct: 34, y_pct: 89}      # by the door / plate rail
+    - {slot_id: guild_nook, x_pct: 67, y_pct: 88}      # trophy-nook corner
+
+church:
+  slots:
+    - {slot_id: church_lectern, x_pct: 55, y_pct: 72}  # before the lectern
+    - {slot_id: church_aisle, x_pct: 45, y_pct: 81}    # mid-aisle
+    - {slot_id: church_side, x_pct: 65, y_pct: 87}     # side wall, foreground
+    - {slot_id: church_door, x_pct: 35, y_pct: 90}     # inside the door
+
+square:
+  slots:
+    - {slot_id: square_far_left, x_pct: 35, y_pct: 73}
+    - {slot_id: square_far_right, x_pct: 65, y_pct: 73}
+    - {slot_id: square_center, x_pct: 50, y_pct: 80}
+    - {slot_id: square_left, x_pct: 38, y_pct: 88}
+    - {slot_id: square_right, x_pct: 62, y_pct: 89}
+    - {slot_id: square_fore, x_pct: 50, y_pct: 93}
+
+shop:
+  slots:
+    - {slot_id: shop_counter, x_pct: 60, y_pct: 73}    # behind-the-counter position
+    - {slot_id: shop_shelf, x_pct: 38, y_pct: 74}      # browsing the shelves
+    - {slot_id: shop_center, x_pct: 50, y_pct: 83}     # middle of the shop floor
+    - {slot_id: shop_door, x_pct: 34, y_pct: 90}       # just inside the door
+
+road:
+  slots:
+    - {slot_id: road_far, x_pct: 50, y_pct: 70}        # up the road, deepest
+    - {slot_id: road_left, x_pct: 36, y_pct: 78}
+    - {slot_id: road_right, x_pct: 64, y_pct: 78}
+    - {slot_id: road_near_left, x_pct: 42, y_pct: 88}
+    - {slot_id: road_near_right, x_pct: 58, y_pct: 91}

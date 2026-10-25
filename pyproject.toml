@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "everquill-engine"
+version = "0.2.0"
+description = "Everquill deterministic rules engine. Pure Python, zero LLM/network imports; rules modules are DB-free (persistence lives only in db/store/migrate/cli per the Sprint-1 ticket). The engine is the referee; the LLM is the mouth."
+requires-python = ">=3.12"
+license = { text = "MIT" }
+dependencies = [
+    "PyYAML>=6",
+]
+
+[project.optional-dependencies]
+db = [
+    "psycopg[binary]>=3.2",
+]
+crypto = [
+    # HIGH-8 crypto-shredding: AES-GCM envelope encryption of player-authored
+    # text (everquill_engine/crypto.py). Required wherever the store appends
+    # player-text events (the API deploy needs it in root requirements.txt).
+    "cryptography>=42",
+]
+dev = [
+    "pytest>=8",
+    "ruff>=0.5",
+    "jsonschema>=4",
+    "cryptography>=42",
+    "httpx>=0.27",  # FastAPI's TestClient
+]
+
+[tool.setuptools.packages.find]
+include = ["everquill_engine*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

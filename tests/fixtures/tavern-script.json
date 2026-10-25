@@ -1,0 +1,223 @@
+{
+  "comment": "Canned-intent script for the Sprint-1 tavern scene (dev-fixture.yaml). Every intent conforms to docs/contracts/intent.schema.json v1.3. Used by the CLI --script mode and the determinism/rebuild tests.",
+  "intents": [
+    {
+      "label": "Look around the room",
+      "intent": {
+        "action_type": "observation",
+        "target_entity_ids": [],
+        "approach": "take in the taproom slowly",
+        "stat_hint": null,
+        "dialogue": null,
+        "plausibility_hint": "plausible",
+        "duration_hint": null,
+        "ambiguity_flags": [],
+        "addressee": null,
+        "speech_act": null,
+        "topic_ids": [],
+        "transaction": null,
+        "invoked_law_ids": [],
+        "movement_scope": null
+      }
+    },
+    {
+      "label": "Size up Torvald Ashmane",
+      "intent": {
+        "action_type": "observation",
+        "target_entity_ids": [
+          "npc_dev_torvald"
+        ],
+        "approach": "read the old drillmaster without staring",
+        "stat_hint": "wits",
+        "dialogue": null,
+        "plausibility_hint": "plausible",
+        "duration_hint": null,
+        "ambiguity_flags": [],
+        "addressee": null,
+        "speech_act": null,
+        "topic_ids": [],
+        "transaction": null,
+        "invoked_law_ids": [],
+        "movement_scope": null
+      }
+    },
+    {
+      "label": "Ask around about Sorrel Vane",
+      "intent": {
+        "action_type": "research",
+        "target_entity_ids": [
+          "npc_dev_sorrel"
+        ],
+        "approach": "work the taproom for what people say about the scribe",
+        "stat_hint": "lore",
+        "dialogue": null,
+        "plausibility_hint": "plausible",
+        "duration_hint": null,
+        "ambiguity_flags": [],
+        "addressee": null,
+        "speech_act": null,
+        "topic_ids": [],
+        "transaction": null,
+        "invoked_law_ids": [],
+        "movement_scope": null
+      }
+    },
+    {
+      "label": "Win Hedda over",
+      "intent": {
+        "action_type": "social",
+        "target_entity_ids": [
+          "npc_dev_hedda"
+        ],
+        "approach": "help stack mugs and earn a little trust",
+        "stat_hint": "presence",
+        "dialogue": null,
+        "plausibility_hint": "plausible",
+        "duration_hint": null,
+        "ambiguity_flags": [],
+        "addressee": "person",
+        "speech_act": "statement",
+        "topic_ids": [],
+        "transaction": null,
+        "invoked_law_ids": [],
+        "movement_scope": null
+      }
+    },
+    {
+      "label": "Challenge Torvald to arm-wrestling",
+      "intent": {
+        "action_type": "physical",
+        "target_entity_ids": [
+          "npc_dev_torvald"
+        ],
+        "approach": "put the drillmaster's arm to the table",
+        "stat_hint": "might",
+        "dialogue": null,
+        "plausibility_hint": "dubious",
+        "duration_hint": null,
+        "ambiguity_flags": [],
+        "addressee": null,
+        "speech_act": null,
+        "topic_ids": [],
+        "transaction": null,
+        "invoked_law_ids": [],
+        "movement_scope": null
+      }
+    },
+    {
+      "label": "Whittle a charm from scrap wood",
+      "intent": {
+        "action_type": "craft",
+        "target_entity_ids": [],
+        "approach": "whittle a small charm by the fire",
+        "stat_hint": "finesse",
+        "dialogue": null,
+        "plausibility_hint": "plausible",
+        "duration_hint": null,
+        "ambiguity_flags": [],
+        "addressee": null,
+        "speech_act": null,
+        "topic_ids": [],
+        "transaction": null,
+        "invoked_law_ids": [],
+        "movement_scope": null
+      }
+    },
+    {
+      "label": "Train will until nightfall",
+      "intent": {
+        "action_type": "train",
+        "target_entity_ids": [],
+        "approach": "drill focus and stillness in the yard",
+        "stat_hint": "will",
+        "dialogue": null,
+        "plausibility_hint": "plausible",
+        "duration_hint": {
+          "mode": "until_condition",
+          "text": "until nightfall",
+          "until": "dusk",
+          "amount": null,
+          "unit": null
+        },
+        "ambiguity_flags": [],
+        "addressee": null,
+        "speech_act": null,
+        "topic_ids": [],
+        "transaction": null,
+        "invoked_law_ids": [],
+        "movement_scope": null
+      }
+    },
+    {
+      "label": "Swear the hearth-oath",
+      "intent": {
+        "action_type": "social",
+        "target_entity_ids": [],
+        "approach": "swear a binding hearth-oath over the tavern fire",
+        "stat_hint": "will",
+        "dialogue": null,
+        "plausibility_hint": "dubious",
+        "duration_hint": null,
+        "ambiguity_flags": [],
+        "addressee": "person",
+        "speech_act": "statement",
+        "topic_ids": [],
+        "transaction": null,
+        "invoked_law_ids": [
+          "law_hearth_oath"
+        ],
+        "movement_scope": null
+      }
+    },
+    {
+      "label": "Levitate above the taproom",
+      "intent": {
+        "action_type": "physical",
+        "target_entity_ids": [],
+        "approach": "concentrate and levitate off the floorboards",
+        "stat_hint": "will",
+        "dialogue": null,
+        "plausibility_hint": "impossible_in_fiction",
+        "duration_hint": null,
+        "ambiguity_flags": [],
+        "addressee": null,
+        "speech_act": null,
+        "topic_ids": [],
+        "transaction": null,
+        "invoked_law_ids": [
+          "law_unwritten_flight"
+        ],
+        "movement_scope": null
+      }
+    },
+    {
+      "label": "Take a room for the night",
+      "intent": {
+        "action_type": "rest",
+        "target_entity_ids": [],
+        "approach": "pay for a room and sleep",
+        "stat_hint": null,
+        "dialogue": null,
+        "plausibility_hint": "plausible",
+        "duration_hint": {
+          "mode": "explicit",
+          "text": "for the night",
+          "until": null,
+          "amount": 8,
+          "unit": "hour"
+        },
+        "ambiguity_flags": [],
+        "addressee": null,
+        "speech_act": null,
+        "topic_ids": [],
+        "transaction": {
+          "kind": "buy",
+          "price_key": "inn_room_night_copper",
+          "count": 1
+        },
+        "invoked_law_ids": [],
+        "movement_scope": null
+      }
+    }
+  ]
+}

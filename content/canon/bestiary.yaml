@@ -1,0 +1,521 @@
+# Universe Canon — Bestiary (the creature ladder, absolute scale)
+# Team B, Universe Canon v1 (DRAFT). Category: 1 of 8.
+#
+# The absolute, never-level-scaled threat ladder (docs/lore/09-bestiary.md, roadmap 3.1/3.3).
+# Bands are engine threat_band (everquill_engine/ladder.py). Reference points, fixed:
+#   average adult aptitude = 3; trained = 5; veteran = 7; elite = 10-12.
+#   gap = target band - actor aptitude; gap<=-4 TRIVIAL, <=0 ROUTINE, <=3 RISKY,
+#   <=7 DESPERATE, >7 HOPELESS. So band 1 is ROUTINE to a commoner; band 14 (wyvern) is
+#   HOPELESS to everyone the vale can field; band 25+ (ancient dragon) is HOPELESS to an elite.
+#
+# The ladder is PHYSICS (docs/lore/02-universe-laws.md): working people know the gradient the
+# way sailors know tides. Guild letter-grades are a KNOWN sheet OVER this true gradient and can
+# be wrong. threat_band_range is [floor, typical, ceiling] — families OVERLAP by design (an old
+# goblin chief out-stats a young ogre), which is why intel, not category, decides a fight.
+#
+# common_sense is narrator-safe. research_depth is the PATTERN of re-tiering truths a family
+# hides (authoring only, never narrator) — the universe template that a region instance's
+# actual secret fills in (e.g. the wight family hides a binding radius; Harrowdown's wight's
+# specific radius lives in the region file).
+
+bestiary:
+
+  # ---------- BEASTS (mundane fauna, the low ladder) ----------
+  - id: bestiary.slime
+    name: slime
+    family: beast
+    rung: 1
+    threat_band_range: [1, 1, 3]
+    habitat: [wet_cellar, ditch, bridge_shadow, cave, sewer, bog]
+    common_sense:
+      - A boneless mass that gathers in wet, still places. A walking pace outruns one.
+      - Given time it ruins leather, rope, and anything soft left in it. Salt kills small ones.
+      - The joke-tier kill. Every child has poked one with a stick.
+    research_depth:
+      - The re-tiering truth a slime family hides is CATEGORY error, not a weak point — most
+        slimes are exactly what they look like, but a rare specimen (fed on the wrong thing,
+        grown in a thin place, mineral-laden) is a different band wearing the same silhouette.
+      - Solvents and salt lines are the researchable counter; acid content is the researchable
+        hazard.
+    ladder_note: >-
+      The floor of the ladder. A slime that is NOT joke-tier is the canonical one-off rumor
+      payload (the apex hiding as vermin).
+    fit_rules:
+      - band floor stays 1; a variant above band 3 must justify it as an exceptional/thin-place
+        specimen and route through the adjudicator.
+      - no limbs, no tools, no speech; a slime that talks is a different family.
+    instances: [creature.harrowdown.ditch_slime]
+
+  - id: bestiary.vermin
+    name: vermin (rats, bats, crows in number)
+    family: beast
+    rung: 2
+    threat_band_range: [1, 2, 4]
+    habitat: [granary, barrow, ruin, cave, drove_road, town_underfloor]
+    common_sense:
+      - Small pack foragers. One is nothing; a swarm in a grain-year is a posting.
+      - Bites and scratches go bad more often than clean wounds should. Wash them.
+      - The guild's cheapest, most reliable F-rank work.
+    research_depth:
+      - Vermin families hide WHAT THEY CARRY, not what they weigh — where a colony dens changes
+        what a bite does (barrow soil, plague ground, a thin place). This is the canonical
+        sample contamination wrong-intel seat — a dossier written on clean stock is confidently
+        wrong about tainted stock.
+    ladder_note: Above the slime by cunning and number, not by any one animal's strength.
+    fit_rules:
+      - individual band stays <=4; the threat is emergent (numbers, disease, what they carry).
+      - den-site determines any elevated hazard; author it as a den fact, not an innate power.
+    instances: [creature.harrowdown.cairn_rat]
+
+  - id: bestiary.venomous_crawler
+    name: venomous crawler (adders, spiders, scorpions)
+    family: beast
+    rung: 3
+    threat_band_range: [2, 3, 5]
+    habitat: [chalk_path, heath, ruin, cave, woodpile, marsh]
+    common_sense:
+      - Small, hard to see, does not chase. The danger is the venom, not the fight.
+      - A bite gives a grown adult time to reach a healer; children and sheep less.
+      - Watch the ground, wear boot leather, step back and it goes.
+    research_depth:
+      - The re-tiering truth is the GRACE WINDOW — how long the bitten has, and what shortens it
+        (exertion, heat, the wrong first-aid). Dossiers carry a comfortable window that assumes
+        the victim stays still; the real window collapses under effort. Canonical outdated
+        phrasing seat.
+    ladder_note: Barely above vermin in a straight fight; deadlier to the unlucky and the young.
+    fit_rules:
+      - low physical band; lethality lives in a venom/toxin fact drawn from flora.yaml or an
+        authored toxin, never in raw strength.
+    instances: [creature.harrowdown.chalk_adder]
+
+  - id: bestiary.pack_beast
+    name: pack beast (wolves, wild dogs, boar)
+    family: beast
+    rung: 4
+    threat_band_range: [3, 5, 8]
+    habitat: [downs, forest, fen, hills, road_at_dusk]
+    common_sense:
+      - Runs in packs; tests you before it commits. Noise and fire end most encounters.
+      - A lone traveler at dusk is different arithmetic than two with staves at noon.
+      - Winter changes the numbers — hunger makes a bold pack.
+    research_depth:
+      - The re-tiering truth is the KEYSTONE — a pack led by one old animal scatters if it falls,
+        turning a six-body fight into a one-body problem. And inherited dossier claims about
+        pack behavior (will not cross running water) are the canonical note missing its
+        qualifier seat — true of one fen-pack in flood season, copied as a law.
+    ladder_note: The first rung where a fresh plate can actually die to a common animal.
+    fit_rules:
+      - pack band scales with number and season; the individual stays <=8.
+      - any behavioral law (won't cross water, won't enter fire) is region/season-bound intel,
+        never an innate universal — this is a designed wrong-intel vector.
+    instances: [creature.harrowdown.downland_wolf]
+
+  - id: bestiary.raptor
+    name: raptor (great birds, harriers, rocs' lesser kin)
+    family: beast
+    rung: 5
+    threat_band_range: [4, 6, 10]
+    habitat: [crag, high_pasture, coast, mountain, moor]
+    common_sense:
+      - Hunts from above; takes lambs, hares, the odd shepherd's dog. Strikes and leaves.
+      - It owns the sky and you do not. Cover is the only real defense.
+    research_depth:
+      - The re-tiering truth is the PATTERN — raptors hunt on weather and light (thermals, the
+        sun-side), predictable to the hour by anyone who watches for a week. The whole
+        wing-hunter clade (up through wyvern) shares this — fights move by learning the schedule.
+    ladder_note: >-
+      A biome variant that bridges beast and draconic — the small template for the wyvern's
+      weather-bound hunting, one ladder below the real menace.
+    fit_rules:
+      - flying hunters carry a schedule (weather/light/thermal) as their researchable pattern.
+    instances: []
+
+  # ---------- HUMANOIDS (the goblinoid track) ----------
+  - id: bestiary.goblin
+    name: goblin
+    family: humanoid
+    rung: 6
+    threat_band_range: [3, 5, 8]
+    habitat: [cave, ruin, forest_edge, warren, abandoned_mine]
+    common_sense:
+      - Small, quick, cowardly alone and vicious in a warren. Uses stolen tools and dirty tricks.
+      - The first real fight — and the first kill that the deed log remembers you for.
+      - Where there is one there are twenty. Find the warren before the warren finds you.
+    research_depth:
+      - The re-tiering truth is SOCIAL, not physical — a warren's danger is its leadership and
+        numbers, not any one goblin. An old scarred chief can out-stat a young ogre (band overlap
+        is the point). What they have looted and how they have fortified re-tiers the raid.
+    ladder_note: >-
+      The genre's moral-queasiness rung. Casual extermination is NOT casual here — the deed log
+      remembers every routine kill (docs/lore/12-explicit-absences.md).
+    fit_rules:
+      - a lone goblin is band 3-4; the threat is the warren. Leadership individuals may reach 8.
+      - goblins use tools and tactics, never innate magic (low-magic anchor).
+    instances: []
+
+  - id: bestiary.orc
+    name: orc
+    family: humanoid
+    rung: 8
+    threat_band_range: [6, 8, 12]
+    habitat: [hills, warband_camp, frontier, ruin, borderland]
+    common_sense:
+      - Big, disciplined where goblins are not, and it fights on purpose. A warband is a levy
+        matter, not a posting.
+      - One orc is a hard fight for a trained man. A dozen is a village emptied.
+    research_depth:
+      - The re-tiering truth is ORGANIZATION — an orc warband runs on a chain of command and a
+        supply line; break either and the band comes apart. Intel on the chief, the camp, and
+        the season of raiding re-tiers a war into a manageable fight.
+    ladder_note: The rung where the guild stops posting and the crown starts levying.
+    fit_rules:
+      - individual orc is a genuine threat to a veteran (band 6-8); chieftains reach 12.
+      - warband danger is organizational; author leaders and logistics, not a monolith stat.
+    instances: []
+
+  - id: bestiary.ogre
+    name: ogre
+    family: giant_kin
+    rung: 10
+    threat_band_range: [9, 11, 14]
+    habitat: [hills, cave, ruin, bridge, high_country]
+    common_sense:
+      - One creature the size of four men, strong enough to end a fight with one blow.
+      - Slow, though, and stupid, and it can be led. Terrain and patience beat it; a straight
+        trade does not.
+    research_depth:
+      - The re-tiering truth is TERRAIN and TEMPO — an ogre in the open at your pace is DESPERATE;
+        an ogre in a ravine you chose, on ground it cannot use, is a solvable problem. Its
+        weak points are joints and eyes, reachable only if it cannot bring its reach to bear.
+    ladder_note: Overlaps the low wyvern band from below; the top of what a mortal party can plan to kill.
+    fit_rules:
+      - high strength, low finesse/wits; killable only by re-tiering with terrain or intel.
+    instances: []
+
+  - id: bestiary.troll
+    name: troll
+    family: giant_kin
+    rung: 11
+    threat_band_range: [10, 13, 16]
+    habitat: [fen, cave, mountain, cold_country, ruin]
+    common_sense:
+      - Like an ogre that will not stay hurt. Wounds close while you watch; only fire and acid
+        keep it down, the ballads say.
+    research_depth:
+      - The re-tiering truth is the STOP CONDITION — what actually ends the regeneration for a
+        given troll (fire, a specific reagent, a season, a starvation window). This is the
+        canonical one right method held by one source seat — the counter exists and is
+        knowable, and a party without it is fighting a thing that cannot be killed by damage.
+    ladder_note: The ladder's answer to what if hitting it harder does not work — you need the method.
+    fit_rules:
+      - regeneration MUST have an authored, discoverable stop condition (never unkillable).
+    instances: []
+
+  # ---------- UNDEAD (parallel track, tied to the veil) ----------
+  - id: bestiary.lesser_undead
+    name: lesser undead (ghouls, walking dead, grave-things)
+    family: undead
+    rung: 5
+    threat_band_range: [3, 6, 9]
+    habitat: [graveyard, battlefield, plague_ground, crypt, thin_place]
+    common_sense:
+      - The dead that did not stay down. Slow, tireless, and it does not fear you.
+      - Where the ground is wrong — old battlefields, plague pits, thin places — it comes back
+        oftener. Fire and salt and consecrated ground answer it.
+    research_depth:
+      - The re-tiering truth is the ANIMATING CAUSE — what raised it, and therefore what lays it.
+        A grave-thing bound by grief, by a thin place, or by an unfinished deed each has a
+        different undoing. This clade sits ON the veil (docs/lore/02-universe-laws.md) — its
+        existence is the base physic the two churches argue over.
+    ladder_note: Bridges the low ladder into veil territory; the entry point to forbidden research.
+    fit_rules:
+      - every undead has an authored animating cause and a matching laying; none is generic.
+      - undead behavior obeys the veil (docs/lore/02) — dead cross once outward; a returned dead
+        is a thin-place / component-law event, never ambient.
+    instances: []
+
+  - id: bestiary.wight
+    name: wight (barrow-bound revenant)
+    family: undead
+    rung: 7
+    threat_band_range: [5, 7, 10]
+    habitat: [barrow_field, cairn, thin_place, old_tomb]
+    common_sense:
+      - Something dead that walks a barrow field and holds its ground. Shepherds will not graze
+        near one; grave-robbers who go in get funerals.
+      - It is strongest on the wrong nights of the year, near midwinter, and it keeps to its dead.
+    research_depth:
+      - The re-tiering truth is the BINDING RADIUS — a wight cannot leave sight of its own mound;
+        break the sight-line and it cannot follow. And its strength WAXES inside a recurring
+        thin-window (the six nights centered on a Quarterday). A C-grade horror becomes a solvable
+        problem to anyone who learns the leash. Its grave-goods are real and unlooted.
+    ladder_note: >-
+      The vale's mid-ladder terror and its best worked example of "intel moves a fight down the
+      ladder." Tied to Hollow Tor and the resurrection passage-component (docs/lore/02).
+    fit_rules:
+      - a wight is BOUND (a barrow, a tomb, an oath-ground) and has a researchable leash + a
+        thin-window strength cycle. Never free-roaming.
+    instances: [creature.harrowdown.barrow_wight]
+
+  - id: bestiary.greater_undead
+    name: greater undead (wraith, lich, barrow-lord)
+    family: undead
+    rung: 14
+    threat_band_range: [12, 16, 22]
+    habitat: [ancient_tomb, drowned_quarter, thin_place, ruined_seat, forbidden_archive]
+    common_sense:
+      - The dead that kept their wits, or worse, their will. A named thing, in songs, that ended
+        a barony once.
+      - You do not fight one. You learn what holds it here and you take that away.
+    research_depth:
+      - The re-tiering truth is the ANCHOR — a greater undead persists on a physical or written
+        thing (a sealed name, a relic, an unpaid debt of the veil). Destroy the anchor and the
+        band collapses; fight the body and it comes back. This is component-law-adjacent
+        (docs/lore/laws-format) and accrues heavy forbidden-knowledge exposure to research.
+    ladder_note: >-
+      Undead's high rung, overlapping wyverns and young dragons. A regional apex where no dragon
+      lives. Ties to the resurrection law and the summoning wreckage (docs/lore/07).
+    fit_rules:
+      - persistence rides an authored anchor; the fight is anchor-first. Researching it is a
+        forbidden-domain action (exposure accrues).
+    instances: []
+
+  # ---------- DRACONIC (the top of the mortal ladder and beyond) ----------
+  - id: bestiary.wyvern
+    name: wyvern
+    family: draconic
+    rung: 13
+    threat_band_range: [12, 14, 16]
+    habitat: [crag, quarry, coast, mountain, high_pasture]
+    common_sense:
+      - A winged beast that takes oxen and horses off the high ground. It has killed every party
+        sent after it. An apex beast — and still no dragon.
+      - It owns the air and hunts on the wing. You cannot outrun it and you cannot reach it.
+    research_depth:
+      - The re-tiering truth is the SCHEDULE and the CACHE — a wyvern flies when the thermals rise
+        (weather-bound, predictable to the hour) and caches what it takes, returning at the same
+        dead hour the next day. A party that reaches the cache unseen and downwind gets the only
+        angle the mortal scale allows — enough to make HOPELESS into DESPERATE, never routine.
+        Research MOVES the fight (the roost, the hour, the ledge); it never erases the band.
+    ladder_note: >-
+      The regional apex where no dragon lives, and the whole point of the gap: "a wyvern is an
+      apex beast and still no dragon" is a proverb. HOPELESS for any plate the vale can field.
+    fit_rules:
+      - band stays 12-16; research reveals a schedule + a weak-point angle, never a band drop
+        below DESPERATE for a lone mortal.
+      - a wyvern is NOT a dragon — no breath weapon, no speech, no hoard-cunning. That gap is canon.
+    # RESOLVED (George, 2026-07-14, decision 5 final): the Quarryman is ONE of the Cinder Dam's
+    # scattered brood (mother_dragon below). creature.fellmarch.screel is a second placed wyvern of
+    # the high country. Both are placed lore nodes, not worldgen spawns.
+    instances: [creature.harrowdown.quarryman, creature.fellmarch.screel]
+
+  - id: bestiary.drake
+    name: drake (lesser dragon-kin)
+    family: draconic
+    rung: 15
+    threat_band_range: [14, 17, 20]
+    habitat: [mountain, deep_cave, volcanic_country, drowned_ruin, wasteland]
+    common_sense:
+      - Bigger than a wyvern and smarter, with a killing breath of one element — fire, or frost,
+        or worse. A kingdom's-edge threat, not a region's.
+      - Cunning enough to lair with intent and to remember a face.
+    research_depth:
+      - The re-tiering truth is the BREATH and the LAIR — its element (and thus its counter),
+        its cadence between breaths, and the terrain it has shaped. A drake is where the draconic
+        clade gains a real elemental weapon and real cunning; the fight is against a mind now.
+    ladder_note: The rung between the mortal ceiling (wyvern) and true dragons. Warps a whole march.
+    fit_rules:
+      - one elemental breath with an authored cadence and counter; genuine cunning; no full
+        dragon-tier reality-warping. Sits below dragon_young.
+    # RESOLVED (George, 2026-07-14, decision 5 final): two placed drakelings among the Cinder Dam's
+    # scattered brood (mother_dragon below) — one in the high Fellmarch, one on the burned approach.
+    instances: [creature.fellmarch.corrie_drake, creature.cindermarch.ashling]
+
+  - id: bestiary.dragon_young
+    name: young dragon
+    family: draconic
+    rung: 18
+    threat_band_range: [18, 21, 24]
+    habitat: [mountain_deep, ancient_ruin, isle, wasteland, thin_place]
+    common_sense:
+      - A dragon. The yardstick every other danger is measured against. One is a matter for a
+        kingdom, not a party; the crown levies, the church prays, and most of both die.
+      - Nobody living in the vale has seen one. That is not a fact about dragons. It is a fact
+        about the vale.
+    research_depth:
+      - The re-tiering truth is that research does NOT bring a dragon to a mortal's band — it
+        brings ALLIES, COMPONENTS, and LAWS. Killing one is a sealed-tier project (the
+        wyvern-hunt archives scale up to dragonslaying doctrine) — the right ground, the right
+        numbers, a named weakness earned from the deepest archives, and cost paid in lives.
+    ladder_note: >-
+      HOPELESS even to an elite veteran (aptitude 12: gap 21-12=9 > 7). The top of the authored
+      seated ladder; dragons are rare and near-mythical. Confirm top-band numbers (anchors.yaml).
+    fit_rules:
+      - band floor 18; a dragon is never DESPERATE-or-below for any single mortal by intel alone.
+      - dragons are RARE — near-single-digit named individuals in the known world; a confirmed
+        living dragon warps regional politics. Worldgen may not spawn them ambiently.
+    instances: []
+
+  - id: bestiary.dragon_ancient
+    name: ancient dragon (calamity-class)
+    family: draconic
+    rung: 20
+    threat_band_range: [25, 30, 40]
+    habitat: [legend, ruined_kingdom, mountain_root, thin_place, the_deep_map]
+    common_sense:
+      - The kind of thing that ends kingdoms and starts calendars. No nation solos this.
+      - Most people believe they are extinct, or a story. Most people are wrong about a great
+        many things (docs/lore/00-spine.md).
+    research_depth:
+      - The re-tiering truth is that an ancient dragon is a POLITICAL and METAPHYSICAL event, not
+        a fight. It sits adjacent to the demon-lord question (docs/lore/08) and the sealed/
+        impossible boundary — some of what it does may cross into sealed-feat territory. Its
+        research domain is bottomless — every answer opens a deeper one (anchor.bottomless_core).
+    ladder_note: >-
+      The top of the authored ladder and the bridge to the sealed tier. Calamity-class shares this
+      rung with whatever the Demon Lord truly is. It is the CURRENT apex, not the final ceiling:
+      see `beyond_the_ladder` below for the escalation hook that opens once a calamity dragon actually
+      falls. The one PLACED living calamity-dragon is the Cinder Dam (the Mother Dragon), authored in
+      full in `mother_dragon` below — she is the endgame target the whole ladder climbs toward.
+    fit_rules:
+      - calamity-class (band 25+) is authored/adjudicated only, never worldgen-spawned; each is
+        a named, singular, kingdom-scale event with its own dossier.
+    instances: [creature.cindermarch.cinder_dam]   # the Mother Dragon (mother_dragon below)
+
+  # ---------- ABERRATION & CONSTRUCT (rare parallel tracks) ----------
+  - id: bestiary.veil_thing
+    name: veil-thing (that which watches from the far side)
+    family: aberration
+    rung: 12
+    threat_band_range: [7, 14, 25]
+    habitat: [thin_place, drowned_quarter, barrow_field, the_far_side]
+    common_sense:
+      - Not dead, not alive, and not from here. It gathers at thin places and it learns the names
+        of people who knock. Entities that watch the veil are the price of veil-work.
+    research_depth:
+      - The re-tiering truth is that a veil-thing is not fought on the mortal scale at all — it is
+        WARDED, BARGAINED WITH, or DENIED PASSAGE. Its band is meaningless without a thin place;
+        it is strong in its window and cannot cross outside it. Ties directly to the attention
+        cost of the resurrection law (docs/lore/laws-format, on_attempt_incomplete — something on
+        the far side noticed the knock).
+    ladder_note: >-
+      The ladder's off-scale track. It is why forbidden research has teeth: the more you know, the
+      more knows you. Bottomless by construction.
+    fit_rules:
+      - always tied to a thin place / window; never free-roaming in the mundane world.
+      - answered by wards, names, and passage-law, not by damage. Researching it accrues exposure.
+    instances: []
+
+  - id: bestiary.construct
+    name: construct (golem, animated guardian, worked thing)
+    family: construct
+    rung: 9
+    threat_band_range: [6, 12, 18]
+    habitat: [old_seat, sealed_vault, ruined_college, tomb, workshop]
+    common_sense:
+      - A made thing that moves without life in it — stone, clay, bone, or bronze given a task and
+        no more. It does not tire, does not reason, and does exactly what it was told, forever.
+    research_depth:
+      - The re-tiering truth is the ANIMATING PRINCIPLE and the COMMAND — a construct runs on a
+        rule (a name, a word, a written instruction, a seated relic). Learn the rule and you can
+        halt it, redirect it, or exploit its literalism; fight the body and you fight a rockslide.
+        Making one is sealed-tier craft (rare in low magic — most extant constructs are inherited
+        wreckage from a higher-magic past, not new work).
+    ladder_note: >-
+      Rare, because low magic. A construct in the world is usually a relic of the summoning-era
+      wreckage (docs/lore/07), which is itself good texture.
+    fit_rules:
+      - every construct has an authored animating rule and a command/halt condition (literalism
+        is the lever). New constructs are sealed-craft, adjudicated; ambient ones are old relics.
+    instances: []
+
+# ---------- THE MOTHER DRAGON (the placed living apex, the endgame target) ----------
+# RESOLVED (George, 2026-07-14, decisions-resolved.md decision 5 final): scatter the dragon-kin as
+# smaller/younger instances across the frontier (the Quarryman + creature.fellmarch.screel /
+# .corrie_drake / creature.cindermarch.ashling, seated on the wyvern/drake rungs above), AND place
+# ONE singular living apex — the MOTHER DRAGON. She is an INSTANCE of bestiary.dragon_ancient
+# (calamity-class, top living band), not a new rung: authored/placed, never worldgen-spawned. She is
+# "the top" the player climbs toward. Felling her is what OPENS `beyond_the_ladder` (she is the
+# calamity-dragon whose fall the hook waits on). Seated in the deep north (region.cindermarch), placed
+# but distant, her approach sealed by season and by her own brood.
+mother_dragon:
+  id: creature.cindermarch.cinder_dam
+  name: the Cinder Dam
+  also_called: >-
+    "the Mother" (the Scored Page, sect.scored_page, who read a whole province struck from the page
+    when she burned it); "the Dam" plainly by the wyvern-hunters — a dam is a brood-mother, and that
+    is what she is. A proper name may survive only in the deepest Severwick archives (text.wyvern_hunt_archive).
+  is_a: bestiary.dragon_ancient          # an INSTANCE of the calamity rung, not a new rung
+  family: draconic
+  threat_band_range: [25, 30, 40]        # top living band (inherits dragon_ancient); HOPELESS to any mortal force
+  placed: true                           # the one confirmed-living-and-located dragon (resolves anchor.monster_ladder's open question)
+  seat:
+    region: region.cindermarch
+    where: a mountain-root / burned caldera in the deep north (volcanic_country, mountain_deep, thin_place)
+    approach: >-
+      Sealed by distance and danger, not by a lock: a season north past the high country, no safe
+      through-road, and her scattered brood holds the ground between. Distant by design — the vale
+      never feels her daily; the endgame does.
+  offspring_source: >-
+    The source the frontier's lesser draconic descend from. Over generations her brood has spread
+    DOWN the high country — the Fellmarch wyverns and drakes (creature.fellmarch.screel,
+    creature.fellmarch.corrie_drake), the burned-approach drakeling (creature.cindermarch.ashling),
+    and the one that reached the settled edge, the vale's Quarryman (creature.harrowdown.quarryman).
+    Each is a rung BELOW her (wyvern -> drake -> young dragon -> her). Killing her young never touches her band.
+  brood: [creature.harrowdown.quarryman, creature.fellmarch.screel, creature.fellmarch.corrie_drake, creature.cindermarch.ashling]
+  common_sense:
+    - The thing that burned the north to ruin and did not leave. Every wyvern and drake the high
+      country fears is one of hers, spread down from where she lairs.
+    - No party, no levy, no crown fights her and files the notes. She is the calamity the calendars count from.
+  the_top: >-
+    The apex the whole ladder climbs toward — "I'll try and get the top." She is the placed calamity
+    dragon of the `beyond_the_ladder` hook: while she stands, the hook stays closed; when she FALLS
+    (genuinely defeated in play, not merely fled), what SHE flees becomes the next threat.
+  fit_rules:
+    - a placed instance of dragon_ancient's fit_rules — calamity-class, authored/adjudicated only,
+      never worldgen-spawned, a named singular kingdom-scale event with her own dossier.
+    - her fall is the sole trigger authored for `beyond_the_ladder`; nothing else opens it.
+    - her TRUE sheet never reaches narrator context (inv.true_known_split); the vale's knowledge of
+      her is a KNOWN sheet, fallible and earned by distance (docs/lore/11, the Severwick archives).
+  links: [content/canon/map.yaml, docs/lore/13-world-map.md, docs/lore/09-bestiary.md]
+
+# ---------- BEYOND THE LADDER (the escalation hook above dragons) ----------
+# RESOLVED (George, 2026-07-14, content/canon/decisions-resolved.md decision 4):
+# Dragons (bestiary.dragon_young / bestiary.dragon_ancient) are the CURRENT top of the ladder.
+# Per anchor.bottomless_core the apex is not the ceiling — it is the current ceiling. When the
+# dragon tier is genuinely conquered (a calamity-class dragon killed, not merely fled), what
+# emerges above it is authored HERE as a HOOK, never a stat block. It has no band, no family
+# row, and no worldgen route: it is off-ladder by construction, and it does not open until the
+# apex below it has actually fallen in play.
+beyond_the_ladder:
+  status: hook (authoring/adjudicator only — never worldgen-spawned, never a seated stat block)
+  what: >-
+    The thing above dragons. Undiscovered and unnamed on purpose: nobody living has fought one
+    and filed the notes, because a dragon is already the yardstick the world measures fear by
+    (bestiary.dragon_ancient). The seat of the hook is an observation, not a creature — dragons
+    are the apex, and dragons still flee something. What a calamity-class dragon runs FROM is the
+    next tier, and it stays closed until the dragon tier is closed. The placed calamity-dragon whose
+    fall opens it is the Cinder Dam (the Mother Dragon, `mother_dragon` above): while she stands the
+    hook stays shut; if she is genuinely felled, what SHE fled becomes the world's next threat.
+  no_band: >-
+    Deliberately unstatted. Where dragon_ancient carries a band (25-40), this carries none: a
+    band is a promise the fight can be measured, and the point of the tier is that it cannot be
+    yet. It is authored as an EVENT and a research well — in the shape of the ancient-dragon and
+    demon-lord dossiers — when, and only when, the apex below it is defeated.
+  candidate_framings:
+    # None locked. The author/adjudicator picks the flavor at the moment it is earned, so the
+    # reveal is never a floor the game can hit early. All three keep the bottomless rule.
+    - the sealed elder power the summoning-era colleges woke and could not put back (docs/lore/07).
+    - whatever drove the Cinder Dam south to burn the province in the first place — the thing even a
+      calamity-dragon fled from, where the wyvern-hunt archives stop short because the hunters who
+      went that deep past her did not come back (docs/lore/13-world-map.md, region.cindermarch).
+    - a metaphysical event rather than a beast, adjacent to the Quill question and sharing a rung
+      with whatever the Demon Lord truly was (docs/lore/08) — it may touch the last question, never close it.
+  fit_rules:
+    - never worldgen-spawned and never auto-FIT; authored/adjudicated only, and only after the placed
+      calamity-class dragon (the Cinder Dam, `mother_dragon`) has been genuinely defeated in play.
+    - carries no threat_band and no family; it is off the seated ladder. A candidate that tries
+      to seat it with a number REJECTS (a measured tier is not this tier).
+    - every revelation about it is real and opens a deeper one (anchor.bottomless_core); it may
+      touch the Quill's nature but may never resolve it (docs/lore/06 hard rule).
+  links: [docs/lore/06-quill-cosmology.md, docs/lore/07-summoning-history.md, docs/lore/08-demon-lord-dossier.md, docs/lore/13-world-map.md, content/canon/anchors.yaml]

@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:quilltouched:contracts:intent",
+  "title": "ParsedIntent",
+  "$comment": "Schema version 1.3 (2026-10-24): six closed fields carry the decisions the engine used to read out of the free-text approach (docs/tickets/typed-decision-fields.md): addressee, speech_act, topic_ids, transaction, invoked_law_ids, movement_scope; duration_hint gains closed until / amount / unit, which the engine binds instead of the text. v1.2 (Sprint 2 wave 3, 2026-07-13): input caps at every level (EQ-R2-05) — approach maxLength 500, quoted_speech maxLength 500, target_entity_ids maxItems 5, ambiguity_flags maxItems 8, duration_hint.text maxLength 200, all ids maxLength 64. v1.1 (Sprint 1): added 'rest' to action_type; stat_hint vocabulary LOCKED per sprint-1 interface decision 1. v1.0 was the Sprint 0 draft (nine action_types, PROVISIONAL stat vocabulary).",
+  "description": "Output contract for the intent parser (haiku, structured output). Schema v1.3. This is a PARSE of what the player declared, never a ruling: every *_hint field is advisory and the deterministic engine alone decides tier, difficulty, duration pricing, and outcome. All declared fields are required; absence is expressed as null or []. additionalProperties is false at every level. The engine never branches on the wording of approach: every decision it takes from a parse comes from a closed field.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "action_type",
+    "target_entity_ids",
+    "approach",
+    "stat_hint",
+    "dialogue",
+    "plausibility_hint",
+    "duration_hint",
+    "ambiguity_flags",
+    "addressee",
+    "speech_act",
+    "topic_ids",
+    "transaction",
+    "invoked_law_ids",
+    "movement_scope"
+  ],
+  "properties": {
+    "action_type": {
+      "description": "Primary category of the declared action. For compound utterances the parser picks the primary category and sets a compound_action ambiguity flag. rest (v1.1) = let-time-pass declarations (sleep, wait, idle until a condition) -- distinct from meta, which is out-of-fiction System queries.",
+      "enum": [
+        "physical",
+        "social",
+        "movement",
+        "observation",
+        "research",
+        "craft",
+        "train",
+        "dialogue",
+        "rest",
+        "meta"
+      ]
+    },
+    "target_entity_ids": {
+      "description": "IDs of world/state entities the action is directed at (NPCs, creatures, items, objects, locations, Codex hypothesis cards). May be empty (untargeted actions, proclamations, meta queries). IDs resolve against the scene roster / Pack / Codex supplied with the parse call; the parser never invents IDs.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]*$",
+        "maxLength": 64
+      },
+      "maxItems": 5,
+      "uniqueItems": true
+    },
+    "approach": {
+      "description": "Free-text summary of HOW the player is doing it (manner, method, leverage). Preserves intent nuance the enums cannot carry (e.g. a feint's deceptive purpose). Never contains rules language, tiers, or numbers.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "stat_hint": {
+      "description": "Advisory guess at the aptitude the approach leans on, or null when no stat plausibly applies (trivial/rest/meta actions). Vocabulary LOCKED (Sprint 1 interface decision 1): might, finesse, wits, will, presence, lore -- matches docs/engine/stats.md and Team B's true sheets.",
+      "enum": ["might", "finesse", "wits", "will", "presence", "lore", null]
+    },
+    "dialogue": {
+      "description": "Present when the utterance contains in-character speech; null otherwise. Verbatim quoted speech MUST land here, never be paraphrased into approach.",
+      "anyOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/dialogue" }
+      ]
+    },
+    "plausibility_hint": {
+      "description": "Parser's common-sense read of the attempt. HINT ONLY -- the engine decides the ladder tier from true sheets and authored laws. The parser must not pre-deny actions that are legal fiction (fighting a dragon is 'plausible' even though the engine will tier it hopeless; sealed feats are 'dubious', not impossible).",
+      "enum": ["plausible", "dubious", "impossible_in_fiction"]
+    },
+    "duration_hint": {
+      "description": "Present when the player declared a time span or end condition for a timed action (training blocks, rest, explicit spans); null otherwise. The engine binds the closed fields (until, or amount and unit) to world minutes and prices the duration (previewed at the commit beat); the player's words ride along in text for the narrator and are never bound.",
+      "anyOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/duration_hint" }
+      ]
+    },
+    "ambiguity_flags": {
+      "description": "Machine-readable markers of a reading the parser doubts, shown to the player; the engine decides nothing from them and they do not force a confirmation. Open snake_case vocabulary; starter registry in docs/contracts/README.md (e.g. could_be_feint_or_fight, compound_action, ambiguous_target, ambiguous_addressee, idiom_or_literal). Empty array when the parse is clean.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]*$",
+        "maxLength": 64
+      },
+      "maxItems": 8,
+      "uniqueItems": true
+    },
+    "addressee": {
+      "description": "Who the speech is aimed at, for dialogue and social actions: room = everyone present or the world at large (shouting to the taproom, a public proclamation); person = one listener, named or not. null for every other action type. The engine reads room to keep an unnamed follow-up from sticking to the last conversation partner.",
+      "enum": ["room", "person", null]
+    },
+    "speech_act": {
+      "description": "What the speech does, for dialogue and social actions: question = asks for information; introduction = gives the speaker's name or asks for the listener's; statement = anything else said (greetings, warnings, claims, orders, requests, haggling). null for every other action type. The engine reads question to answer from what the listener knows, and introduction to exchange names.",
+      "enum": ["question", "introduction", "statement", null]
+    },
+    "topic_ids": {
+      "description": "For dialogue and social actions: IDs of what the speech is ABOUT, taken from the Topics list or the scene roster supplied with the parse call (never the addressee, never invented). Empty when no listed subject is named, and for every other action type. The engine answers from the listener's knowledge of these subjects.",
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$", "maxLength": 64 },
+      "maxItems": 3,
+      "uniqueItems": true
+    },
+    "transaction": {
+      "description": "A purchase or coin hand-over the player declares: buy = paying for a good or service on the Prices list supplied with the parse call (price_key from that list, count = how many); give_coin = handing over coins (price_key null, count = number of coins). null when no coin changes hands, including haggling over something not on the list. The engine prices the spend from the world's price table.",
+      "anyOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/transaction" }
+      ]
+    },
+    "invoked_law_ids": {
+      "description": "IDs from the Laws list supplied with the parse call whose feat the player is attempting (a rite, a sealed feat, a physics-breaking act). Empty when no listed law is invoked, and always empty when no Laws list is supplied. The engine checks the law's components; the parser only names it.",
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$", "maxLength": 64 },
+      "maxItems": 2,
+      "uniqueItems": true
+    },
+    "movement_scope": {
+      "description": "For movement actions: here = moving within the current location (to the bar, across the room, onto or over something in the scene); away = setting off for another place. null for every other action type. The engine reads here to let a targetless move cross the room instead of refusing it with the list of exits.",
+      "enum": ["here", "away", null]
+    }
+  },
+  "$defs": {
+    "dialogue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["addressee_id", "quoted_speech"],
+      "properties": {
+        "addressee_id": {
+          "description": "Entity ID of who is being addressed, or null when unaddressed / spoken to the room.",
+          "anyOf": [
+            { "type": "null" },
+            { "type": "string", "pattern": "^[a-z][a-z0-9_]*$", "maxLength": 64 }
+          ]
+        },
+        "quoted_speech": {
+          "description": "Verbatim player-authored speech (normalized quoting/casing allowed, wording preserved). Null when speech is paraphrased ('Ask the librarian about dragon anatomy') -- the narrator voices the line.",
+          "anyOf": [
+            { "type": "null" },
+            { "type": "string", "minLength": 1, "maxLength": 500 }
+          ]
+        }
+      }
+    },
+    "duration_hint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "text", "until", "amount", "unit"],
+      "properties": {
+        "mode": {
+          "description": "until_condition = ends at a time of day or when a world event occurs ('until dusk', 'until the caravan leaves'); explicit = player stated a span ('for three hours', 'for the night').",
+          "enum": ["until_condition", "explicit"]
+        },
+        "text": {
+          "description": "The player's stated condition or span, verbatim. For the narrator and the Chronicle; the engine never binds it.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "until": {
+          "description": "For until_condition: the time of day it ends at. dawn = first light, sunrise, morning; midday = noon; dusk = sundown, sunset, nightfall, evening; midnight. null for explicit spans, and for a world event ('until the caravan leaves'), which the engine refuses.",
+          "enum": ["dawn", "midday", "dusk", "midnight", null]
+        },
+        "amount": {
+          "description": "For explicit: how many units ('three hours' = 3; 'the night' = 8 hours, 'the day' = 12 hours, 'the evening' = 4 hours, 'half an hour' = 30 minutes). null for until_condition.",
+          "anyOf": [
+            { "type": "null" },
+            { "type": "integer", "minimum": 1, "maximum": 999 }
+          ]
+        },
+        "unit": {
+          "description": "For explicit: the unit of amount. null for until_condition.",
+          "enum": ["minute", "hour", "day", null]
+        }
+      }
+    },
+    "transaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "price_key", "count"],
+      "properties": {
+        "kind": {
+          "description": "buy = pay for a listed good or service; give_coin = hand over coins.",
+          "enum": ["buy", "give_coin"]
+        },
+        "price_key": {
+          "description": "For buy: the key from the Prices list. For give_coin: null.",
+          "anyOf": [
+            { "type": "null" },
+            { "type": "string", "pattern": "^[a-z][a-z0-9_]*$", "maxLength": 64 }
+          ]
+        },
+        "count": {
+          "description": "How many of the good, or how many coins. 1 when the player gives no number.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20
+        }
+      }
+    }
+  }
+}

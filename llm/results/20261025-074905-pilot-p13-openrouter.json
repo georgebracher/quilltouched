@@ -1,0 +1,335 @@
+{
+  "overall": 0.9874213836477987,
+  "passed": 157,
+  "total": 159,
+  "subtotals": {
+    "v1.2 fields": {
+      "ok": 95,
+      "n": 96
+    },
+    "v1.3 fields": {
+      "ok": 62,
+      "n": 63
+    }
+  },
+  "fields": {
+    "schema_valid": {
+      "ok": 10,
+      "n": 10
+    },
+    "action_type": {
+      "ok": 10,
+      "n": 10
+    },
+    "target_entity_ids": {
+      "ok": 10,
+      "n": 10
+    },
+    "stat_hint": {
+      "ok": 10,
+      "n": 10
+    },
+    "plausibility_hint": {
+      "ok": 10,
+      "n": 10
+    },
+    "ambiguity_flags": {
+      "ok": 10,
+      "n": 10
+    },
+    "dialogue.presence": {
+      "ok": 10,
+      "n": 10
+    },
+    "duration_hint.presence": {
+      "ok": 9,
+      "n": 10
+    },
+    "approach": {
+      "ok": 10,
+      "n": 10
+    },
+    "addressee": {
+      "ok": 10,
+      "n": 10
+    },
+    "speech_act": {
+      "ok": 10,
+      "n": 10
+    },
+    "movement_scope": {
+      "ok": 10,
+      "n": 10
+    },
+    "transaction": {
+      "ok": 10,
+      "n": 10
+    },
+    "topic_ids": {
+      "ok": 9,
+      "n": 10
+    },
+    "invoked_law_ids": {
+      "ok": 10,
+      "n": 10
+    },
+    "dialogue.addressee_id": {
+      "ok": 2,
+      "n": 2
+    },
+    "dialogue.quoted_speech": {
+      "ok": 2,
+      "n": 2
+    },
+    "duration_hint.mode": {
+      "ok": 1,
+      "n": 1
+    },
+    "duration_hint.text": {
+      "ok": 1,
+      "n": 1
+    },
+    "duration_hint.until": {
+      "ok": 1,
+      "n": 1
+    },
+    "duration_hint.amount": {
+      "ok": 1,
+      "n": 1
+    },
+    "duration_hint.unit": {
+      "ok": 1,
+      "n": 1
+    }
+  },
+  "gates_ok": false,
+  "api_errors": [],
+  "misses": [
+    {
+      "id": "gu-004",
+      "utterance": "I tell the guard captain: stand down, we have business with the duke",
+      "field": "topic_ids",
+      "pass": false,
+      "expected": [],
+      "actual": [
+        "npc_duke_corvane"
+      ]
+    },
+    {
+      "id": "gu-010",
+      "utterance": "Set out for the monastery at the pass at first light",
+      "field": "duration_hint.presence",
+      "pass": false,
+      "expected": null,
+      "actual": "object"
+    }
+  ],
+  "raw": {
+    "gu-001": {
+      "action_type": "physical",
+      "target_entity_ids": [
+        "crt_dragon_vermithrax"
+      ],
+      "approach": "feint toward the dragon, testing its reaction with a deceptive move",
+      "stat_hint": "finesse",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": [
+        "could_be_feint_or_fight"
+      ],
+      "addressee": null,
+      "speech_act": null,
+      "topic_ids": [],
+      "transaction": null,
+      "invoked_law_ids": [],
+      "movement_scope": null
+    },
+    "gu-002": {
+      "action_type": "physical",
+      "target_entity_ids": [
+        "crt_dragon_vermithrax"
+      ],
+      "approach": "attacking the dragon in direct combat",
+      "stat_hint": "might",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": [],
+      "addressee": null,
+      "speech_act": null,
+      "topic_ids": [],
+      "transaction": null,
+      "invoked_law_ids": [],
+      "movement_scope": null
+    },
+    "gu-003": {
+      "action_type": "social",
+      "target_entity_ids": [],
+      "approach": "proclaiming godhood over the world",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "impossible_in_fiction",
+      "duration_hint": null,
+      "ambiguity_flags": [],
+      "addressee": "room",
+      "speech_act": "statement",
+      "topic_ids": [],
+      "transaction": null,
+      "invoked_law_ids": [],
+      "movement_scope": null
+    },
+    "gu-004": {
+      "action_type": "social",
+      "target_entity_ids": [
+        "npc_guard_captain_bren"
+      ],
+      "approach": "commanding the guard captain to yield, invoking the duke's authority",
+      "stat_hint": "presence",
+      "dialogue": {
+        "addressee_id": "npc_guard_captain_bren",
+        "quoted_speech": "stand down, we have business with the duke"
+      },
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": [],
+      "addressee": "person",
+      "speech_act": "statement",
+      "topic_ids": [
+        "npc_duke_corvane"
+      ],
+      "transaction": null,
+      "invoked_law_ids": [],
+      "movement_scope": null
+    },
+    "gu-005": {
+      "action_type": "research",
+      "target_entity_ids": [
+        "loc_dunmere_archive",
+        "hyp_dragon_soft_underbelly"
+      ],
+      "approach": "consulting the archive records to test the hypothesis about dragon anatomy",
+      "stat_hint": "lore",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": [],
+      "addressee": null,
+      "speech_act": null,
+      "topic_ids": [],
+      "transaction": null,
+      "invoked_law_ids": [],
+      "movement_scope": null
+    },
+    "gu-006": {
+      "action_type": "train",
+      "target_entity_ids": [
+        "obj_practice_post"
+      ],
+      "approach": "drilling spear technique against the practice post",
+      "stat_hint": "finesse",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": {
+        "mode": "until_condition",
+        "text": "until the caravan leaves",
+        "until": null,
+        "amount": null,
+        "unit": null
+      },
+      "ambiguity_flags": [],
+      "addressee": null,
+      "speech_act": null,
+      "topic_ids": [],
+      "transaction": null,
+      "invoked_law_ids": [],
+      "movement_scope": null
+    },
+    "gu-007": {
+      "action_type": "social",
+      "target_entity_ids": [
+        "npc_gate_guard_tam",
+        "itm_gate_keys"
+      ],
+      "approach": "sweet-talk Tam while palming his keys from his belt",
+      "stat_hint": "presence",
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": [
+        "compound_action"
+      ],
+      "addressee": "person",
+      "speech_act": "statement",
+      "topic_ids": [],
+      "transaction": null,
+      "invoked_law_ids": [],
+      "movement_scope": null
+    },
+    "gu-008": {
+      "action_type": "dialogue",
+      "target_entity_ids": [
+        "npc_librarian_esme"
+      ],
+      "approach": "seeking information about dragon anatomy",
+      "stat_hint": null,
+      "dialogue": {
+        "addressee_id": "npc_librarian_esme",
+        "quoted_speech": null
+      },
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": [],
+      "addressee": "person",
+      "speech_act": "question",
+      "topic_ids": [
+        "crt_dragon_vermithrax"
+      ],
+      "transaction": null,
+      "invoked_law_ids": [],
+      "movement_scope": null
+    },
+    "gu-009": {
+      "action_type": "physical",
+      "target_entity_ids": [
+        "itm_potion_red_small"
+      ],
+      "approach": "drinking the small red potion from your pack",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": null,
+      "ambiguity_flags": [],
+      "addressee": null,
+      "speech_act": null,
+      "topic_ids": [],
+      "transaction": null,
+      "invoked_law_ids": [],
+      "movement_scope": null
+    },
+    "gu-010": {
+      "action_type": "movement",
+      "target_entity_ids": [
+        "loc_monastery_pass"
+      ],
+      "approach": "departing for the monastery at the pass, timed to first light",
+      "stat_hint": null,
+      "dialogue": null,
+      "plausibility_hint": "plausible",
+      "duration_hint": {
+        "mode": "until_condition",
+        "text": "at first light",
+        "until": "dawn",
+        "amount": null,
+        "unit": null
+      },
+      "ambiguity_flags": [],
+      "addressee": null,
+      "speech_act": null,
+      "topic_ids": [],
+      "transaction": null,
+      "invoked_law_ids": [],
+      "movement_scope": "away"
+    }
+  }
+}

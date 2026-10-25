@@ -1,0 +1,291 @@
+{
+  "corpus_sha256": "3989f1f2e3303e4c57e3ed60b3a52e6066f1ab347c4865741d933921f8d20d7f",
+  "projections": {
+    "characters": {
+      "pc": {
+        "aptitudes": {
+          "finesse": 7,
+          "lore": 7,
+          "might": 6,
+          "presence": 4,
+          "will": 7,
+          "wits": 10
+        },
+        "coin": 28,
+        "entity_id": "pc",
+        "flags": {
+          "breakthrough_might": true,
+          "journal_hook_turn_10": "spared by Torvald Ashmane",
+          "owes_favor_npc_dev_hedda": true
+        },
+        "hp": 7,
+        "hp_max": 9,
+        "inventory": {
+          "crafted_trinket_1": 1
+        },
+        "last_event_id": 17,
+        "location_id": "loc.dev.yard",
+        "name": "the Quill-touched",
+        "origin": "quill_touched_stranger",
+        "titles": [
+          {
+            "deed_ref": "5",
+            "title": "Elbow of the Inkwell"
+          }
+        ]
+      }
+    },
+    "claim_evidence": {
+      "claim_pc_13_1::18": {
+        "acquisition_method": "observed",
+        "base_weight": 100,
+        "claim_id": "claim_pc_13_1",
+        "event_id": 18,
+        "root_event_id": 17,
+        "world_time": 550
+      },
+      "claim_pc_13_1::19": {
+        "acquisition_method": "observed",
+        "base_weight": 100,
+        "claim_id": "claim_pc_13_1",
+        "event_id": 19,
+        "root_event_id": 999,
+        "world_time": 560
+      },
+      "claim_pc_14_1::20": {
+        "acquisition_method": "observed",
+        "base_weight": 100,
+        "claim_id": "claim_pc_14_1",
+        "event_id": 20,
+        "root_event_id": 20,
+        "world_time": 570
+      },
+      "claim_pc_1_1::6": {
+        "acquisition_method": "observed",
+        "base_weight": 100,
+        "claim_id": "claim_pc_1_1",
+        "event_id": 6,
+        "root_event_id": 5,
+        "world_time": 10
+      }
+    },
+    "claims": {
+      "claim_pc_13_1": {
+        "acquisition_method": "observed",
+        "believer_id": "pc",
+        "claim_id": "claim_pc_13_1",
+        "claim_text": "You take Torvald Ashmane's measure.",
+        "confidence": "consistent",
+        "contested_by_claim_id": "claim_pc_14_1",
+        "contradiction_ids": [
+          "claim_pc_14_1"
+        ],
+        "derived_from_claim_id": null,
+        "hop_count": 0,
+        "journal_flag": false,
+        "layer": "inquiry",
+        "method": "witnessed",
+        "observer": "pc",
+        "origin_event_id": 18,
+        "predicate": "threat_assessed",
+        "provenance_root_event_id": 17,
+        "scope": "firsthand",
+        "source": "your own eyes",
+        "source_agent_id": null,
+        "status": "contested",
+        "strength": 200,
+        "subject_entity_id": "npc.dev.torvald",
+        "superseded_by_claim_id": null,
+        "superseded_reason": null,
+        "value_num": null,
+        "value_range": null,
+        "value_text": "DESPERATE",
+        "world_date": "Day 1, 15:10",
+        "world_time_acquired": 550,
+        "world_valid": null
+      },
+      "claim_pc_14_1": {
+        "acquisition_method": "observed",
+        "believer_id": "pc",
+        "claim_id": "claim_pc_14_1",
+        "claim_text": "At a glance, Torvald Ashmane seems manageable.",
+        "confidence": "uncorroborated",
+        "contested_by_claim_id": null,
+        "contradiction_ids": [],
+        "derived_from_claim_id": null,
+        "hop_count": 0,
+        "journal_flag": false,
+        "layer": "inquiry",
+        "method": "misjudged_glance",
+        "observer": "pc",
+        "origin_event_id": 20,
+        "predicate": "threat_assessed",
+        "provenance_root_event_id": 20,
+        "scope": "firsthand",
+        "source": "your own eyes",
+        "source_agent_id": null,
+        "status": "superseded",
+        "strength": 100,
+        "subject_entity_id": "npc.dev.torvald",
+        "superseded_by_claim_id": "claim_pc_13_1",
+        "superseded_reason": "better_evidence",
+        "value_num": null,
+        "value_range": null,
+        "value_text": "RISKY",
+        "world_date": "Day 1, 15:30",
+        "world_time_acquired": 570,
+        "world_valid": null
+      },
+      "claim_pc_1_1": {
+        "acquisition_method": "observed",
+        "believer_id": "pc",
+        "claim_id": "claim_pc_1_1",
+        "claim_text": "Hedda favors her left arm.",
+        "confidence": "consistent",
+        "contested_by_claim_id": null,
+        "contradiction_ids": [],
+        "derived_from_claim_id": null,
+        "hop_count": 0,
+        "journal_flag": false,
+        "layer": "inquiry",
+        "method": "witnessed",
+        "observer": "pc",
+        "origin_event_id": 6,
+        "predicate": "observed_statement",
+        "provenance_root_event_id": 5,
+        "scope": "firsthand",
+        "source": "the bout itself",
+        "source_agent_id": null,
+        "status": "retracted",
+        "strength": 100,
+        "subject_entity_id": "npc.dev.hedda",
+        "superseded_by_claim_id": null,
+        "superseded_reason": null,
+        "value_num": null,
+        "value_range": null,
+        "value_text": null,
+        "world_date": "Day 1, 06:10",
+        "world_time_acquired": 10,
+        "world_valid": null
+      }
+    },
+    "deeds": [
+      {
+        "actor_entity_id": "pc",
+        "deed_order": 1,
+        "description": "the Quill-touched traded blows with Hedda Marle",
+        "location_id": "loc.dev.tavern",
+        "notoriety": 2,
+        "source_event_id": 7,
+        "world_time": 10
+      }
+    ],
+    "entities": {
+      "npc.dev.hedda": {
+        "conditions": [],
+        "entity_id": "npc.dev.hedda",
+        "hp": 5,
+        "hp_max": 9,
+        "location_id": "loc.dev.tavern",
+        "updated_from_event_id": 14,
+        "world_id": "world"
+      }
+    },
+    "manifest": {
+      "npc.dev.hedda": {
+        "common_knowledge": [
+          "Hedda Marle has kept the Inkwell Rest for twenty years and forgets no tab."
+        ],
+        "descriptor": null,
+        "entity_id": "npc.dev.hedda",
+        "kind": "npc",
+        "last_event_id": 2,
+        "location_id": "loc.dev.tavern",
+        "name": "Hedda Marle",
+        "portrait": null,
+        "region": "dev"
+      },
+      "pc": {
+        "common_knowledge": [],
+        "entity_id": "pc",
+        "kind": "character",
+        "last_event_id": 17,
+        "location_id": "loc.dev.yard",
+        "name": "the Quill-touched",
+        "portrait": null,
+        "region": "dev"
+      }
+    },
+    "reputation": {
+      "pc::disposition::npc_harrowdown_maren_ostler": {
+        "actor_id": "pc",
+        "last_event_id": 5,
+        "scope": "disposition",
+        "subject_id": "npc_harrowdown_maren_ostler",
+        "value": 2
+      },
+      "pc::standing::loc.harrowdown": {
+        "actor_id": "pc",
+        "last_event_id": 5,
+        "scope": "standing",
+        "subject_id": "loc.harrowdown",
+        "value": 1
+      }
+    },
+    "timers": {
+      "timer_pc_2": {
+        "attempts": 0,
+        "created_event_id": 5,
+        "due_at": "1970-01-01T08:15:00+00:00",
+        "fired_event_id": 10,
+        "kind": "training",
+        "payload": {
+          "aptitude": "might",
+          "owner_id": "pc"
+        },
+        "status": "fired",
+        "subject_id": "pc",
+        "timer_key": "timer_pc_2",
+        "world_due": 495
+      },
+      "timer_pc_9": {
+        "attempts": 0,
+        "created_event_id": 5,
+        "due_at": "1970-01-01T16:25:00+00:00",
+        "fired_event_id": null,
+        "kind": "training",
+        "payload": {
+          "aptitude": "will",
+          "owner_id": "pc"
+        },
+        "status": "pending",
+        "subject_id": "pc",
+        "timer_key": "timer_pc_9",
+        "world_due": 985
+      }
+    },
+    "world": {
+      "last_event_id": 24,
+      "rng_counters": {
+        "[\"character:pc\",\"action\"]": 1,
+        "[\"character:pc\",\"action:physical\"]": 1,
+        "[\"character:pc\",\"hopeless_flavor\"]": 1,
+        "[\"chargen\",\"pc\"]": 6,
+        "[\"timerfire\",\"timer_pc_2\"]": 1
+      },
+      "seed": 42,
+      "world_time": 590
+    }
+  },
+  "projector_versions": {
+    "character_sheet": 1,
+    "claim": 3,
+    "claim_evidence": 1,
+    "deeds": 1,
+    "entity_state": 1,
+    "reputation": 1,
+    "scene_manifest": 2,
+    "timer": 1,
+    "world_state": 1
+  }
+}

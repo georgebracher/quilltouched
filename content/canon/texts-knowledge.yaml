@@ -1,0 +1,251 @@
+# Universe Canon — Texts, Books & Knowledge (fields of study + the researchable tree)
+# Team B, Universe Canon v1 (DRAFT). Category: 5 of 8.
+#
+# What fields of study exist, what an archive can hold, and the shape of the research tree the
+# Codex is a discovered subset of. Two parts: KNOWLEDGE DOMAINS (fields) and TEXTS (the tomes/
+# records instances of those fields). Research is actions (roadmap 3.4): appraisal tiers reveal
+# FIELDS, not accuracy; failed research writes wrong intel at high confidence (the ballads lie).
+# Peak knowledge lives near where the thing happened (docs/lore/11) — a text's archive location
+# is load-bearing.
+#
+# Forbidden domains accrue forbidden-knowledge exposure (docs/lore, the Kumo "Taboo" model): the
+# same knowledge that lets you act also implicates and isolates you. The deepest, "what is the
+# Quill," never terminates (anchor.bottomless_core).
+
+# ---------- FIELDS OF STUDY ----------
+knowledge_domains:
+
+  - id: knowledge.metallurgy
+    name: metallurgy & smithing
+    studies: Ores, smelting, alloys, forging, tempering — how the world makes its metal.
+    tech_ceiling: Crucible steel and shaped plate are the frontier; the blast furnace is a sealed goal.
+    forbidden: false
+    taught_at: [faction.smiths_guild, text.smiths_treatise]
+    research_tiers: ["0 what it is", "1 which metal", "2 quality band", "3 method + range", "4 the smith's secret proportion"]
+
+  - id: knowledge.herblore
+    name: herblore & apothecary (alchemy)
+    studies: Plants, fungi, salts, and their preparation into remedy, poison, dye, and reagent.
+    tech_ceiling: >-
+      Empirical alchemy — distillation, mordants, acids — with no theory of elements or germs;
+      results depend on trace conditions and must be documented, not deduced (the Bookworm lesson).
+    forbidden: false
+    taught_at: [faction.healers_guild, text.green_kalendar]
+    research_tiers: ["0 name", "1 use-class", "2 dose band", "3 preparation + safe range", "4 the synthesis edge"]
+
+  - id: knowledge.physic
+    name: physic & chirurgery (healing)
+    studies: Wounds, fevers, setting bones, the limits of what hedge-craft and potions can do.
+    tech_ceiling: >-
+      Excellent empirical wound-care; NO germ theory (hygiene is custom, not understood), no
+      surgery beyond amputation and setting. "Pray the wound is honest" is the real state of it.
+    forbidden: false
+    taught_at: [faction.healers_guild, text.physic_manual]
+    research_tiers: ["0 symptom", "1 likely cause", "2 prognosis band", "3 treatment + odds", "4 the rare cure"]
+
+  - id: knowledge.beast_lore
+    name: beast-lore & monsterology
+    studies: The creature ladder — habits, habitats, weak points, threat grading (bestiary.yaml).
+    tech_ceiling: >-
+      Guild letter-grades and hunt-doctrine; the deep truths (a wyvern's cache-ledge, a wight's
+      leash) live in survivor testimony and archives, not in the field dossier.
+    forbidden: false
+    taught_at: [faction.adventurers_guild, text.gradus_of_beasts, text.wyvern_hunt_archive]
+    research_tiers: ["0 what walks there", "1 category", "2 threat band + surface fact", "3 habit/schedule", "4 weak point"]
+
+  - id: knowledge.cartography
+    name: cartography & travel-lore
+    studies: Roads, distances in carriage-days, chokepoints, where records were carried.
+    tech_ceiling: Road-books and surveyor's chains; no precise instruments, distance is time.
+    forbidden: false
+    taught_at: [faction.merchants_guild, text.road_book]
+    research_tiers: ["0 there is a road", "1 where it goes", "2 the days + toll", "3 the chokepoint", "4 the hidden way"]
+
+  - id: knowledge.history
+    name: history & chronicle
+    studies: What happened — chronicles, ballads, parish rolls, the wreckage of the summoning era.
+    tech_ceiling: >-
+      Written chronicle where parchment survived; oral ballad where it did not. Distance distorts
+      (a deed is fact in two days, a story in four, a ballad with the names wrong in a season).
+    forbidden: false
+    taught_at: [faction.scribes_guild, faction.open_page_church, text.crown_chronicle]
+    research_tiers: ["0 a story exists", "1 the gist", "2 the dated record", "3 the contested account", "4 the burned/suppressed truth"]
+
+  - id: knowledge.statecraft
+    name: law & statecraft
+    studies: Charters, guild permissions, coin trust, the reeve's schedule, seat authority.
+    tech_ceiling: Custom, charter, and the magistrate's ledger; power is who adjudicates, not who is right.
+    forbidden: false
+    taught_at: [faction.crown_and_seats, faction.merchants_guild]
+    research_tiers: ["0 the rule as told", "1 who enforces it", "2 the written charter", "3 the jurisdiction seam", "4 the exploitable clause"]
+
+  - id: knowledge.theology
+    name: theology & Quill-studies
+    studies: The Quill, the veil, the two churches' doctrine, the death rites, the prophet's mark.
+    tech_ceiling: >-
+      Both churches read the same true evidence and both are half right; doctrine is deep but the
+      final answer is unreachable. The deepest forbidden domain (see below) starts where doctrine ends.
+    forbidden: false   # ordinary doctrine is open; the Quill's NATURE is the forbidden deep end
+    taught_at: [faction.open_page_church, text.open_page_scripture]
+    research_tiers: ["0 what people believe", "1 the two doctrines", "2 the sealed evidence both cite", "3 a real revelation", "4 -> forbidden: what the Quill is (never closes)"]
+
+  # ----- FORBIDDEN DOMAINS (exposure accrues) -----
+  - id: knowledge.veil_lore
+    name: veil-lore
+    studies: The veil, thin places, thin windows, the dead's crossing, what watches the far side.
+    tech_ceiling: Enough to attempt the resurrection passage-component; never enough to be safe.
+    forbidden: true
+    exposure_track: >-
+      Entities that watch the veil learn the researcher's name (docs/lore/laws-format). Exposure
+      accrues per depth and never bypasses via time-skip. Locals remember who came asking.
+    taught_at: [text.five_laws_commentaries, faction.open_page_church]
+    research_tiers: ["0 avoid that ground", "1 it is a thin place", "2 the window", "3 the crossing method", "4 what is on the far side (bottomless)"]
+
+  - id: knowledge.true_name_lore
+    name: true-name lore
+    studies: The metaphysics of the sealed true-name — identity anchors, the roll seals, marriage seals.
+    tech_ceiling: How a name becomes an anchor; the IDENTITY component of resurrection.
+    forbidden: true
+    exposure_track: Handling true-names is legible power; the church watches, and so do worse readers.
+    taught_at: [text.five_laws_commentaries, faction.open_page_church]
+    research_tiers: ["0 names have weight", "1 the sealing rite", "2 what a seal binds", "3 crafting an anchor", "4 unmaking one (forbidden)"]
+
+  - id: knowledge.sealed_arts
+    name: the sealed arts (component laws)
+    studies: The Five Laws of Return, the summoning law, and the general shape of sealed feats.
+    tech_ceiling: The component-law framework — any route that assembles the components counts.
+    forbidden: true
+    exposure_track: The deepest scholarship draws the most dangerous attention; the precedent ledger remembers every attempt.
+    taught_at: [text.five_laws_commentaries, text.summoning_annals]
+    research_tiers: ["0 some acts are barred", "1 the act is a component list", "2 the named components", "3 a route to one", "4 the assembled feat"]
+
+  - id: knowledge.summoning_lore
+    name: summoning-lore
+    studies: The historical hero-summonings, their components, and the wreckage they left (docs/lore/07).
+    tech_ceiling: >-
+      Enough to know summoning HAPPENED and shares components with resurrection; the components are
+      lost or controlled. The Quill-touched player's own arrival sits at the bottom of this well.
+    forbidden: true
+    exposure_track: Asking who summons, and why they keep summoning, is itself a flagged inquiry.
+    taught_at: [text.summoning_annals, faction.crown_and_seats]
+    research_tiers: ["0 heroes were summoned once", "1 by whom, roughly", "2 the sealed law", "3 a surviving component", "4 the reason it never stopped (bottomless)"]
+
+  - id: knowledge.demon_lore
+    name: demon-lore
+    studies: The Demon Lord question — real, dead, committee, or propaganda (docs/lore/08).
+    tech_ceiling: The church's KNOWN dossier is deep and confident; the truth is authored separately.
+    forbidden: true
+    exposure_track: The flagship hypothesis-pinboard; deep inquiry attracts both churches and worse.
+    taught_at: [text.demon_lord_dossier, faction.open_page_church]
+    research_tiers: ["0 the threat as preached", "1 the church's dossier", "2 the contradictions in it", "3 a real revelation", "4 the truth (bottomless)"]
+
+# ---------- CANONICAL TEXTS (what an archive can hold) ----------
+# reliability is mandatory: a text is a KNOWN sheet and can be confidently wrong.
+texts:
+
+  - id: text.gradus_of_beasts
+    name: The Gradus of Beasts
+    domain: knowledge.beast_lore
+    held_at: [faction.adventurers_guild, faction.monastery_record_halls]
+    reliability: >-
+      The kingdom's standard bestiary and grading table — sound on the low ladder (decades of cheap
+      evidence), thin and out-of-date on the high (survivor testimony, old letters). The source of
+      the guild's confidently-wrong dossier lines.
+    instances: [prop.harrowdown.guild_board]
+
+  - id: text.wyvern_hunt_archive
+    name: The Severwick Wyvern-Hunt Archive
+    domain: knowledge.beast_lore
+    held_at: [faction.monastery_record_halls]
+    reliability: >-
+      The kingdom's deep hunt-doctrine, four carriage-days south. The standing lead for anyone
+      serious about a wyvern — and the scaffold that dragonslaying doctrine sits on top of. Real
+      depth, but you must travel to it (docs/lore/11).
+    instances: []
+
+  - id: text.green_kalendar
+    name: The Green Kalendar
+    domain: knowledge.herblore
+    held_at: [faction.healers_guild]
+    reliability: >-
+      The standard herbal — season, habitat, use, and dose for the common plants. Reliable on the
+      staples, dangerous on the poisons (the hemlock/edible-twin confusion is IN the margins as a
+      warning most foragers never read).
+    instances: []
+
+  - id: text.physic_manual
+    name: The Physician's Hand
+    domain: knowledge.physic
+    held_at: [faction.healers_guild]
+    reliability: Solid empirical wound-care; silent on causes it cannot see. Honest about its limits.
+    instances: []
+
+  - id: text.smiths_treatise
+    name: On the Working of Metals
+    domain: knowledge.metallurgy
+    held_at: [faction.smiths_guild]
+    reliability: The guild's craft record; the best proportions are omitted on purpose (guild secret).
+    instances: []
+
+  - id: text.road_book
+    name: The Road-Book of the Vale
+    domain: knowledge.cartography
+    held_at: [faction.merchants_guild]
+    reliability: Distances in carriage-days, tolls, and chokepoints; goes stale as roads and fords change.
+    instances: []
+
+  - id: text.crown_chronicle
+    name: The Crown Chronicle
+    domain: knowledge.history
+    held_at: [faction.crown_and_seats, faction.monastery_record_halls]
+    reliability: >-
+      The official history; written by the winners, thin on the summoning era, silent where the
+      crown prefers silence. The ballads carry what the chronicle omits, with the names wrong.
+    instances: []
+
+  - id: text.parish_rolls
+    name: The Parish Rolls
+    domain: knowledge.history
+    held_at: [faction.open_page_church]
+    reliability: >-
+      Public appraisal, birth, marriage, and true-name records — reverent and fallible (reader
+      tier, transcription, false names). Thirty years deep in the vale; older entries burned in
+      the roll fire (docs/lore/05). Instantiated by the chapel rolls.
+    instances: []
+
+  - id: text.open_page_scripture
+    name: The Open Page (scripture)
+    domain: knowledge.theology
+    held_at: [faction.open_page_church]
+    reliability: >-
+      Doctrine, not fact: "the Quill wrote the world; it does not write your lines." Sincere and
+      useful and unprovable. The Blotted keep NO text by principle — their anti-scripture is the
+      absence itself, and it dies with each generation (docs/lore/06).
+    instances: []
+
+  - id: text.five_laws_commentaries
+    name: Commentaries on the Five Laws of Return
+    domain: knowledge.sealed_arts
+    held_at: [faction.monastery_record_halls, "private (Elam Ferrier)"]
+    reliability: >-
+      Forbidden scholarship on the resurrection law. Scattered, guarded, and dangerous to gather.
+      Elam Ferrier's thirty-year assembly is the vale's hidden instance (docs/lore/02).
+    instances: []
+
+  - id: text.summoning_annals
+    name: The Summoning Annals
+    domain: knowledge.summoning_lore
+    held_at: [faction.crown_and_seats, faction.monastery_record_halls]
+    reliability: >-
+      Fragmentary records of the historical hero-summonings — heavily controlled by the crown,
+      because the answers implicate it. True half never reaches narrator context (docs/lore/07).
+    instances: []
+
+  - id: text.demon_lord_dossier
+    name: The Demon Lord Dossier
+    domain: knowledge.demon_lore
+    held_at: [faction.open_page_church, faction.crown_and_seats]
+    reliability: >-
+      The flagship pinboard. The church's confident KNOWN answer is authored in full; the TRUE
+      answer is authored SEPARATELY and never serializes to narrator context (docs/lore/08).
+    instances: []

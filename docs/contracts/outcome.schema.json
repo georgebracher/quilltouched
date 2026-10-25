@@ -1,0 +1,425 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:quilltouched:contracts:outcome",
+  "title": "ResolvedOutcome",
+  "description": "The PUBLIC/narrator-facing projection of a committed outcome (v1.4, movement-blocked note): everquill_engine.views.outcome_public applied to the canonical resolver contract. The canonical event still records exact hp and internal-only flags server-side; this view NEVER carries them. hp changes appear only as wound_transition deltas (fiction effect words, never numbers -- exact hp is true-sheet data); flag deltas survive only for the public allowlist prefixes (owes_favor_/rebuffed_/noticed_by_/discovered_/scar_/marked_), internal flags are stripped. Everything here is already committed to the append-only event log (event_id) before the narrator sees it -- narration can never change it. Dice and modifiers are post-roll Chronicle data (auditable, KNOWN-safe band-derived labels only). Current resolver contracts also carry optional backward-compatible system_note and movement_blocked fields for deterministic API routing of blocked movement. additionalProperties is false at every level.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "event_id",
+    "event_ulid",
+    "tier_resolved",
+    "risk_label_shown",
+    "outcome_tier",
+    "dice",
+    "state_deltas",
+    "narration_constraints"
+  ],
+  "properties": {
+    "event_id": {
+      "description": "Local bigint id (string form) of the committed event this outcome derives from -- internal correlation only. Narration binds to the record, never the other way round.",
+      "type": "string",
+      "minLength": 1
+    },
+    "event_ulid": {
+      "description": "THE stable external id of the committed outcome event (MEDIUM-6, v1.2): use this for client references, narration binding, and logical copy/merge. Null only when served from a legacy read that did not select the column.",
+      "anyOf": [
+        { "type": "null" },
+        { "type": "string", "minLength": 26, "maxLength": 26, "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$" }
+      ]
+    },
+    "tier_resolved": {
+      "description": "The plausibility-ladder tier the ENGINE resolved this action at (roadmap 3.1). Never influenced by the parser's plausibility_hint beyond routing.",
+      "enum": ["trivial", "routine", "risky", "desperate", "hopeless", "sealed", "impossible"]
+    },
+    "risk_label_shown": {
+      "description": "The engine-calculated risk label that was shown to the player PRE-roll, in words never percentages (roadmap 3.1). Null when no roll occurred (trivial, impossible, sealed-with-unmet-components).",
+      "enum": ["guarded", "perilous", "dire", "desperate", "suicidal", null]
+    },
+    "outcome_tier": {
+      "description": "2d6 three-tier result. Null when no roll occurred (trivial narrate-only; impossible -- fiction reacts to the attempt itself). Hopeless is failure-flavor only: outcome_tier is always miss and the dice picked HOW you fail. Sealed with unmet components fails forward as miss without dice.",
+      "enum": ["strong_hit", "hit_with_complication", "miss", null]
+    },
+    "dice": {
+      "description": "Post-roll Chronicle data: the honest 2d6, the KNOWN-safe modifier breakdown, and the total. Shown to the player in full after resolution -- every death must be auditable without trusting prose. Null when no roll occurred.",
+      "anyOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/dice" }
+      ]
+    },
+    "state_deltas": {
+      "description": "Typed state changes committed by this outcome. Every miss writes something (intel, rumor seed, scar, journal line) -- an empty array is legal only for pure narrate-only beats.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/state_delta" }
+    },
+    "narration_constraints": {
+      "description": "Hard constraints the narrator prompt must enforce for this outcome. Closed vocabulary; registry with rationale in docs/contracts/README.md. Extending it is a contract change, not a prompt tweak.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "no_npc_awe_unearned",
+          "bind_to_death_record",
+          "entity_facts_only",
+          "no_chronicle_contradiction",
+          "no_invented_witnesses",
+          "no_invented_final_words",
+          "no_success_framing",
+          "impossible_tier_irony_licensed",
+          "no_furniture_commits"
+        ]
+      }
+    },
+    "system_note": {
+      "description": "Engine-authored System line committed with trivial no-op outcomes. Used by the API for deterministic movement-blocked responses; null when no System line is needed. Optional for historical fixture compatibility; current resolver writes it on every outcome.",
+      "anyOf": [
+        { "type": "null" },
+        { "type": "string", "minLength": 1 }
+      ]
+    },
+    "movement_blocked": {
+      "description": "True only when a declared movement action could not resolve to a direct authored exit and the engine supplied the exit-list system_note. Optional for historical fixture compatibility; current resolver writes false on non-blocked outcomes.",
+      "type": "boolean"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "tier_resolved": { "enum": ["trivial", "impossible"] } },
+        "required": ["tier_resolved"]
+      },
+      "then": {
+        "properties": {
+          "dice": { "const": null },
+          "outcome_tier": { "const": null },
+          "risk_label_shown": { "const": null }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "tier_resolved": { "enum": ["routine", "risky", "desperate", "hopeless"] } },
+        "required": ["tier_resolved"]
+      },
+      "then": {
+        "properties": {
+          "dice": { "$ref": "#/$defs/dice" },
+          "risk_label_shown": { "enum": ["guarded", "perilous", "dire", "desperate", "suicidal"] },
+          "outcome_tier": { "enum": ["strong_hit", "hit_with_complication", "miss"] }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": { "tier_resolved": { "const": "hopeless" } },
+        "required": ["tier_resolved"]
+      },
+      "then": {
+        "properties": {
+          "outcome_tier": { "const": "miss" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "entity_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "dice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rolls", "modifiers", "total"],
+      "properties": {
+        "rolls": {
+          "description": "The two d6 faces, in roll order.",
+          "type": "array",
+          "items": { "type": "integer", "minimum": 1, "maximum": 6 },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "modifiers": {
+          "description": "KNOWN-safe modifier breakdown. Labels come from the player's known sheet vocabulary (named abilities, visible conditions, declared approach) and MUST NOT leak true-sheet values or names the player has not earned.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["label", "value"],
+            "properties": {
+              "label": { "type": "string", "minLength": 1 },
+              "value": { "type": "integer" }
+            }
+          }
+        },
+        "total": {
+          "description": "rolls sum plus modifier sum. The engine guarantees arithmetic; validators should re-check it (schema cannot).",
+          "type": "integer"
+        }
+      }
+    },
+    "state_delta": {
+      "oneOf": [
+        { "$ref": "#/$defs/delta_wound_transition" },
+        { "$ref": "#/$defs/delta_coin" },
+        { "$ref": "#/$defs/delta_inventory" },
+        { "$ref": "#/$defs/delta_flag" },
+        { "$ref": "#/$defs/delta_position" },
+        { "$ref": "#/$defs/delta_intel" },
+        { "$ref": "#/$defs/delta_deed" },
+        { "$ref": "#/$defs/delta_title" },
+        { "$ref": "#/$defs/delta_clock" },
+        { "$ref": "#/$defs/delta_timer_started" },
+        { "$ref": "#/$defs/delta_death_record" },
+        { "$ref": "#/$defs/delta_reputation" }
+      ]
+    },
+    "delta_wound_transition": {
+      "description": "Public redaction of an hp change (EQ-R2-03). Carries a FICTION effect only -- the exact hp amount and cause are true-sheet data and live solely in the canonical server-side event. `dispatched` when the change drops the target to 0 (resulting wound word), otherwise `wounded`/`recovered` by the sign of the change.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["delta_type", "entity_id", "effect"],
+      "properties": {
+        "delta_type": { "const": "wound_transition" },
+        "entity_id": { "$ref": "#/$defs/entity_id" },
+        "effect": { "enum": ["wounded", "recovered", "dispatched"] }
+      }
+    },
+    "delta_coin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["delta_type", "entity_id", "amount", "reason"],
+      "properties": {
+        "delta_type": { "const": "coin" },
+        "entity_id": { "$ref": "#/$defs/entity_id" },
+        "amount": { "description": "In base coin units (copper); negative = spent/lost.", "type": "integer" },
+        "reason": {
+          "anyOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }]
+        }
+      }
+    },
+    "delta_inventory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["delta_type", "entity_id", "item_id", "op", "quantity"],
+      "properties": {
+        "delta_type": { "const": "inventory" },
+        "entity_id": { "description": "Owner whose inventory changes.", "$ref": "#/$defs/entity_id" },
+        "item_id": { "$ref": "#/$defs/entity_id" },
+        "op": { "enum": ["add", "remove"] },
+        "quantity": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "delta_flag": {
+      "description": "Public flag delta (EQ-R2-03 + Slice 3 danger marks): only allowlisted social/discovery/mark prefixes reach this view -- internal flags (journal_hook_/humbled_/botched_/attempted_/rapport_/...) are stripped by views.outcome_public before validation.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["delta_type", "entity_id", "flag_key", "value"],
+      "properties": {
+        "delta_type": { "const": "flag" },
+        "entity_id": { "$ref": "#/$defs/entity_id" },
+        "flag_key": { "type": "string", "pattern": "^(owes_favor_|rebuffed_|noticed_by_|discovered_|scar_|marked_)[a-z0-9_]*$" },
+        "value": { "type": ["boolean", "string", "number"] }
+      }
+    },
+    "delta_position": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["delta_type", "entity_id", "from_location_id", "to_location_id", "transit_hint"],
+      "properties": {
+        "delta_type": { "const": "position" },
+        "entity_id": { "$ref": "#/$defs/entity_id" },
+        "from_location_id": {
+          "anyOf": [{ "type": "null" }, { "$ref": "#/$defs/entity_id" }]
+        },
+        "to_location_id": { "$ref": "#/$defs/entity_id" },
+        "transit_hint": {
+          "description": "HOW the entity moved -- the resolver sets it where derivable (declared travel = walked); events written before v1.2 render as unknown.",
+          "enum": ["walked", "fled", "carried", "thrown", "unknown"]
+        }
+      }
+    },
+    "delta_intel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["delta_type", "claim"],
+      "properties": {
+        "delta_type": { "const": "intel" },
+        "claim": { "$ref": "#/$defs/claim_write" }
+      }
+    },
+    "claim_write": {
+      "description": "A claim written to the player's Codex at outcome time (claim_id assigned on commit; corroboration/contradiction links computed by projection, not written here). Failed research legally writes wrong intel at high confidence -- the schema carries provenance, never truth. v1.2 (claim schema v2, HIGH-5): typed predicate from the CLOSED vocabulary (everquill_engine.claims.PREDICATES -- the code registry is the source of truth; llm/ validates via claims.enforce_predicate) + typed value columns replace the free-text value_or_range; acquisition_method is the closed evidence-weight vocabulary. Events written before v1.2 are upcast on read. Kept deliberately looser in narration_context.schema.json#/$defs/claim (read-time shape still serves value_or_range for compatibility -- see README changelog).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subject_entity_id",
+        "predicate",
+        "value_text",
+        "value_num",
+        "value_range",
+        "world_valid",
+        "claim_text",
+        "layer",
+        "source",
+        "observer",
+        "method",
+        "acquisition_method",
+        "source_agent_id",
+        "world_date",
+        "scope",
+        "confidence"
+      ],
+      "properties": {
+        "subject_entity_id": { "$ref": "#/$defs/entity_id" },
+        "predicate": {
+          "description": "Closed controlled vocabulary (module registry everquill_engine.claims.PREDICATES; append-only). Contradiction stays SQL equality on (believer, subject, predicate) -- never NLI/LLM checking.",
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "value_text": {
+          "anyOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }]
+        },
+        "value_num": {
+          "description": "Integer-only (LOW-1): folded numeric domains never carry floats.",
+          "anyOf": [{ "type": "null" }, { "type": "integer" }]
+        },
+        "value_range": {
+          "description": "Inclusive [lo, hi] integer pair.",
+          "anyOf": [
+            { "type": "null" },
+            { "type": "array", "items": { "type": "integer" }, "minItems": 2, "maxItems": 2 }
+          ]
+        },
+        "world_valid": {
+          "description": "World-minute validity range of the FACT (whereabouts-class predicates only).",
+          "anyOf": [
+            { "type": "null" },
+            { "type": "array", "items": { "type": "integer" }, "minItems": 2, "maxItems": 2 }
+          ]
+        },
+        "claim_text": { "type": "string", "minLength": 1 },
+        "layer": {
+          "description": "chronicle = authoritative fact of record; inquiry = fallible dossier claim.",
+          "enum": ["chronicle", "inquiry"]
+        },
+        "source": { "description": "Named source (a person, ballad, ledger, appraisal).", "type": "string", "minLength": 1 },
+        "observer": {
+          "anyOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }]
+        },
+        "method": { "description": "Site-specific acquisition detail (witnessed, appraisal_ii, archive_research, rumor, inherited_journal, ...).", "type": "string", "minLength": 1 },
+        "acquisition_method": {
+          "description": "Closed evidence-weight vocabulary; base weights observed > told > rumor > inherited_journal > overheard.",
+          "enum": ["observed", "told", "rumor", "inherited_journal", "overheard"]
+        },
+        "source_agent_id": {
+          "description": "Who told them (null for direct observation).",
+          "anyOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }]
+        },
+        "world_date": { "type": "string", "minLength": 1 },
+        "scope": { "description": "Where/what the claim covers (local-vs-universal is a canonical wrong-intel mechanism).", "type": "string", "minLength": 1 },
+        "confidence": {
+          "description": "Evidence consistency, NEVER truth-probability. Display value since v1.2 -- ranking strength lives in the claim projection (decayed evidence-weight sum).",
+          "enum": ["uncorroborated", "consistent", "strongly_corroborated"]
+        }
+      }
+    },
+    "delta_deed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["delta_type", "actor_entity_id", "description", "location_id", "witness_ids", "notoriety", "world_date"],
+      "properties": {
+        "delta_type": { "const": "deed" },
+        "actor_entity_id": { "$ref": "#/$defs/entity_id" },
+        "description": { "description": "Factual record for rumor propagation -- concrete facts, never generated praise.", "type": "string", "minLength": 1 },
+        "location_id": { "$ref": "#/$defs/entity_id" },
+        "witness_ids": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/entity_id" },
+          "uniqueItems": true
+        },
+        "notoriety": { "type": "number", "minimum": 0 },
+        "world_date": { "type": "string", "minLength": 1 }
+      }
+    },
+    "delta_title": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["delta_type", "entity_id", "title", "deed_ref"],
+      "properties": {
+        "delta_type": { "const": "title" },
+        "entity_id": { "$ref": "#/$defs/entity_id" },
+        "title": { "description": "Deed-minted title, e.g. 'Ratcatcher of Dunmere'.", "type": "string", "minLength": 1 },
+        "deed_ref": {
+          "description": "Event ID of the witnessed deed that minted it, null only for chargen-origin titles.",
+          "anyOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }]
+        }
+      }
+    },
+    "delta_clock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["delta_type", "clock_id", "advance"],
+      "properties": {
+        "delta_type": { "const": "clock" },
+        "clock_id": { "$ref": "#/$defs/entity_id" },
+        "advance": {
+          "description": "World-time units advanced. Unit definition belongs to Team A's world-clock spec (PROVISIONAL).",
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "delta_timer_started": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["delta_type", "timer_id", "kind", "due_world_time"],
+      "properties": {
+        "delta_type": { "const": "timer_started" },
+        "timer_id": { "$ref": "#/$defs/entity_id" },
+        "kind": { "enum": ["training", "research", "travel", "craft", "recovery", "worldgen", "rumor"] },
+        "due_world_time": { "type": "string", "minLength": 1 }
+      }
+    },
+    "delta_death_record": {
+      "description": "The sealed death record, committed BEFORE narration (heir flow phase 1). Death narration binds to exactly these facts: no invented witnesses, sacrifices, or final words.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["delta_type", "entity_id", "cause", "location_id", "witness_ids", "body_disposition", "journal_disposition", "rumor_seeds", "world_date"],
+      "properties": {
+        "delta_type": { "const": "death_record" },
+        "entity_id": { "$ref": "#/$defs/entity_id" },
+        "cause": { "description": "Mechanical cause, auditable from the Chronicle.", "type": "string", "minLength": 1 },
+        "location_id": { "$ref": "#/$defs/entity_id" },
+        "witness_ids": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/entity_id" },
+          "uniqueItems": true
+        },
+        "body_disposition": {
+          "anyOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }]
+        },
+        "journal_disposition": {
+          "anyOf": [{ "type": "null" }, { "type": "string", "minLength": 1 }]
+        },
+        "rumor_seeds": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "world_date": { "type": "string", "minLength": 1 }
+      }
+    },
+    "delta_reputation": {
+      "description": "Reputation delta (Sprint 4, The Self & The Social): the actor's own standing moved. scope=disposition (subject=NPC id) | standing (subject=settlement id) | renown (subject='' global). amount is the signed change, already clamped by the resolver to the design band; the fold applies it verbatim. Public and un-redacted -- it is the player's EARNED standing, so the narrator may bind warming/cooling to it and the Self view reflects it (KNOWN-safe, like a named modifier).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["delta_type", "entity_id", "scope", "subject_id", "amount"],
+      "properties": {
+        "delta_type": { "const": "reputation" },
+        "entity_id": { "$ref": "#/$defs/entity_id" },
+        "scope": { "enum": ["disposition", "standing", "renown"] },
+        "subject_id": { "description": "NPC id (disposition), settlement id (standing), or '' (global renown).", "type": "string" },
+        "amount": { "description": "Signed change; resolver-clamped so the running total stays in band.", "type": "integer" }
+      }
+    }
+  }
+}

@@ -1,0 +1,242 @@
+# Universe Canon — Item Archetypes (the classes of thing that exist)
+# Team B, Universe Canon v1 (DRAFT). Category: 4 of 8.
+#
+# The CLASSES of item, with their tier and what canon materials compose them. This is the
+# whitelist the item fit-check reads: a generated/looted item must be composed of canon
+# materials at/below the tech ceiling for its tier, or route through the adjudicator.
+# Harrowdown's items and gear (docs/lore/10, harrowdown.yaml) are INSTANCES here.
+#
+# tiers:
+#   mundane      — anyone can own/make; sold on Market Row.
+#   rare         — costly, guild-work, freighted (a mail shirt, plate).
+#   sealed       — gated by a component law or a sealed invention (a firearm-if-it-existed).
+#   anchor_class — a true-name-bound object that satisfies a resurrection component
+#                  (docs/lore/laws-format). Never mass-produced, never mundane.
+#
+# The System never shows true numbers on any item (docs/lore/12); an item's "grade" is always
+# the seller's KNOWN claim (a sealed potion buys recourse, not guaranteed potency — docs/lore/10).
+
+item_archetypes:
+
+  # ---------- WEAPONS ----------
+  - id: item_archetype.knife
+    name: knife / dagger
+    item_class: weapon
+    tier: mundane
+    materials: [material.iron, material.oak, material.hide]
+    tech_ceiling: Universal tool and last-ditch weapon; every adult carries one.
+    notes: The floor of the armory. 60 pennies for a decent blade (docs/lore/10).
+    instances: []
+
+  - id: item_archetype.spear
+    name: spear
+    item_class: weapon
+    tier: mundane
+    materials: [material.iron, material.oak]
+    tech_ceiling: The commoner's real weapon — cheap, long, and it kills wolves and men alike.
+    notes: 150 pennies. What Jorun Pike would tell you to carry up the Quarry Track and live wrecked.
+    instances: []
+
+  - id: item_archetype.sword
+    name: sword (short and long)
+    item_class: weapon
+    tier: rare
+    materials: [material.steel, material.iron, material.oak, material.hide]
+    tech_ceiling: Steel, a smith's warranty, and freight — a mark of means, not a farm tool.
+    notes: Shortsword 600 pennies; a good long-blade far more. No local smith-guild, so blades carry Severwick freight.
+    instances: []
+
+  - id: item_archetype.bow
+    name: bow (and the crossbow)
+    item_class: weapon
+    tier: rare
+    materials: [material.oak, material.hide, material.iron]
+    tech_ceiling: >-
+      Self-bows and crossbows exist (medieval ceiling); a windlass crossbow is the top of the
+      mechanical art. No firearm exists — that is the sealed line (tech.black_powder ->
+      tech.firelock).
+    notes: The reach weapon. Poison (wolfsbane) on the head is an antagonist's craft.
+    instances: []
+
+  # ---------- ARMOR ----------
+  - id: item_archetype.leather_jerkin
+    name: leather jerkin
+    item_class: armor
+    tier: mundane
+    materials: [material.hide]
+    tech_ceiling: The affordable body protection; turns a glancing blow, not a committed one.
+    notes: 300 pennies. What a fresh plate can actually buy.
+    instances: []
+
+  - id: item_archetype.mail_shirt
+    name: mail shirt
+    item_class: armor
+    tier: rare
+    materials: [material.iron, material.steel]
+    tech_ceiling: Riveted iron rings; weeks of a smith's work. The top of common protection.
+    notes: 4,000 pennies — a small fortune, near a working farm's worth in coin.
+    instances: []
+
+  - id: item_archetype.plate
+    name: plate harness
+    item_class: armor
+    tier: rare
+    materials: [material.steel]
+    tech_ceiling: >-
+      Shaped steel plate is the ABSOLUTE ceiling of the world's armor art — a seat's armory or a
+      named knight's, not a vale thing. Beyond it lies nothing until inventions change the game.
+    notes: Effectively unseen in Harrowdown. A worldgen "top of the ladder" mundane object.
+    instances: []
+
+  # ---------- TOOLS & CONSUMABLES ----------
+  - id: item_archetype.candle
+    name: candle / lamp
+    item_class: tool
+    tier: mundane
+    materials: [material.tallow, material.beeswax, material.lamp_oil, material.flax]
+    tech_ceiling: Light after dark. Tallow for the poor, wax and sealed oil for the careful.
+    notes: Tallow candle 1 penny; Ferrier's sealed lamp oil 8/pint. Light is a real, priced resource.
+    instances: []
+
+  - id: item_archetype.tinderbox
+    name: tinderbox
+    item_class: tool
+    tier: mundane
+    materials: [material.flint, material.steel, flora.tinder_fungus]
+    tech_ceiling: Flint, steel, and char — the whole of fire-lighting, and the seed of any firelock.
+    notes: The mundane fire-chain the sealed firelock invention builds on.
+    instances: []
+
+  - id: item_archetype.poultice
+    name: poultice (hedge-grade)
+    item_class: consumable
+    tier: mundane
+    materials: [flora.woundwort, flora.yarrow, flora.comfrey, material.flax]
+    tech_ceiling: Herbs and clean linen. Closes a wound that was going to close, faster. No magic.
+    notes: 20 pennies (docs/lore/10). The floor of "healing," honestly labeled.
+    instances: []
+
+  - id: item_archetype.potion
+    name: potion (graded, unsealed to sealed)
+    item_class: consumable
+    tier: rare
+    materials: [flora.willowbark, flora.nightshade, material.glass]
+    tech_ceiling: >-
+      Apothecary craft, not miracle water: stops bleeding, dulls pain, fights infection over days
+      of world-time. A "healing draught" never regrows a limb. Grade is the seller's KNOWN claim.
+    notes: Lesser 300 / field 1,200 / sealed 6,000 pennies. The seal buys recourse, not potency.
+    instances: []
+
+  - id: item_archetype.poison
+    name: poison
+    item_class: consumable
+    tier: rare
+    materials: [flora.hemlock, flora.wolfsbane, flora.nightshade, material.orpiment]
+    tech_ceiling: The dark side of the apothecary; dose is everything. Antagonist and investigation content.
+    notes: Never trivialized — a poisoning is a deed the world remembers.
+    instances: []
+
+  - id: item_archetype.rope
+    name: rope / cord
+    item_class: tool
+    tier: mundane
+    materials: [material.flax]
+    tech_ceiling: Hemp and flax cordage; the unglamorous thing that decides half of all expeditions.
+    notes: Ruined by slimes (docs/lore/09) — a small honest hazard.
+    instances: []
+
+  # ---------- DOCUMENTS (the KNOWN-sheet artifacts) ----------
+  - id: item_archetype.guild_plate
+    name: guild plate (F -> SSS)
+    item_class: document
+    tier: rare
+    materials: [material.bronze, material.iron]
+    tech_ceiling: The guild's certified KNOWN rank made physical; a legal permission, not a power reading.
+    notes: >-
+      Thumb-print-bound at registration (docs/lore/04). Rank dies with the holder; a false plate is
+      branded through and the name barred for life. The world-readable slice of the deed log.
+    instances: []
+
+  - id: item_archetype.parish_roll
+    name: parish roll / dossier / ledger
+    item_class: document
+    tier: rare
+    materials: [material.parchment, item_archetype.iron_gall_ink]
+    tech_ceiling: The written KNOWN sheet — appraisals, dossiers, warrants, contracts. Fallible by design.
+    notes: >-
+      The archive that outlasts a life and burns in a fire. Every entry carries reader, tier, date,
+      and a scope line ("it showed no more"). Instantiated by the guild board and the chapel rolls.
+    instances: [prop.harrowdown.guild_board]
+
+  - id: item_archetype.iron_gall_ink
+    name: iron-gall ink
+    item_class: tool
+    tier: craft
+    materials: [flora.oak_gall, material.vitriol, material.iron]
+    tech_ceiling: The world's writing-black. Its fading and biting is why old records can lie.
+    notes: A material fact under the archive's fallibility.
+    instances: []
+
+  - id: item_archetype.journal
+    name: journal (devotional / inheritance)
+    item_class: document
+    tier: mundane
+    materials: [material.parchment, item_archetype.iron_gall_ink]
+    tech_ceiling: >-
+      A private written memory. Under Open Page practice a devotional object; mechanically, the
+      memory-component of resurrection and the carrier of KNOWN intel across an heir's death.
+    notes: >-
+      Journal text is UNTRUSTED data in any prompt (data-layer §2.3) — quoted, never obeyed. Dying
+      unrecorded is the quiet tragedy; a grandmother's notebook is an heir's inheritance.
+    instances: []
+
+  # ---------- CURRENCY ----------
+  - id: item_archetype.coin
+    name: coin (penny / mark / sovereign)
+    item_class: currency
+    tier: mundane
+    materials: [material.copper, material.silver, material.gold]
+    tech_ceiling: >-
+      100 copper pennies = 1 silver mark; 100 marks = 1 gold sovereign. A coin is itself a KNOWN
+      sheet — a mark is a claim about silver, with provenance (mint-mark, weight, clip).
+    notes: Pennies always pass; old marks pass at weight; the Blotted pay in kind. (docs/lore/10.)
+    instances: []
+
+  # ---------- RELICS & ANCHOR-CLASS (sealed tier) ----------
+  - id: item_archetype.true_name_seal
+    name: true-name wax seal
+    item_class: relic
+    tier: anchor_class
+    materials: [material.beeswax]
+    tech_ceiling: >-
+      A true-name pressed into wax at a rite (a church sealing, or the vale's wedding custom).
+      Bound to one person; satisfies the IDENTITY component of law.resurrection if crafted before
+      death (docs/lore/laws-format).
+    notes: >-
+      The everyday version (wedding seals on the mantel) is common; an anchor-class one bound to a
+      specific dead person is singular and hidden. Reyla's marriage seal is THE instance.
+    instances: [item.harrowdown.marriage_seal]
+
+  - id: item_archetype.soul_anchor
+    name: soul anchor
+    item_class: relic
+    tier: anchor_class
+    materials: [material.gold, material.silver, material.beeswax]
+    tech_ceiling: >-
+      A crafted object made before death that says without doubt who someone was — the highest
+      identity anchor. Rarer and dearer than a wax seal; a sealed-craft object.
+    notes: The generalized IDENTITY component; a wax true-name seal is the vale's affordable form of it.
+    instances: []
+
+  - id: item_archetype.holy_relic
+    name: holy relic / vault-piece
+    item_class: relic
+    tier: sealed
+    materials: [material.gold, material.silver, material.granite]
+    tech_ceiling: >-
+      A church or seat treasure with a KNOWN sacred claim and a hidden TRUE nature that may differ.
+      Slots into sealed-tier component laws (a "holy sword in a vault" is expected furniture).
+    notes: >-
+      Provenance and a finite known count matter (the Overlord "irreplaceable legacy item" lesson).
+      Identification is incomplete: an effect known, charges/counters/reproducibility not.
+    instances: []

@@ -1,0 +1,16 @@
+.env
+.env.*
+__pycache__/
+*.pyc
+.venv/
+node_modules/
+dist/
+.DS_Store
+*.log
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.wrangler/
+backups/
+.env.localdev
+docs/ops/invite-codes.md

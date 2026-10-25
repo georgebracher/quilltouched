@@ -1,0 +1,41 @@
+{
+ "model": "claude-sonnet-5",
+ "fixtures": 2,
+ "per_narration_failing": 0,
+ "batch_fails": [],
+ "batch_warns": [],
+ "stats": {
+  "hook_ratio": 0.0,
+  "sentence_cv": 0.5833025700440013,
+  "band_10_22": 0.3333333333333333,
+  "em_dash_mean": 0,
+  "ellipsis_mean": 0
+ },
+ "usage": {
+  "input_mean": 4865,
+  "input_p95": 4951,
+  "output_mean": 116.5,
+  "output_p95": 149
+ },
+ "cost_per_turn_usd": 0.019692499999999998,
+ "narrations": [
+  {
+   "id": "nf-01-trivial-ale",
+   "text": "Maren pulls the tap without asking twice, sets the mug down still foaming, and holds out her hand until two pennies land in it. She doesn't count them twice. The ale is warm and a little flat, the way it always is this close to the bottom of the barrel.",
+   "input_tokens": 4779,
+   "output_tokens": 84,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-12-hopeless-highdice",
+   "text": "The lamp-flare caught chalk dust and nothing else. The quarryman closed the distance before the staff came level, one arm taking the swing out of your hands and the other driving you back into the cut bench wall. The impact lands under the bandaged shoulder; the wound there does not care that it was already three days old.\n\nYou come to on the drove road, some distance down from the track, chalk still in your teeth. The quarryman didn't follow past the benches. It didn't need to.",
+   "input_tokens": 4951,
+   "output_tokens": 149,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  }
+ ]
+}

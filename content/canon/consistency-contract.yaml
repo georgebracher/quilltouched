@@ -1,0 +1,205 @@
+# Universe Canon — The Consistency Contract (the fit-check)
+# Team B, Universe Canon v1 (DRAFT). The point of the whole thing.
+#
+# HOW discovered/generated content is validated as "fitting the seated base." This is the
+# interface Sprint 5 worldgen and the sealed-feat/synthesis adjudicator consume. It is authored
+# as PROSE (the doctrine) + a CHECKABLE SHAPE (fit_check, the machine spec). The engine, never an
+# LLM, runs the deterministic checks; the adjudicator (one high-quality LLM call with lore bible +
+# precedent ledger) is reserved for the out-of-band creativity that the deterministic checks
+# escalate — and its accepted rulings APPEND to canon permanently (anchor.bottomless_core).
+
+# ===========================================================================
+# DOCTRINE (prose)
+# ===========================================================================
+doctrine: |
+  The canon is the TRUE super-set of what exists. The player's Codex is a discovered subset of
+  it. Worldgen and research surface NEW things — creatures, items, books, materials, people — and
+  every one must slot into the seated base or be legitimately admitted to it. Nothing generated is
+  ever "true" on arrival; it is KNOWN (a fallible claim) until sealed, and its TRUE sheet never
+  reaches narrator context.
+
+  The base does three things at once. It is a RAIL (generation cannot wander off the ladder, the
+  tech ceiling, or the absences). It is a VOCABULARY (a new creature is described in canon
+  families, biomes, and bands; a new item in canon materials). And it is a LEDGER OF PRECEDENT
+  (what has been admitted before constrains and enables what can be admitted next).
+
+  There are three verdicts for any candidate:
+
+    FIT     — the candidate satisfies its category's deterministic fit-check. Admitted as a KNOWN
+              instance of an existing canon category. No LLM judgment needed. This is the common case.
+    REJECT  — the candidate trips a hard invariant (an explicit absence, a true-number leak, a
+              magic-without-a-price, a creature above its family ceiling with no justification, an
+              item of non-canon material, a tech above the ceiling with no route). It does not
+              enter the world. The attempt may still be a deed (the fiction reacts), but the
+              content is discarded.
+    ESCALATE — the candidate is coherent but OUT OF BAND: a genuinely new material, a new knowledge
+              domain, a route to a sealed feat that no `satisfiable_by` lists, or an invention past
+              the ceiling. It routes to the adjudicator with the lore bible and the precedent
+              ledger. The ruling is committed to the precedent ledger and, if accepted, APPENDED to
+              canon as permanent new rows (a new bestiary rung, a new material, a new
+              `satisfiable_by` entry). Precedents only ADD; they never remove or narrow an existing
+              `verification` (docs/lore/laws-format, field rule 2).
+
+  Growth is one-directional: the base never shrinks; it accretes. A dragon admitted once is as
+  canonical as the seated wyvern. The universe accretes case law. The one thing that never gets
+  admitted, at any tier, by any route, is an answer to "what is the Quill" (docs/lore/06).
+
+# ===========================================================================
+# GLOBAL INVARIANTS — checked for EVERY candidate, before category checks.
+# A trip here is always REJECT (never ESCALATE).
+# ===========================================================================
+global_invariants:
+
+  - id: inv.absences
+    rule: The candidate must not match any hard absence in docs/lore/12-explicit-absences.md.
+    checklist:
+      - no slavery content (not villainy-to-defeat, not backstory, not economy flavor)
+      - no harems / affection meters / romance-collection
+      - no VRMMO logic (no log-out, respawn, patch notes, menus-as-reality)
+      - no Earth-food nostalgia beats (cuisine is regional intel, never an import)
+      - no truthful floating windows / true numbers anywhere (including the player's own sheet)
+      - no underage-coded companions
+    on_trip: REJECT
+
+  - id: inv.true_known_split
+    rule: >-
+      No candidate field may leak a TRUE number or a hidden true fact into narrator-facing content.
+      Generated content carries common_sense (narrator-safe) and, separately, engine-only truth.
+    on_trip: REJECT
+
+  - id: inv.magic_has_a_price
+    rule: >-
+      No effect is a permission. Any magical/supernatural property must map to a cost-ledger entry
+      (docs/lore/03) or a component law (docs/lore/laws-format). An effect with no price is REJECT.
+    on_trip: REJECT
+
+  - id: inv.tech_ceiling
+    rule: >-
+      No item, tool, or capability may exceed the pre-gunpowder ceiling (anchor.pre_gunpowder_ceiling)
+      unless it is an accepted sealed invention in canon, or it ESCALATES to the adjudicator.
+    on_trip: [REJECT if claimed as mundane, ESCALATE if claimed as a new invention]
+
+  - id: inv.low_magic_density
+    rule: >-
+      Magic stays RARE. Worldgen may not populate a region with casters, enchanted items, or ambient
+      magic beyond the low-magic density (hedge-craft common, rites institutional, veil-work singular,
+      battle-magic unverified). A region that reads as high-magic is REJECT.
+    on_trip: REJECT
+
+# ===========================================================================
+# CATEGORY FIT-CHECKS (the checkable shape, per category)
+# Each: required_fields, the taxonomy/whitelist it must reference, and the specific bound checks.
+# ===========================================================================
+fit_check:
+
+  bestiary:
+    required_fields: [family, threat_band_range, habitat, common_sense]
+    must:
+      - family is one of the canon families (beast/humanoid/undead/draconic/giant_kin/aberration/construct).
+      - habitat tags are drawn from the canon biome set (cosmology-powers.yaml `biomes`).
+      - threat_band_range floor >= the family's floor AND ceiling <= the family's ceiling
+        (bestiary.yaml). A specimen outside the family band ESCALATES (it may be a new rung).
+      - every supernatural trait (regeneration, undeath, breath, veil-tie) has an authored
+        discoverable counter / stop-condition / anchor (no unkillable, no counter-less power).
+      - draconic candidates at band >= 18 (dragons) ESCALATE, never auto-FIT — dragons are
+        named, rare, adjudicated events; worldgen may not spawn them ambiently.
+      - calamity-class (band >= 25) is authoring/adjudicator only.
+    on_out_of_band: ESCALATE (candidate may become a new rung, appended to bestiary.yaml)
+
+  material:
+    required_fields: [material_class, properties, tech_tier]
+    must:
+      - material_class is one of the canon classes (schema.yaml).
+      - a novel material (no existing material.<id>) ALWAYS ESCALATES — the periodic table grows
+        only by adjudication (rare). Common case — a candidate maps to an existing material.
+      - any `combines_into` edge naming a sealed/beyond product ESCALATES the SYNTHESIS (the
+        gunpowder pattern), never the material.
+    on_out_of_band: ESCALATE
+
+  flora:
+    required_fields: [kind, properties, habitat]
+    must:
+      - kind is one of {herb, fungus, tree, crop, moss_lichen}; habitat from the canon biome set.
+      - a medicinal/toxic/alchemical property must state its honest limit or dose-shape (no
+        miracle-cure flora; the poultice-honesty rule, docs/lore/10).
+      - veil_adjacent flora ties to a thin place and accrues exposure if researched deep.
+    on_out_of_band: ESCALATE (a genuinely new species/property)
+
+  item:
+    required_fields: [item_class, tier, materials]
+    must:
+      - every entry in `materials` is a canon material.<id> (the composition whitelist).
+      - tier matches the tech ceiling — mundane/rare must be at/below the ceiling; sealed requires an
+        accepted sealed invention; anchor_class requires a true-name binding (a component law).
+      - no item grants an effect without a cost-ledger price or a component law (inv.magic_has_a_price).
+      - grade is always a KNOWN seller's claim, never a guaranteed true property.
+    on_out_of_band: ESCALATE (an item of a would-be new material or a new sealed tier)
+
+  text:
+    required_fields: [domain, reliability]
+    must:
+      - domain is an existing knowledge.<id>, OR a legitimately-discovered new domain (which ESCALATES).
+      - reliability is stated (a text is a KNOWN sheet; it must be able to be wrong, with a cause).
+      - a text in a forbidden domain accrues exposure to read/research (knowledge.<id>.forbidden).
+      - held_at is a plausible archive given distance (peak knowledge near where it happened,
+        docs/lore/11); a deep truth held in a nearby cheap archive ESCALATES (suspicious).
+    on_out_of_band: ESCALATE (a new knowledge domain)
+
+  tech_invention:
+    required_fields: [components, tier]
+    must:
+      - every component is a canon material.<id> or an already-accepted tech.<id>.
+      - a `beyond`-tier attempt with unmet prerequisite sealed feats is REJECT (the adjudicator does
+        not grant a firearm before black powder + a barrel exist in canon).
+      - a `sealed`-tier attempt routes to the adjudicator + precedent ledger (the gunpowder pattern);
+        on acceptance the invention is APPENDED to canon permanently, with its notoriety, faction
+        reactions, exposure, and economy shift authored into the accepting event.
+    on_out_of_band: ESCALATE
+
+  people_faction:
+    required_fields: [prevalence or reach]
+    must:
+      - demihuman presence honors the rarity anchor (rare/regional; humans dominant) — a region
+        densely populated with demihumans ESCALATES (it contradicts the seated distribution).
+      - a faction is a KNOWN-sheet builder (its ranks/seals/dossiers can be wrong) or it is not a
+        canon-shaped institution.
+    on_out_of_band: ESCALATE
+
+# ===========================================================================
+# THE ESCALATION PROTOCOL (out-of-band creativity -> permanent canon)
+# ===========================================================================
+escalation:
+  route: >-
+    A candidate that is coherent but out of band goes to the adjudicator: one high-quality LLM call
+    with the lore bible, the relevant canon category, and the precedent ledger (roadmap 3.2/3.7).
+    The adjudicator answers FIT-AS-NEW / REJECT with a reason, never a number and never a state change.
+  commit: >-
+    Every ruling (accept or reject) is committed to the precedent ledger as permanent canon — the
+    universe accretes case law. An accepted candidate is APPENDED to the relevant canon file as a
+    new row (bestiary rung, material, flora, item archetype, text, knowledge domain, invention,
+    people/faction) OR, for sealed feats, as a new `satisfiable_by` entry on the law.
+  invariants:
+    - precedents only ADD routes/rows; they never remove or narrow an existing `verification`.
+    - the accepting event carries the full consequences (notoriety, faction reactions, exposure,
+      economy shift) so worldgen downstream reads a fully-formed canon row, never a stub.
+    - prove what the Quill is is the one candidate the adjudicator treats as permanently
+      unsatisfiable — it may gate revelations, never grant the final answer (docs/lore/06).
+
+# ===========================================================================
+# WHAT THE CONSUMERS READ (the interface surface, named)
+# ===========================================================================
+consumers:
+  worldgen_sprint5:
+    reads: [anchors.yaml, bestiary.yaml, materials.yaml, flora.yaml, items.yaml, texts-knowledge.yaml, sciences-tech.yaml, cosmology-powers.yaml, peoples-factions.yaml]
+    uses: >-
+      Generates regions/creatures/NPCs/texts downstream of the deed log by SELECTING and VARYING
+      canon rows within their fit-check bounds (a new region's bestiary is drawn from the ladder +
+      biome set; its texts from the knowledge domains; its materials from the periodic table). Runs
+      the fit_check on every generated instance; a FIT instance is authored, an out-of-band one
+      ESCALATES before it enters the world.
+  adjudicator:
+    reads: [this file, cosmology-powers.yaml laws_registry, docs/lore/laws-format.md, the precedent ledger]
+    uses: >-
+      Rules on ESCALATE candidates (novel materials, new domains, sealed-feat routes, inventions).
+      Deterministic component checks stay in the engine; the adjudicator judges only fit-as-new,
+      and its rulings append to canon.

@@ -1,0 +1,319 @@
+# Universe Canon — THE INITIAL MAP (Team B, decisions-resolved.md decision 6)
+# RESOLVED (George, 2026-07-14): author a base map now; more regions appear later (bottomless).
+# Human-readable companion: docs/lore/13-world-map.md. This file is the MACHINE surface worldgen
+# (Sprint 5) reads to place new regions consistently — ids, tier, connections, biome, and whether a
+# region is AUTHORED (fixed canon) or FRONTIER-OPEN (worldgen may extend it).
+#
+# ID CONVENTION: geographic/political regions are namespaced region.<id> (region-tier objects),
+# DISTINCT from the loc.<region>.<name> location instances in content/world/*.yaml. Regions
+# REFERENCE existing loc.* arrival squares and their carriage-day edges (content/world/harrowdown.yaml,
+# docs/lore/11-travel-network.md) rather than redefining them, so nothing here contradicts a locked
+# region file. Every referenced loc.*/faction.*/text.*/creature.* id resolves in existing canon.
+#
+# CANON LOCKED 2026-07-14 (George). SCALE — CONFIRMED:
+#   The authored base is ONE KINGDOM (the Kingdom of Aldreth) sitting inside a larger, UNMAPPED
+#   world. Harrowdown is one small vale, in one province (the Lundmarch, seat Severwick), near the
+#   kingdom's wild inland edge. The kingdom has a civilized south (Severwick -> the capital) and a
+#   wild, rising north (the high country -> the burned province), with frontier and then blank map
+#   past every border. This matches the Codex map that goes "blank past the ridge" (roadmap §3),
+#   dragons being near-single-digit in the KNOWN world, and anchor.bottomless_core.
+#
+#   SETTLEMENT COUNT — CONFIRMED: the authored base is exactly 1 CAPITAL + 1 LARGE CITY + 5 TOWNS,
+#   and everything past those 7 settlements is frontier-open (worldgen grows it, never between two
+#   authored places). Capital = Aldcaster. Large city = Severwick (the Lundmarch seat: river port,
+#   crown mint, cathedral, guild seat). Five towns = Harrowdown, Dunmere, Cranholt, and the two
+#   authored this pass — Larkhythe (South Road river wool-staple) and Milbury (steadfolk farm-mill
+#   town). The Cindermarch is a burned, unpeopled province, a lore node, NOT one of the 7 settlements.
+#
+#   NAMES — APPROVED (George): Aldreth, Aldcaster, the Lundmarch, the Cindermarch, the Fellmarch,
+#   the Meres. Existing names (Harrowdown, Dunmere, Cranholt, Severwick, the River Lund, Hollow Tor,
+#   Redcliff, Sedge Ford, Stanwick) are locked canon and unchanged.
+#
+#   REGIONAL SECTS — a region MAY carry an optional `sect:` field (a sect.<id> from
+#   cosmology-powers.yaml `quill_worship_regional`). Regional Quill-interpretation is a first-class
+#   REPEATABLE pattern: the three seeded readings (Crown's Hand / Scored Page / Fen Kalendar) are
+#   examples, and worldgen/authoring MAY give a new region its own reading (see `sect_pattern` below).
+
+map:
+  scale:
+    unit: kingdom_within_larger_world
+    kingdom: region.aldreth
+    resolved: >-
+      CANON LOCKED 2026-07-14 (George). One kingdom (Aldreth) inside a larger unmapped world;
+      names approved. The authored base is exactly 1 capital (Aldcaster) + 1 large city (Severwick)
+      + 5 towns (Harrowdown, Dunmere, Cranholt, Larkhythe, Milbury); everything past those 7
+      settlements is frontier-open. The world is deliberately larger than the authored map — the
+      blank past the borders is where worldgen adds regions.
+    settlement_base:
+      capital: region.aldcaster
+      large_city: region.severwick
+      towns: [region.harrowdown, region.dunmere, region.cranholt, region.larkhythe, region.milbury]
+      beyond: frontier_open   # everything past the 7 is grown by worldgen under frontier_rule
+    sect_pattern: >-
+      Regional Quill-interpretation is a first-class, REPEATABLE pattern. Each region/major
+      settlement MAY carry an optional `sect:` field naming a sect.<id> from cosmology-powers.yaml
+      `quill_worship_regional`. The three seeded readings — sect.crown_hand (Aldcaster/crown lands),
+      sect.scored_page (the burned Cindermarch), sect.fen_kalendar (Dunmere/the Meres) — are examples
+      alongside the two poles (sect.open_page / sect.blotted); worldgen/authoring MAY introduce a new
+      region's own reading (of the one true Quill) when it adds a region, appended to canon on accept.
+    frontier_rule: >-
+      Worldgen may add regions ONLY adjacent to a FRONTIER-OPEN edge, drawing biome + threat from the
+      neighbouring authored region and the ladder, and running the consistency-contract fit-check. It
+      may never insert a region between two AUTHORED regions or rewrite an authored distance.
+
+  # status values:
+  #   authored         — fixed canon this pass (the seed region: content/world/harrowdown.yaml).
+  #   authored_stub    — named, placed, connected; interior unauthored until its own sprint (docs/lore/11).
+  #   authored_exists  — confirmed to EXIST in canon; interior + exact inner distance deferred.
+  #   authored_frontier— a named place that exists as a lore node but whose interior is dangerous frontier.
+  #   frontier_open    — unauthored edge; worldgen expands here under the frontier_rule.
+  regions:
+
+    # ---------- the kingdom ----------
+    - id: region.aldreth
+      name: the Kingdom of Aldreth       # APPROVED (George, 2026-07-14)
+      tier: kingdom
+      status: authored
+      contains: [region.lundmarch, region.aldcaster, region.cindermarch, region.fellmarch, region.the_meres]
+      biome: [downs, fen, forest, hills, riverbank, crag, mountain, coast]
+      flavor: >-
+        A medieval, low-magic kingdom of wool, tallow, and written record. A civilized river-and-farm
+        south and a wild upland north, bound by the crown, the guilds, and the churches. One kingdom
+        among an unmapped many.
+
+    # ---------- the vale's province (authored core) ----------
+    - id: region.lundmarch
+      name: the Lundmarch               # APPROVED — the River Lund's province, seat at Severwick
+      tier: province
+      status: authored
+      parent: region.aldreth
+      seat: region.severwick
+      sect: sect.open_page              # the settled heartland reading
+      biome: [downs, chalk_path, heath, fen, riverbank, hills, high_pasture]
+      contains: [region.harrowdown, region.dunmere, region.cranholt, region.larkhythe, region.milbury, region.severwick]
+      flavor: >-
+        The chalk-and-river province the vale belongs to: wool towns, farm shires, fen edges, and the
+        Lund running south to the seat. The kingdom's inland edge — past its upland rim the settled map
+        thins to frontier. The kingdom's large city (Severwick) and all 5 of its towns sit here; only the
+        capital (Aldcaster) lies outside, far south in the crown lands.
+
+    - id: region.harrowdown
+      name: Harrowdown Vale
+      tier: vale
+      status: authored                  # the seed region (content/world/harrowdown.yaml)
+      parent: region.lundmarch
+      sect: sect.open_page              # the settled heartland reading
+      biome: [downs, chalk_path, heath, barrow_field, riverbank, quarry]
+      settlements: [loc.harrowdown.market_row]
+      landmarks:
+        - Hollow Tor (barrow field; creature.harrowdown.barrow_wight)
+        - Redcliff Scar / the quarry (creature.harrowdown.quarryman)
+        - Sedge Ford
+        - the River Lund
+      connections:
+        - {to: region.dunmere,   via: loc.harrowdown.cairn_road,  carriage_days: 2,    chokepoint: Sedge Ford,                     bearing: W}
+        - {to: region.larkhythe, via: loc.harrowdown.south_road,  carriage_days: 2,    chokepoint: "none before the Lund market",  bearing: S, note: "the South Road's first town, halfway to the seat"}
+        - {to: region.severwick, via: loc.harrowdown.south_road,  carriage_days: 4,    chokepoint: the Lund bridge at Stanwick,     bearing: S, note: "down the South Road past Larkhythe and the Stanwick bridge"}
+        - {to: region.cranholt,  via: loc.harrowdown.drove_road,  carriage_days: 3,    chokepoint: high downs / weather,            bearing: NE}
+        - {to: region.fellmarch, via: loc.harrowdown.quarry_track, carriage_days: null, note: "dead-ends at Redcliff; the high country has no through-road from the vale yet", bearing: NE}
+      flavor: >-
+        A backwater vale on the chalk downs where the Lund runs, hinged between the civilized south
+        and the wild north. Apex threat is a wyvern, and still no dragon.
+
+    - id: region.dunmere
+      name: Dunmere
+      tier: vale
+      status: authored_stub             # named + placed + connected; interior unauthored until its sprint (docs/lore/11)
+      parent: region.lundmarch
+      sect: sect.fen_kalendar           # the wet-country reading, shared with the Meres
+      biome: [fen, marsh, riverbank, heath]
+      settlements: [loc.dunmere.market_square]
+      connections:
+        - {to: region.harrowdown, via: loc.harrowdown.cairn_road, carriage_days: 2,    chokepoint: Sedge Ford, bearing: E}
+        - {to: region.the_meres,  carriage_days: null, note: "west into the fen frontier", bearing: W}
+      flavor: Fen-edge wool town, two days west; chronic rat trouble, standing bounties. The western edge of the settled province.
+
+    - id: region.cranholt
+      name: Cranholt
+      tier: vale
+      status: authored_stub
+      parent: region.lundmarch
+      sect: sect.open_page
+      biome: [forest, woodland, hills, downs, high_pasture]
+      settlements: [loc.cranholt.market_square]
+      connections:
+        - {to: region.harrowdown, via: loc.harrowdown.drove_road, carriage_days: 3,    chokepoint: high downs / weather, bearing: SW}
+        - {to: region.fellmarch,  carriage_days: null, note: "the downs rise past Cranholt into the high country", bearing: N}
+      flavor: Timber holt over the downs, three days northeast; snowed off part of winter. The last settled step before the high country.
+
+    # ---------- the two towns authored this pass (George's FINAL CONFIRM, 2026-07-14) ----------
+    # Both authored_stub like Dunmere/Cranholt: named + placed + connected, interior deferred to their
+    # own sprint. They complete the confirmed base of 5 towns. loc.* squares are stub references (no
+    # content/world file yet), exactly as Dunmere/Cranholt's are.
+    - id: region.larkhythe
+      name: Larkhythe                   # authored 2026-07-14 — the South Road's river-market town
+      tier: town
+      status: authored_stub
+      parent: region.lundmarch
+      sect: sect.open_page              # the settled heartland reading
+      biome: [riverbank, town, downs, high_pasture]
+      settlements: [loc.larkhythe.market_square]
+      connections:
+        - {to: region.harrowdown, via: loc.harrowdown.south_road, carriage_days: 2, chokepoint: "none before the Lund market", bearing: N}
+        - {to: region.severwick,  via: loc.harrowdown.south_road, carriage_days: 2, chokepoint: the Lund bridge at Stanwick,   bearing: S, note: "the road crosses the Stanwick bridge on this leg"}
+        - {to: region.milbury,    carriage_days: 2, chokepoint: "the meadow lanes", bearing: W, note: "off the South Road into the farm shires"}
+      flavor: >-
+        The South Road's halfway town, two days south of Harrowdown down the Lund. A river wool-staple:
+        vale fleece is weighed, baled, and barged on to Severwick here, so the town runs on wharves,
+        weigh-houses, and the Merchants' Guild scales. The last chokepoint before the seat, the Stanwick
+        bridge, is a day further down its road. Placed and connected; interior authored in its own sprint.
+
+    - id: region.milbury
+      name: Milbury                     # authored 2026-07-14 — the steadfolk farm-and-mill town
+      tier: town
+      status: authored_stub
+      parent: region.lundmarch
+      sect: sect.open_page              # heartland reading (worldgen MAY seat a steadfolk folk-reading here later; see sect_pattern)
+      biome: [riverbank, downs, hills, woodland, town]
+      settlements: [loc.milbury.market_square]
+      demihuman_presence: people.halfling_kin   # a seated steadfolk town (rare/regional, honors the demihuman rarity anchor)
+      connections:
+        - {to: region.larkhythe, carriage_days: 2, chokepoint: "the meadow lanes", bearing: E, note: "back to the South Road at Larkhythe"}
+      flavor: >-
+        Corn-and-cheese country in the Lund's river-meadows, two days west of Larkhythe off the South
+        Road. Watermills on the Lund's feeder brooks, dairy, and the settled heartland's steadfolk
+        (people.halfling_kin) — the demihuman town, so long-intermarried most families are some part
+        steadfolk without making anything of it. The commonest seat of mixed heritage (people.mixed_heritage).
+        Placed and connected; interior authored in its own sprint.
+
+    - id: region.severwick
+      name: Severwick
+      tier: seat
+      role: large_city                  # the confirmed LARGE CITY of the base (1 of 7 settlements)
+      status: authored_stub             # the provincial seat; interior unauthored until its sprint
+      parent: region.lundmarch
+      sect: sect.open_page              # the seat's cathedral chapter holds the heartland reading
+      biome: [riverbank, town, coast, hills]
+      settlements: [loc.severwick.market_square]
+      holds: [faction.monastery_record_halls, faction.crown_and_seats, text.wyvern_hunt_archive, text.crown_chronicle, text.summoning_annals]
+      connections:
+        - {to: region.larkhythe,  via: loc.harrowdown.south_road, carriage_days: 2, chokepoint: the Lund bridge at Stanwick, bearing: N}
+        - {to: region.harrowdown, via: loc.harrowdown.south_road, carriage_days: 4, chokepoint: the Lund bridge at Stanwick, bearing: N, note: "up the South Road past the Stanwick bridge and Larkhythe"}
+        - {to: region.aldcaster,  carriage_days: null, note: "downriver and inland to the capital, roughly weeks; distance set when its sprint lands", bearing: S}
+      flavor: >-
+        The kingdom's large city and the seat of the Lundmarch: river port, crown mint, cathedral,
+        guild seat, and the monastery record-halls that hold the kingdom's wyvern-hunt archives — the
+        records carried SOUTH out of the burned north (region.cindermarch). Four days south, and the
+        direction the vale means when it says "civilization." The safe COPY of deep lore lives here;
+        the dangerous original lives a season further north (region.cindermarch).
+
+    # ---------- the far civilized centre (exists; interior + distance later) ----------
+    - id: region.aldcaster
+      name: the crown seat at Aldcaster  # APPROVED — the capital
+      tier: capital
+      role: capital                      # the confirmed CAPITAL of the base (1 of 7 settlements)
+      status: authored_exists            # confirmed to exist; a season away by ballad (docs/lore/11)
+      parent: region.aldreth
+      sect: sect.crown_hand              # the capital's statist high church (seeded example)
+      biome: [town, riverbank, coast, hills]
+      holds: [faction.war_colleges, faction.crown_and_seats, text.crown_chronicle, text.summoning_annals]
+      connections:
+        - {to: region.severwick, carriage_days: null, note: "upriver to the province seat; ~weeks", bearing: N}
+      flavor: >-
+        The kingdom's heart, a season away by the time a Harrowdown deed arrives as a ballad with the
+        names wrong (docs/lore/11). Seat of the crown, the great cathedral chapter, and the
+        war-colleges — the only attributed source of battle-magic (power.battle_magic, UNVERIFIED from
+        the vale). Where the Demon Lord legend is maintained hardest (docs/lore/08), the summoning
+        annals are controlled, and the Crown's Hand reading holds (sect.crown_hand).
+
+    # ---------- the burned province (exists as a lore node; interior is ruin/frontier) ----------
+    - id: region.cindermarch
+      name: the Cinder Province          # APPROVED — the burned province, FAR NORTH (CONFIRMED)
+      tier: province
+      status: authored_frontier          # a named ruin, not a walkable town set — its interior is dangerous frontier
+      parent: region.aldreth
+      sect: sect.scored_page             # the burned north's grief-church (seeded example)
+      biome: [wasteland, volcanic_country, ruin, mountain, mountain_deep, thin_place]
+      holds: []                          # the ON-SITE deep truth; the carried-south copies live at Severwick (text.wyvern_hunt_archive)
+      apex: creature.cindermarch.cinder_dam   # the placed living apex — the MOTHER DRAGON (bestiary.yaml `mother_dragon`)
+      draconic: >-
+        Where dragons were fought and a province was lost — burned generations ago by the Cinder Dam
+        (creature.cindermarch.cinder_dam, bestiary.yaml `mother_dragon`), the singular living apex who
+        still lairs in its mountain-root. The scattered wyverns and drakes of the frontier
+        (creature.fellmarch.screel, creature.fellmarch.corrie_drake, creature.cindermarch.ashling, and
+        the vale's own Quarryman) are her spread brood. Peak dragon/wyvern lore lives here on-site
+        (roadmap §3); the wyvern-hunt archive at Severwick is the safe copy carried SOUTH out of the
+        burned north. The geographic seat of the beyond_the_ladder hook — which opens only when the Dam
+        FALLS — and adjacent to the Demon Lord question (docs/lore/08) and the Calling (docs/lore/07).
+      connections:
+        - {to: region.fellmarch, carriage_days: null, note: "a season north, up through and past the high country; no safe through-road (the Dam's sealed approach)", bearing: S}
+      flavor: >-
+        A province the fire took generations ago — dragon-scorched, unpeopled, a season north past the
+        high country, and home to the Scored Page reading (sect.scored_page). The endgame ground: the
+        Cinder Dam lairs in its deep north, placed but distant, her approach sealed by season and by her
+        brood. The drama of distance made a place — the deepest answers, and the highest target, are the
+        furthest and most dangerous to reach.
+
+    # ---------- FRONTIER-OPEN edges (unauthored; worldgen expands here) ----------
+    - id: region.fellmarch
+      name: the Fellmarch (the high country)   # APPROVED
+      tier: frontier
+      status: frontier_open              # draconic frontier; the primary bottomless-expansion direction (up the ladder)
+      parent: region.aldreth
+      biome: [crag, mountain, mountain_deep, high_pasture, hills, cave, deep_cave]
+      draconic: "bestiary.wyvern -> bestiary.drake -> bestiary.dragon_young -> bestiary.dragon_ancient (habitat rises with the ground)"
+      # The Dam's scattered brood — placed young/lesser draconic instances across the frontier, the
+      # rungs BELOW her (bestiary.yaml `mother_dragon`.brood). Placed lore nodes, not worldgen spawns.
+      placed_draconic:
+        - {instance: creature.fellmarch.screel,       rung: bestiary.wyvern, note: "a young wyvern of the high passes"}
+        - {instance: creature.fellmarch.corrie_drake, rung: bestiary.drake,  note: "a drakeling denned in a deep corrie"}
+        - {instance: creature.harrowdown.quarryman,   rung: bestiary.wyvern, note: "the vale's own — the brood-member that reached the settled edge (Redcliff)"}
+      borders_people: people.orc_kin     # the orc-kin borderland (peoples-factions.yaml), distinct from feral bestiary.orc warbands
+      connections:
+        - {to: region.harrowdown,  via: loc.harrowdown.quarry_track, carriage_days: null, note: "the vale's toe into it dead-ends at Redcliff (the Quarryman)", bearing: SW}
+        - {to: region.cranholt,    carriage_days: null, bearing: S}
+        - {to: region.cindermarch, carriage_days: null, note: "rises north toward the burned province and the Dam", bearing: N}
+      flavor: >-
+        The upland north where the downs become crag and mountain: draconic country and the orc-kin
+        borderland, seeded with the Cinder Dam's scattered young (the Screel, the Corrie Drake) below
+        her in the ladder. The Redcliff quarry and its wyvern are the vale's first inch of it.
+        FRONTIER-OPEN: worldgen climbs the ladder here (wyvern -> drake -> dragon) as the player earns
+        the altitude, up toward the placed Dam in the burned north beyond.
+
+    - id: region.the_meres
+      name: the Meres (the fen frontier)       # APPROVED
+      tier: frontier
+      status: frontier_open
+      parent: region.aldreth
+      sect: sect.fen_kalendar             # the wet-country reading (seeded example)
+      biome: [fen, marsh, riverbank, coast, drowned_quarter]
+      connections:
+        - {to: region.dunmere, carriage_days: null, note: "west of the settled fen edge", bearing: E}
+      flavor: >-
+        Wet country west past Dunmere: fen, bog, and drowned ground toward an unmapped coast. Blotted
+        camps and the Fen Kalendar reading (sect.fen_kalendar). FRONTIER-OPEN.
+
+    - id: region.beyond
+      name: the unmapped world (blank past the ridge)
+      tier: frontier
+      status: frontier_open
+      parent: null                       # outside the kingdom entirely
+      biome: []                          # undefined by design
+      flavor: >-
+        Everything past the kingdom's borders and the Codex map's edge: other kingdoms, seas, wastes,
+        the source of the summonings, and wherever dragons flee TO. Deliberately blank (roadmap §3,
+        "blank past the ridge"). The outermost bottomless frontier — no worldgen without an authored
+        edge to grow from.
+
+  # ---------- the authored travel graph, distilled (source: docs/lore/11-travel-network.md) ----------
+  # Carriage-days between AUTHORED regions, restated so worldgen has one machine surface for distance.
+  # These MUST match content/world/harrowdown.yaml and 11-travel-network.md. null = deferred, not zero.
+  edges:
+    - {from: region.harrowdown, to: region.dunmere,    carriage_days: 2,    road: the Cairn Road}
+    - {from: region.harrowdown, to: region.cranholt,   carriage_days: 3,    road: the Drove Road}
+    - {from: region.harrowdown, to: region.larkhythe,  carriage_days: 2,    road: the South Road (first leg)}
+    - {from: region.larkhythe,  to: region.severwick,  carriage_days: 2,    road: the South Road (Stanwick bridge leg)}
+    - {from: region.harrowdown, to: region.severwick,  carriage_days: 4,    road: the South Road (= 2 to Larkhythe + 2 to the seat; unchanged, still 4)}
+    - {from: region.larkhythe,  to: region.milbury,    carriage_days: 2,    road: the meadow lanes (off the South Road)}
+    - {from: region.severwick,  to: region.aldcaster,  carriage_days: null, road: downriver (weeks; deferred)}
+    - {from: region.fellmarch,  to: region.cindermarch, carriage_days: null, road: none (a season; frontier)}

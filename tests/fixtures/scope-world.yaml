@@ -1,0 +1,67 @@
+# Test-only world exercising knowledge_scope (Sprint 3 wave 1, Team A).
+# NOT content/world/ — a fixture the engine tests author against, the way
+# Team B will author real scopes. PC starts at the FIRST location (the archive,
+# co-located with the source); the wyrm is OFF-SCENE (catalogued, not present).
+
+locations:
+  - id: loc.test.archive
+    name: The Test Archive
+    type: guild_hall
+    region: test
+    connections:
+      - {to: loc.test.scar, carriage_days: 3}
+  - id: loc.test.scar
+    name: The Redcliff Scar
+    type: road
+    region: test
+    connections:
+      - {to: loc.test.archive, carriage_days: 3}
+
+entities:
+  - id: npc.test.archivist
+    name: the archivist
+    descriptor: the archivist
+    kind: npc
+    location: loc.test.archive
+    true_sheet:
+      aptitudes: {might: 3, finesse: 3, wits: 5, will: 4, presence: 4, lore: 8}
+      threat_band: 2
+      tags: [source, keeps_records]
+    common_knowledge:
+      - The archive keeps two centuries of quarry records.
+    knowledge_scope:
+      max_appraisal_tier: 2
+      subjects:
+        - subject: creature.test.wyrm
+          reveals:
+            - tier: 0
+              predicate: common_knowledge
+              value_text: a great winged shape over the scar
+              claim_text: The records sketch a great winged shape over the scar.
+            - tier: 1
+              predicate: threat_assessed
+              value_text: DESPERATE
+              claim_text: By the tallies the wyrm has killed the seasoned and the lucky alike.
+            - tier: 2
+              predicate: weak_point
+              value_text: the old wound under its left wing
+              claim_text: One margin-hand insists the beast favours a scar beneath its left wing.
+          error:
+            predicate: threat_assessed
+            value_text: RISKY
+            claim_text: The ballads swear it half-grown and half-blind — the archive believes them.
+            distortion: ballad_inflation
+      lead:
+        to: loc.test.far_province
+        claim_text: Nothing here on that — but the burned province keeps the deep dragon-lore.
+
+  - id: creature.test.wyrm
+    name: the test wyrm
+    kind: creature
+    location: loc.test.scar
+    true_sheet:
+      aptitudes: {might: 14, finesse: 8, wits: 6, will: 9, presence: 5, lore: 2}
+      threat_band: 14
+      tags: [wyvern, apex]
+    common_knowledge:
+      - Something with wings closed the old quarry.

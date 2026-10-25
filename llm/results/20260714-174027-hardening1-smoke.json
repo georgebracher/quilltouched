@@ -1,0 +1,41 @@
+{
+ "model": "claude-sonnet-5",
+ "fixtures": 2,
+ "per_narration_failing": 0,
+ "batch_fails": [],
+ "batch_warns": [],
+ "stats": {
+  "hook_ratio": 0.0,
+  "sentence_cv": 0.6169463812765598,
+  "band_10_22": 0.3,
+  "em_dash_mean": 0.5,
+  "ellipsis_mean": 0
+ },
+ "usage": {
+  "input_mean": 5764.5,
+  "input_p95": 5873,
+  "output_mean": 160.5,
+  "output_p95": 203
+ },
+ "cost_per_turn_usd": 0.026461,
+ "narrations": [
+  {
+   "id": "nf-11-desperate-miss-wight",
+   "text": "The staff catches nothing. The wight moves through the swing like the chalk mud isn't there for it, and the answer comes back cold, through the arm, through the shoulder already bandaged three days. The road tips. Wind, sheep-smell, wet flint — then Market Row, and no memory of the ground between.\n\nWhatever put you here left the staff behind on the down.",
+   "input_tokens": 5656,
+   "output_tokens": 118,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  },
+  {
+   "id": "nf-22-observation-slime-maren-lead-npc-category",
+   "text": "The thing pulls itself along the ditch bottom in a slow heave, a translucent mass no bigger than a boot, and it never quite clears the flood line. Where the standing water stops, it stops. When you shift and the lamp-glow from the tavern door catches its flank, the mass contracts and slides back toward the reeds, away from the light, staying low in the wet.\n\nMaren Ostler stands off at the ditch's edge, doing nothing to acknowledge the creature or you, occupied with whatever brought her down here in the first place.\n\nYou've got its measure now: it won't cross dry ground, and it flinches from lamplight.",
+   "input_tokens": 5873,
+   "output_tokens": 203,
+   "stop_reason": "end_turn",
+   "fails": [],
+   "warns": []
+  }
+ ]
+}

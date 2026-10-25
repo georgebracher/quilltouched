@@ -1,0 +1,13 @@
+# Railway runtime deps (root Procfile: uvicorn api.main:app).
+# The engine package (everquill_engine/) is imported from the repo root —
+# these are its runtime deps plus the API's own.
+-c constraints.txt
+fastapi>=0.115
+uvicorn[standard]>=0.30
+PyYAML>=6
+psycopg[binary]>=3.2
+jsonschema>=4
+# Below 2: anthropic 2.x sends API version 2026-10-21, which rejects the
+# parser's temperature 0 (llm/parser.py SAMPLING_BODY).
+anthropic>=1.15,<2
+cryptography>=42
