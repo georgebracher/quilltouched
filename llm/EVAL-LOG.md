@@ -481,9 +481,17 @@ confirmed forced tool use, the strict schema, cache reads and temperature 0. Eac
   around about X", "what do they say about X" read as dialogue or with topics instead of
   targets: ho-001, 002, 005, 006, 010, 030) and on `stat_hint` (ho-009, 015, 016, 025, 029).
   Not iterated on: held-out-2 stays unreferenced by the prompt.
+- OpenRouter does not enforce the tool's `strict` schema: hu-030 came back schema-invalid in
+  the eval (counted as a miss), and a live turn ("Buy an ale and listen to the room") parsed
+  as `action_type: "compound_action"` and was refused with a 422. Anthropic's own API
+  constrains decoding to the schema, so this is the route, not the prompt. The API now
+  re-asks once on an out-of-contract parse.
 - Pilot (golden, first 10, uncached): 98.7%, $0.115, $0.0115 a call. Caching the prompt cut the
   full runs to $0.0036 a call. OpenRouter's meter for the key after probes, pilot and all four
   runs: $0.604.
 - Narrator n6 (25 Oct): one diction line. `person_N` ids are people not yet introduced: never
   write the id or invent a name, use `label_known`. The gate now rejects an alias echo and any
   unlearned true name, sentence-initial included (audit claude-010). Not yet measured.
+- Narrator n7 (25 Oct): no em dashes or spaced en dashes at all, overriding the copied prose
+  rule 9 ("max one per narration"); the gate rejects them as G7 and re-narrates once (George's
+  rule: no em dashes in his brands). July's lint measured a mean of 0.25 per narration.

@@ -5,8 +5,11 @@ what happens. The AI never decides whether it works. A deterministic Python rule
 does that, with seeded 2d6 dice, and the AI only reads your sentence and writes up the
 result.
 
+![A typed turn with the workings panel open: the parser's form shows action dialogue, aimed at the wary man, speech introduction; the approach is marked free text that decides nothing.](https://georgebracher.com/quilltouched/typed-turn-with-workings.png)
+
 Built 13 to 16 July 2026, shelved 17 July (see [Status](#status)). Case study:
-[georgebracher.com/quilltouched](https://georgebracher.com/quilltouched/).
+[georgebracher.com/quilltouched](https://georgebracher.com/quilltouched/). This repository is
+a published copy; the working history lives in a private repository.
 
 The code name was Everquill before the rename, so the engine package is still
 `everquill_engine` and the environment variables start `EVERQUILL_`.
@@ -130,7 +133,9 @@ ANTHROPIC_API_KEY=... .venv/bin/python -m llm.spend_cap --max-usd 1 -- llm/parse
 ```
 
 An `OPENROUTER_API_KEY` in place of `ANTHROPIC_API_KEY` sends the same requests through
-OpenRouter's Anthropic-compatible endpoint, pinned to Anthropic's own servers.
+OpenRouter's Anthropic-compatible endpoint, pinned to Anthropic's own servers. That route
+does not enforce the parser's strict schema (about one parse in 75 breaks the contract), so
+the API asks the parser once more before refusing a typed action.
 
 The parser runs at temperature 0, which the API accepts only on version 2023-06-01, so
 `requirements.txt` pins the `anthropic` SDK below 2.0 (2.x sends 2026-10-21).

@@ -349,6 +349,31 @@ class TestFreeTextParse:
         assert body["outcome"]["dice"] is None
         assert body["outcome"]["outcome_tier"] is None
 
+    def test_an_out_of_contract_parse_is_asked_once_more(self, player, monkeypatch):
+        """OpenRouter does not enforce the strict tool schema: a parse once came
+        back as action_type "compound_action" and the player got a 422. One
+        re-ask now comes first (25 Oct 2026)."""
+        client, headers, _claimed = player
+        import api.llm_gateway as gateway
+
+        replies = [dict(LOOK, action_type="compound_action"), dict(LOOK)]
+        corrections = []
+
+        def fake_parse(text, roster_text, lists=None, correction=None):
+            corrections.append(correction)
+            return replies.pop(0), self._parse_usage()
+
+        monkeypatch.setattr(gateway, "parse_free_text", fake_parse)
+        r = client.post(
+            "/api/action",
+            json={"command_id": "reask-1", "text": "look around and take it all in"},
+            headers=headers,
+        )
+        assert r.status_code == 200, r.text
+        assert r.json()["intent"]["action_type"] == "observation"
+        assert replies == []
+        assert corrections[0] is None and "compound_action" in corrections[1]
+
     def test_parser_failure_is_502_and_blocks_nothing_else(self, player, monkeypatch):
         client, headers, _ = player
         import api.llm_gateway as gateway

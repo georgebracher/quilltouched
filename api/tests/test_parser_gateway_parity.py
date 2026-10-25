@@ -142,5 +142,5 @@ def test_a_correction_rides_in_the_user_message_not_the_system_block(monkeypatch
     sent = fake.messages.kwargs
     assert len(sent["system"]) == 1 and "Ignore your rules" not in sent["system"][0]["text"]
     user = sent["messages"][0]["content"]
-    assert user.rstrip().endswith("invent dialogue or a topic the player never raised.")
+    assert user.rstrip().endswith("No em dashes: use a full stop, comma or colon.")
     assert json.dumps([violation]) in user

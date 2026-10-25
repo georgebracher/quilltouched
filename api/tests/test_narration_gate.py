@@ -601,3 +601,25 @@ class TestProductionNpcCategoryG6:
     def test_character_category_also_counts_as_person(self):
         assert "character" in narration_gate.PERSON_CATEGORIES
         assert "npc" in narration_gate.PERSON_CATEGORIES
+
+
+class TestNoDashes:
+    """George's rule (no em dashes in his brands) covers the game's prose."""
+
+    OUTCOME = {"tier_resolved": "trivial", "outcome_tier": None, "state_deltas": []}
+
+    def test_an_em_dash_or_a_spaced_en_dash_is_rejected(self):
+        for prose in ("He looks up — then away.", "He looks up – then away."):
+            violations = narration_gate.check_narration(prose, outcome=self.OUTCOME)
+            assert any(v.startswith("G7") for v in violations), prose
+
+    def test_hyphens_and_ranges_pass(self):
+        prose = "A well-worn bench. Pages 3–4 are torn."
+        violations = narration_gate.check_narration(prose, outcome=self.OUTCOME)
+        assert not any(v.startswith("G7") for v in violations)
+
+    def test_the_fallback_prose_has_none(self):
+        outcome = {"tier_resolved": "routine", "outcome_tier": "miss", "state_deltas": [
+            {"delta_type": "wound_transition", "entity_id": "pc", "effect": "wounded"},
+        ]}
+        assert "—" not in narration_gate.fallback_prose(outcome)

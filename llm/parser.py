@@ -46,7 +46,10 @@ TOOL_CHOICE = {"type": "tool", "name": TOOL_NAME, "disable_parallel_tool_use": T
 
 #: OpenRouter's Anthropic-compatible endpoint: the SDK appends /v1/messages and
 #: sends the key as a bearer token. Native tool use, tool_choice and
-#: cache_control pass through (checked by a live probe on 25 Oct 2026).
+#: cache_control pass through (checked by a live probe on 25 Oct 2026). The
+#: tool's ``strict`` schema is NOT enforced there: about one parse in 75 came
+#: back outside the contract (an action_type of "compound_action"), so the API
+#: re-asks once before refusing (api/main.py, parse_schema_retry).
 OPENROUTER_BASE_URL = "https://openrouter.ai/api"
 #: Anthropic model id -> OpenRouter's name for the same model.
 OPENROUTER_MODELS = {

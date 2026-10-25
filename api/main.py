@@ -47,6 +47,7 @@ from __future__ import annotations
 
 import hashlib
 import hmac
+import json
 import os
 import threading
 import time
@@ -1483,39 +1484,58 @@ def action(request: Request, body: Annotated[dict[str, Any], Body()]):
                     raise HTTPException(
                         status_code=503, detail="world not initialized (no PC yet)"
                     ) from None
-                try:
-                    intent, parse_usage = llm_gateway.parse_free_text(
-                        source_utterance, roster, lists
-                    )
-                except llm_gateway.ParseInputTooLarge as exc:
+                def parse_once(correction: str | None = None) -> dict[str, Any]:
+                    try:
+                        parsed, parse_usage = llm_gateway.parse_free_text(
+                            source_utterance, roster, lists,
+                            **({"correction": correction} if correction else {}),
+                        )
+                    except llm_gateway.ParseInputTooLarge as exc:
+                        telemetry.emit(
+                            "parse_error", command_id=command_id,
+                            world_id=account.world_id, error=str(exc),
+                        )
+                        raise HTTPException(
+                            status_code=422,
+                            detail="<<The declaration overflows the page. Say less.>>",
+                        ) from None
+                    except llm_gateway.ParseFailure as exc:
+                        telemetry.emit(
+                            "parse_error", command_id=command_id,
+                            world_id=account.world_id, error=str(exc),
+                        )
+                        raise HTTPException(
+                            status_code=502,
+                            detail="<<The Quill mis-hears you. Say it again, or tap a "
+                            "suggested action.>>",
+                        ) from None
                     telemetry.emit(
-                        "parse_error", command_id=command_id,
-                        world_id=account.world_id, error=str(exc),
+                        "llm_stage", command_id=command_id, world_id=account.world_id,
+                        **parse_usage.as_fields(),
                     )
-                    raise HTTPException(
-                        status_code=422,
-                        detail="<<The declaration overflows the page. Say less.>>",
-                    ) from None
-                except llm_gateway.ParseFailure as exc:
+                    llm_gateway.record_usage(
+                        conn, parse_usage, account_id=account.account_id,
+                        world_id=account.world_id, command_id=command_id,
+                    )
+                    parsed = context_mod.unalias_intent(parsed, aliases)
+                    return _clamp_parsed_intent(parsed, command_id, account.world_id)
+
+                intent = parse_once()
+                violations = _intent_errors(intent)
+                if violations:
+                    # A provider that does not enforce the strict tool schema
+                    # (OpenRouter, 25 Oct 2026: about one parse in 75) can return a
+                    # field outside the contract. Ask once more, saying what was
+                    # wrong, before refusing the player.
                     telemetry.emit(
-                        "parse_error", command_id=command_id,
-                        world_id=account.world_id, error=str(exc),
+                        "parse_schema_retry", command_id=command_id,
+                        world_id=account.world_id, violations=violations[:3],
                     )
-                    raise HTTPException(
-                        status_code=502,
-                        detail="<<The Quill mis-hears you. Say it again, or tap a "
-                        "suggested action.>>",
-                    ) from None
-                telemetry.emit(
-                    "llm_stage", command_id=command_id, world_id=account.world_id,
-                    **parse_usage.as_fields(),
-                )
-                llm_gateway.record_usage(
-                    conn, parse_usage, account_id=account.account_id,
-                    world_id=account.world_id, command_id=command_id,
-                )
-                intent = context_mod.unalias_intent(intent, aliases)
-                intent = _clamp_parsed_intent(intent, command_id, account.world_id)
+                    intent = parse_once(
+                        "Your previous answer broke the output contract: "
+                        + json.dumps(violations[:5])
+                        + ". Answer again with every field inside the schema."
+                    )
             else:
                 intent = body["intent"]
                 source_utterance = None

@@ -523,6 +523,8 @@ def specific_injury_violation(
 
 #: A model-facing alias for an unlearned person (api/context.fogged_aliases).
 ALIAS_TOKEN = re.compile(r"\bperson_\d+\b")
+#: An em dash anywhere, or an en dash used as a dash (spaced).
+DASH = re.compile("\u2014|\s\u2013\s")
 
 
 def check_narration(
@@ -581,6 +583,9 @@ def check_narration(
     named = sorted({w for w in words(text) if w in set(unlearned_names)})
     if named:
         violations.append(f"G4 a name the character has not learned: {', '.join(named)}")
+    # George's rule: no em dashes anywhere in his brands, the game's prose included.
+    if DASH.search(text):
+        violations.append("G7 an em or en dash in prose")
 
     n_words = len(words(text))
     if n_words > MAX_WORDS:
@@ -614,8 +619,9 @@ def corrective_line(violations: tuple[str, ...] | list[str]) -> str:
         "other body part unless the committed outcome/context names that same "
         "injury. No character may speak or "
         "volunteer information unless the player addressed them this turn or the "
-        "outcome records a spoken response — describe what happened, do not "
-        "invent dialogue or a topic the player never raised."
+        "outcome records a spoken response: describe what happened, do not "
+        "invent dialogue or a topic the player never raised. No em dashes: use a "
+        "full stop, comma or colon."
     )
 
 

@@ -165,7 +165,10 @@ class ParseInputTooLarge(ParseFailure):
 
 
 def parse_free_text(
-    text: str, roster_text: str, lists: dict[str, str] | None = None
+    text: str,
+    roster_text: str,
+    lists: dict[str, str] | None = None,
+    correction: str | None = None,
 ) -> tuple[dict, StageUsage]:
     """One player utterance -> ParsedIntent dict (unvalidated; caller validates).
 
@@ -176,6 +179,10 @@ def parse_free_text(
     """
     schema, system_prompt = _parser_assets()
     user_message = parser_mod.user_message(roster_text, text, **(lists or {}))
+    if correction:
+        # Engine-written, after the utterance: at temperature 0 an identical
+        # request returns the identical out-of-contract answer.
+        user_message += f"\n\n## Correction\n{correction}"
     estimated = _estimated_tokens(system_prompt, json.dumps(schema), user_message)
     if estimated > MAX_ESTIMATED_INPUT_TOKENS:
         raise ParseInputTooLarge(

@@ -257,7 +257,10 @@ export function chipLabel(ci: CannedIntent, scene: Scene): string {
 
 /** Intents legal against the current scene: every target must be present. */
 export function availableIntents(scene: Scene): CannedIntent[] {
-  const present = new Set(scene.entities.map((e) => e.id))
+  // The dead are not offered: no "Ask the barkeep" over her body.
+  const present = new Set(
+    scene.entities.filter((e) => !e.conditions.includes('dispatched')).map((e) => e.id),
+  )
   return CANNED_INTENTS.filter(
     (ci) => !ci.hidden && ci.intent.target_entity_ids.every((id) => present.has(id)),
   )
