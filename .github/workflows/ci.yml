@@ -55,6 +55,7 @@ jobs:
       # CREATE DATABASE works) so the engine and api public-schema worlds never
       # collide. See docs/ops/release-gate.md.
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/everquill_test
+      REQUIRE_DB: "1"  # a missing database fails the gate instead of a partial pass
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
 

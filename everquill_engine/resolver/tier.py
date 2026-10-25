@@ -324,6 +324,19 @@ def decide_tier(
         )
         gap = difficulty - actor["aptitudes"][stat_name]
         tier = band_for_gap(gap)
+        # A trivial physical action dispatches its target without a roll. Only a
+        # creature may die that way: harming a person always takes dice
+        # (George, 25 Oct 2026, after "buy an ale" misread as physical killed
+        # the barkeep).
+        if (
+            action == "physical"
+            and tier is PlausibilityTier.TRIVIAL
+            and any(
+                t in world.entities and world.entities[t].kind == "npc" for t in living
+            )
+        ):
+            tier = PlausibilityTier.ROUTINE
+            law_notes.append("a person is never harmed without a roll")
 
     # Knowledge gate: a KNOWN weak point on the primary living
     # physical target is target-specific intel the resolver consults. It

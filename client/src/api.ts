@@ -496,6 +496,9 @@ async function request<T>(path: string, init?: RequestInit): Promise<ApiResult<T
         : parsed
     return { ok: false, status: res.status, detail }
   }
+  // A 200 whose body did not arrive whole is a lost response, not a success
+  // carrying null (audit codex-002, third run): callers keep the retry ticket.
+  if (parsed === null || typeof parsed !== 'object') return { ok: false, status: 0, detail: null }
   return { ok: true, body: parsed as T }
 }
 

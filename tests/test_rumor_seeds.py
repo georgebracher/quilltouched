@@ -356,3 +356,39 @@ class TestDeadSourcesTellNothing:
         assert source is None or source.id != "npc.harrowdown.maren_ostler"
         dead = load_known_state(sim.state, sim.world, {}).topics("pc")
         assert "creature_harrowdown_quarryman" not in {t.topic_id for t in dead}
+
+
+class TestPeopleNeedARoll:
+    """A trivial physical action dispatches without dice; only creatures may die
+    that way (George, 25 Oct 2026: a misread "buy an ale" killed the barkeep)."""
+
+    def _sim(self):
+        sim = Sim(seed=42, world_path=HARROWDOWN)
+        sim.state.characters["pc"]["location_id"] = "loc.harrowdown.tavern"
+        sim.state.manifest["pc"]["location_id"] = "loc.harrowdown.tavern"
+        sim.pc["aptitudes"]["might"] = 18  # trivially outclasses everyone here
+        return sim
+
+    def test_a_strong_shove_at_a_person_rolls(self):
+        from everquill_engine.ladder import PlausibilityTier
+
+        sim = self._sim()
+        res, row = sim.run_turn(canned(
+            "physical", ["npc_harrowdown_maren_ostler"], approach="a shove", stat_hint="might",
+        ))
+        assert res.tier is PlausibilityTier.ROUTINE
+        assert row["payload"]["dice"] is not None
+        assert "a person is never harmed without a roll" in row["payload"]["law_notes"]
+
+    def test_a_creature_is_still_stomped_without_dice(self):
+        from everquill_engine.ladder import PlausibilityTier
+
+        sim = self._sim()
+        res, row = sim.run_turn(canned(
+            "physical", ["creature_harrowdown_ditch_slime"], approach="stomp", stat_hint="might",
+        ))
+        assert res.tier is PlausibilityTier.TRIVIAL and row["payload"]["dice"] is None
+        assert any(
+            d["delta_type"] == "hp" and d["cause"] == "dispatched without ceremony"
+            for d in row["payload"]["state_deltas"]
+        )

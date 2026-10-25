@@ -90,7 +90,13 @@ def main(argv: list[str] | None = None) -> int:
             for path in pending:
                 print(f"pending: {path.name}")
             return 0
-        applied = apply_migrations(conn, echo=print)
+        # Through migrate_and_rebuild, like a server start, so a migration that
+        # adds a projection is backfilled here too (third audit F3).
+        from everquill_engine.store import migrate_and_rebuild
+
+        applied = migrate_and_rebuild(conn)
+        for name in applied:
+            print(f"applied {name}")
         if not applied:
             print("no pending migrations")
     return 0

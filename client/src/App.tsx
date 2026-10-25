@@ -945,7 +945,9 @@ export default function App() {
           label,
           lines: [typeof detail === 'string' ? detail : `<<Refused.>> [HTTP ${status}]`],
         })
-      } else if (status === 503 || status === 504 || status === 0) {
+      } else if (status === 500 || status === 503 || status === 504 || status === 0) {
+        // Outcome unknown: the engine may have committed before the error, so
+        // the same id is the only safe re-send (audit codex-001, third run).
         setRetry(retry)
         append({
           kind: 'fault',
@@ -1006,27 +1008,30 @@ export default function App() {
       const commandId = takeCommandId(signature)
       setBusy(true)
       setRetry({ signature, commandId }) // a lost response can be re-sent as-is
-      const res = await send(commandId)
-      let kind: SendKind
-      const typed = signature.startsWith('text:')
-      if (res.ok) {
-        if (res.body.pending_confirmation) {
-          // <<Proceed?>> beat (interface decision 2): nothing resolved yet. The
-          // ticket stays, so a re-tap after a reload brings this beat back
-          // rather than a new one (audit codex-006).
-          setPendingBeat({ commandId, label, assessment: res.body.assessment, typed })
-          kind = 'pending'
+      try {
+        const res = await send(commandId)
+        let kind: SendKind
+        const typed = signature.startsWith('text:')
+        if (res.ok) {
+          if (res.body.pending_confirmation) {
+            // <<Proceed?>> beat (interface decision 2): nothing resolved yet. The
+            // ticket stays, so a re-tap after a reload brings this beat back
+            // rather than a new one (audit codex-006).
+            setPendingBeat({ commandId, label, assessment: res.body.assessment, typed })
+            kind = 'pending'
+          } else {
+            setRetry(null)
+            await recordResolved(label, commandId, res.body, typed)
+            kind = 'resolved'
+          }
         } else {
-          setRetry(null)
-          await recordResolved(label, commandId, res.body, typed)
-          kind = 'resolved'
+          handleFailure(label, res.status, res.detail, { signature, commandId })
+          kind = 'failed'
         }
-      } else {
-        handleFailure(label, res.status, res.detail, { signature, commandId })
-        kind = 'failed'
+        return kind
+      } finally {
+        setBusy(false) // never leave the composer frozen, whatever threw
       }
-      setBusy(false)
-      return kind
     },
     // takeCommandId reads refs only — stable by construction, not a dep.
     [busy, handleFailure, recordResolved],
@@ -1083,22 +1088,25 @@ export default function App() {
   const confirmBeat = async () => {
     if (!pendingBeat || busy) return
     setBusy(true)
-    const res = await postActionConfirm(pendingBeat.commandId)
-    let keepBeat = false
-    if (res.ok && !res.body.pending_confirmation) {
-      setRetry(null)
-      await recordResolved(pendingBeat.label, pendingBeat.commandId, res.body, pendingBeat.typed)
-      // The beat committed — clear the composer only if it still holds the
-      // typed declaration (canned beats never match, so their text is safe).
-      setComposerText((prev) => (prev.trim() === pendingBeat.label ? '' : prev))
-    } else if (!res.ok) {
-      // A lost or not-yet answer keeps the beat: Proceed again re-sends the same
-      // id, and a confirm that did commit is answered from canon (codex-006).
-      keepBeat = [0, 409, 429, 502, 503, 504].includes(res.status)
-      handleFailure(pendingBeat.label, res.status, res.detail, keepBeat ? pendingRetryRef.current : null)
+    try {
+      const res = await postActionConfirm(pendingBeat.commandId)
+      let keepBeat = false
+      if (res.ok && !res.body.pending_confirmation) {
+        setRetry(null)
+        await recordResolved(pendingBeat.label, pendingBeat.commandId, res.body, pendingBeat.typed)
+        // The beat committed — clear the composer only if it still holds the
+        // typed declaration (canned beats never match, so their text is safe).
+        setComposerText((prev) => (prev.trim() === pendingBeat.label ? '' : prev))
+      } else if (!res.ok) {
+        // A lost or not-yet answer keeps the beat: Proceed again re-sends the same
+        // id, and a confirm that did commit is answered from canon (codex-006).
+        keepBeat = [0, 409, 429, 500, 502, 503, 504].includes(res.status)
+        handleFailure(pendingBeat.label, res.status, res.detail, keepBeat ? pendingRetryRef.current : null)
+      }
+      if (!keepBeat) setPendingBeat(null)
+    } finally {
+      setBusy(false)
     }
-    if (!keepBeat) setPendingBeat(null)
-    setBusy(false)
   }
 
   /** Declining just dismisses — the moment expires diegetically, server-side. */

@@ -254,6 +254,9 @@ def _rolled_or_free_outcome(
                 state = (entity_states or {}).get(target_id)
                 if state is None or state.get("hp") is None:
                     continue
+                entity = world.entities.get(target_id)
+                if entity is not None and entity.kind == "npc":
+                    continue  # people never die without a roll (tier.py raises them)
                 remaining = int(state["hp"])
                 if remaining <= 0:
                     continue

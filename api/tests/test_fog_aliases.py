@@ -165,3 +165,22 @@ def test_the_gate_catches_an_alias_echo_and_a_sentence_initial_name():
             prose, outcome=outcome, envelope={}, unlearned_names=unlearned
         )
         assert any(expected in v for v in violations), (prose, violations)
+
+
+def test_the_gate_catches_capitalised_aliases_and_possessives_but_not_the_players_words():
+    """claude-004 (third audit): "Person_3" and "Jorun's" slipped through, and a
+    name the player typed was rejected, forcing a second paid call."""
+    sim, known = _tavern()
+    unlearned = context_mod.unlearned_names(sim.world, context_mod.fogged_aliases(known, sim.world))
+    outcome = {"tier_resolved": "trivial", "outcome_tier": None, "state_deltas": []}
+    for prose in ("Person_3 watches the door.", "The room turns toward Jorun's table."):
+        violations = narration_gate.check_narration(
+            prose, outcome=outcome, envelope={}, unlearned_names=unlearned
+        )
+        assert any(v.startswith("G4") for v in violations), prose
+    said = {"approach": "ask after a man called Jorun", "dialogue": None}
+    violations = narration_gate.check_narration(
+        "Nobody here answers to Jorun, the barkeep says.", outcome=outcome, envelope={},
+        action=said, unlearned_names=unlearned,
+    )
+    assert not any("has not learned" in v for v in violations)

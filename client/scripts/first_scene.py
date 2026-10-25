@@ -3,7 +3,7 @@
   python client/scripts/first_scene.py --base http://localhost:5173 --code <invite> [--shots DIR]
 
 Invite gate, guided creation (place six values, name, arrive), the play screen,
-four tapped suggestions (one rolled), leaving the tavern for Market Row, a
+six tapped suggestions (one rolled, two looks and an ask), leaving the tavern for Market Row, a
 workings panel, the full Chronicle with every mark open, the Character and
 Codex tabs, then a reload with the local Chronicle cache cleared, so the turns
 must come back from the server. Every page is scanned for the true names of
@@ -22,7 +22,9 @@ from pathlib import Path
 
 from playwright.sync_api import Page, sync_playwright
 
-TURNS = ("Look around", "about the quarry", "Size up", "Stomp the ditch slime")
+# Two looks and an ask draw several rumour seeds, so authored text gets scanned too.
+TURNS = ("Look around", "about the quarry", "Size up", "Stomp the ditch slime",
+         "Ask around for local news", "Look around")
 MOVE = "Go to Market Row"
 # Harrowdown's people, first names and surnames. "Ferrier" is left out: it is
 # on a shop sign ("Ferrier's Chandlery"), which the world shows to anyone.
@@ -51,19 +53,25 @@ def tap(page: Page, label: str) -> None:
     page.wait_for_timeout(1200)
 
 
+RAW_ID = re.compile(r"\bnpc_[a-z0-9_]+")
+
+
 def no_unmet_names(page: Page, tag: str, where: str) -> None:
-    found = sorted(set(UNMET.findall(page.locator("body").inner_text())))
+    text = page.locator("body").inner_text()
+    found = sorted(set(UNMET.findall(text)) | set(RAW_ID.findall(text)))
     check(f"[{tag}] no unmet person named on {where}", not found, ", ".join(found))
 
 
-def full_chronicle_actions(page: Page) -> int:
-    """Open the full Chronicle (every mark expanded) and count action blocks."""
+def full_chronicle_actions(page: Page) -> tuple[int, int]:
+    """Open the full Chronicle (every mark expanded); count action blocks and
+    the narrations among them."""
     opener = page.locator(".chronicle-open")
     if opener.count() == 0:
-        return page.locator(ACTIONS).count()
+        return page.locator(ACTIONS).count(), page.locator(".turn-narration").count()
     opener.click()
     page.locator(".chronicle-scroll").wait_for(timeout=5000)
-    return page.locator(f".chronicle-scroll {ACTIONS}").count()
+    scroll = page.locator(".chronicle-scroll")
+    return scroll.locator(ACTIONS).count(), scroll.locator(".turn-narration").count()
 
 
 def run(base: str, code: str, shots: Path | None, viewport: tuple[int, int]) -> None:
@@ -125,16 +133,16 @@ def run(base: str, code: str, shots: Path | None, viewport: tuple[int, int]) -> 
         for label in TURNS:
             tap(page, label)
         faults = page.locator("article.turn--fault").count()
-        check(f"[{tag}] four tapped turns, no fault blocks", faults == 0, f"{faults} faults")
-        narrated = page.locator(".turn-narration").count()
-        check(f"[{tag}] turns are narrated", narrated >= 1, f"{narrated}")
+        check(f"[{tag}] {len(TURNS)} tapped turns, no fault blocks", faults == 0,
+              f"{faults} faults")
         page.locator(".workings-toggle").last.click()
         check(f"[{tag}] a workings panel opens", page.locator(".workings").count() >= 1)
         no_unmet_names(page, tag, "the workings panel")
         shot("4-turns")
 
-        actions = full_chronicle_actions(page)
-        check(f"[{tag}] the full Chronicle holds the four turns", actions >= 4, f"{actions}")
+        actions, narrated = full_chronicle_actions(page)
+        check(f"[{tag}] the full Chronicle holds every turn", actions >= len(TURNS), f"{actions}")
+        check(f"[{tag}] every turn is narrated", narrated == actions, f"{narrated} of {actions}")
         no_unmet_names(page, tag, "the full Chronicle, marks open")
         shot("5-chronicle")
         if page.locator(".chronicle-close").count():
@@ -168,9 +176,9 @@ def run(base: str, code: str, shots: Path | None, viewport: tuple[int, int]) -> 
         page.reload()
         page.locator(".scene-canvas").wait_for(timeout=15000)
         page.wait_for_timeout(1500)
-        recovered = full_chronicle_actions(page)
+        recovered, _ = full_chronicle_actions(page)
         check(f"[{tag}] a reload without the cache rebuilds the Chronicle from the server",
-              recovered >= 5, f"{recovered}")
+              recovered >= len(TURNS) + 1, f"{recovered}")
         shot("9-reload")
         check(f"[{tag}] no page errors", not errors, "; ".join(errors[:3]))
         check(f"[{tag}] no console errors or failed requests", not bad, "; ".join(bad[:3]))

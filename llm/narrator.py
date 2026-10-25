@@ -45,9 +45,9 @@ import anthropic
 # this as llm.narrator; the eval scripts load it beside them with llm/ on
 # sys.path. Neither path edits sys.path from here (audit 2026-10-24, claude #28).
 if __package__:
-    from llm.parser import build_client, served_model  # noqa: F401
+    from llm.parser import build_client, routing_body, served_model  # noqa: F401
 else:
-    from parser import build_client, served_model  # noqa: F401
+    from parser import build_client, routing_body, served_model  # noqa: F401
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PROMPT_PATH = REPO_ROOT / "llm" / "prompts" / "narrator.md"
@@ -108,6 +108,7 @@ def narrate(client: anthropic.Anthropic, envelope: dict, outcome: dict,
     response = client.messages.create(
         model=served_model(MODEL),
         max_tokens=MAX_TOKENS,
+        extra_body=routing_body(),
         thinking={"type": "disabled"},  # see module docstring — cap starvation
         system=system,
         messages=[{"role": "user",

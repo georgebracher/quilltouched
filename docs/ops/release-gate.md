@@ -47,7 +47,7 @@ result before the style gate rather than bailing at the first long line.
 
 `REQUIRE_DB=1 make release-check` fails instead of printing PARTIAL PASS when no
 `DATABASE_URL` is given. Use it wherever the gate is a done-check
-(`tools/tower-check.sh` sets it). The DB fixtures also refuse a non-local
+(CI sets it). The DB fixtures also refuse a non-local
 database host unless `EVERQUILL_ALLOW_REMOTE_TEST_DB=1`: the suites wipe data.
 
 ## Database awareness (local vs CI)

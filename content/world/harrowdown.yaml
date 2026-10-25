@@ -685,6 +685,6 @@ prices:
 rumor_seeds:
   - {deed: "The Quarryman took two oxen off the high pasture below Redcliff Scar in open daylight", notoriety: 6}
   - {deed: "Lights walked the barrow field on Hollow Tor three nights running past midwinter", notoriety: 4}
-  - {deed: "Rold Tanner broke a potter's hand on Market Row over three pennies of stall tax", notoriety: 3}
-  - {deed: "Elam Ferrier paid silver for a water-ruined crate of pre-fire parish rolls off a Severwick barge", notoriety: 2}
+  - {deed: "The hard-faced man who works Market Row broke a potter's hand over three pennies of stall tax", notoriety: 3}
+  - {deed: "The chandler paid silver for a water-ruined crate of pre-fire parish rolls off a Severwick barge", notoriety: 2}
   - {deed: "Dunmere posted rat bounties again, third season running, and is short of takers", notoriety: 2}

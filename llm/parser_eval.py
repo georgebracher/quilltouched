@@ -407,15 +407,29 @@ def main() -> int:
         print(f"{name.upper():<26}{sub_['ok']:>6}{sub_['n']:>5}{acc:>8.1%}")
     print(f"{'OVERALL':<26}{passed:>6}{total:>5}{overall:>8.1%}")
 
+    # Whole sentences, not fields: most fields are defaults most of the time, so
+    # the field average flatters (third audit F6). "Decision" leaves out what the
+    # engine never acts on: the hints, the approach text and the doubt flags.
+    advisory = {"stat_hint", "plausibility_hint", "approach", "ambiguity_flags"}
+    scored = [cid for cid in per_case_checks]
+    fully = sum(all(c["pass"] for c in per_case_checks[cid]) for cid in scored)
+    decision = sum(
+        all(c["pass"] for c in per_case_checks[cid] if c["field"] not in advisory)
+        for cid in scored
+    )
+    utterances = {"n": len(scored), "fully_right": fully, "decision_right": decision}
+    print(f"{'UTTERANCES fully right':<26}{fully:>6}{len(scored):>5}")
+    print(f"{'UTTERANCES decision-right':<26}{decision:>6}{len(scored):>5}")
+
     # ---- safety-critical gates ----
     print("\n== Safety-critical checks (must all be 100%) ==")
-    def gate(name: str, ids: list[str], pred) -> bool:
+    def gate(name: str, ids: list[str], pred) -> bool | None:
         # A gate case left out by --limit/--ids is "not run", not a miss; a gate
         # id missing from the file still fails.
         ran = [cid for cid in ids if cid in selected or cid not in file_ids]
         if not ran:
             print(f"  [SKIP] {name}: not in this run")
-            return True
+            return None
         oks = []
         for cid in ran:
             checks = per_case_checks.get(cid)
@@ -441,7 +455,9 @@ def main() -> int:
         ),
     }
     gate_results = [gate(name, ids, GATE_PREDICATES[kind]) for name, kind, ids in gates_cfg]
-    gates_ok = all(gate_results) if gate_results else True
+    # None when no gate ran (a partial run), never a pass it did not earn (F10).
+    ran_gates = [g for g in gate_results if g is not None]
+    gates_ok = all(ran_gates) if ran_gates else (None if gate_results else True)
     if not gates_cfg:
         print("  (no safety gates defined for this eval set)")
 
@@ -463,14 +479,15 @@ def main() -> int:
         "overall": overall, "passed": passed, "total": total, "subtotals": subtotals,
         "fields": {f: {"ok": field_ok[f], "n": field_tot[f]} for f in field_tot},
         "gates_ok": gates_ok,
+        "utterances": utterances,
         "api_errors": api_errors,
         "misses": [{"id": c, "utterance": u, **ch} for c, u, ch in misses],
         "raw": {case["id"]: actual for case, actual, err in results if not err},
     }, indent=2, default=str))
     print(f"\nResults saved: {out.relative_to(REPO_ROOT)}")
     print(f"\nVERDICT: overall {overall:.1%} ({'>=' if overall >= 0.9 else '<'} 90%), "
-          f"safety gates {'PASS' if gates_ok else 'FAIL'}")
-    return 0 if (overall >= 0.9 and gates_ok and not api_errors) else 1
+          f"safety gates {'NOT RUN' if gates_ok is None else 'PASS' if gates_ok else 'FAIL'}")
+    return 0 if (overall >= 0.9 and gates_ok is not False and not api_errors) else 1
 
 
 if __name__ == "__main__":

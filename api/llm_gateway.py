@@ -155,7 +155,12 @@ def _usage(stage: str, model: str, response, latency_ms: int) -> StageUsage:
 
 
 class ParseFailure(Exception):
-    """The parser call failed or returned no tool_use block."""
+    """The parser call failed or returned no tool_use block. ``usage`` is set
+    when a reply came back (it was billed), so the caller can ledger it."""
+
+    def __init__(self, message: str, *, usage: StageUsage | None = None) -> None:
+        super().__init__(message)
+        self.usage = usage
 
 
 class ParseInputTooLarge(ParseFailure):
@@ -209,11 +214,16 @@ def parse_free_text(
     except Exception as exc:
         raise ParseFailure(f"parser call failed: {type(exc).__name__}") from exc
     latency_ms = int((time.perf_counter() - started) * 1000)
+    usage = _usage("parse", parser_mod.MODEL, response, latency_ms)
     for block in response.content:
         if block.type == "tool_use" and block.name == parser_mod.TOOL_NAME:
-            return dict(block.input), _usage("parse", parser_mod.MODEL, response, latency_ms)
-    raise ParseFailure(f"no {parser_mod.TOOL_NAME} tool_use block (stop_reason="
-                       f"{response.stop_reason})")
+            return dict(block.input), usage
+    # Billed all the same: the caller records this usage before refusing
+    # (audit codex-004, third run).
+    raise ParseFailure(
+        f"no {parser_mod.TOOL_NAME} tool_use block (stop_reason={response.stop_reason})",
+        usage=usage,
+    )
 
 
 def narrate_outcome(
@@ -251,6 +261,7 @@ def narrate_outcome(
             response = client.messages.create(
                 model=parser_mod.served_model(narrator_mod.MODEL),
                 max_tokens=narrator_mod.MAX_TOKENS,
+                extra_body=parser_mod.routing_body(),
                 thinking={"type": "disabled"},  # cap starvation — see llm/narrator.py
                 system=system,
                 messages=[{"role": "user", "content": user_message}],

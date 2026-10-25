@@ -473,6 +473,11 @@ confirmed forced tool use, the strict schema, cache reads and temperature 0. Eac
 | golden (64) | 98.6% (1005/1019) | 98.7% | 98.5% | PASS | $0.230 | `20261025-075202-p13-openrouter-golden-utterances.json` |
 | fog (6) | 100% (98/98) | 100% | 100% | none | $0.019 | `20261025-075210-p13-openrouter-fog-utterances.json` |
 
+- Whole sentences (added 25 Oct after the third audit; the field average flatters, since
+  most fields are defaults most of the time): held-out-2 16/30 fully right, 21/30 right on
+  every field the engine acts on (leaving out the hints, the approach text and the doubt
+  flags); held-out 33/50 and 39/50; golden 50/64 and 51/64; fog 6/6. No held-out case
+  invokes a law, so law recall is unmeasured.
 - Bar: 91.7% on held-out-2. p13 clears it with gates PASS. Against p10's 93.9% (July, old field
   set) the comparable v1.2-field subtotal is 92.8%, about a point lower; the labels were redone
   for v1.3 in between, so this is not a clean before/after. No "before" run of p11 was made: its

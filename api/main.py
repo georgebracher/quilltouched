@@ -1076,10 +1076,14 @@ def _dispatched_now(
     dotted = {contract_id(e): e for e in world_content.entities if contract_id(e) in targets}
     if not dotted:
         return {}
+    # Killed BY THIS TURN: dead now, and this outcome was the last event to
+    # touch it (nothing changes a body's hp afterwards), so a turn that only
+    # wounded still reads "wounded" after a later kill (third audit F12).
     with conn.transaction(), conn.cursor() as cur:
         cur.execute(
-            "SELECT entity_id FROM entity_state WHERE entity_id = ANY(%s) AND hp <= 0",
-            (list(dotted.values()),),
+            "SELECT entity_id FROM entity_state WHERE entity_id = ANY(%s) AND hp <= 0"
+            " AND updated_from_event_id = %s",
+            (list(dotted.values()), int(contract["event_id"])),
         )
         dead = {row[0] for row in cur.fetchall()}
     return {cid: "dispatched" for cid, eid in dotted.items() if eid in dead}
@@ -1292,10 +1296,10 @@ def _absorbed_response(
             detail="command_id was already used but no outcome is on record",
         )
     # Rebuild the public view the first response served (audit 2026-10-24,
-    # claude #17). A kill is permanent, so whether a target is dead now is
-    # whether this turn killed it or left it wounded, wherever the player has
-    # gone since (claude-013). A degraded or failed narration leaves no record
-    # of which, so only the movement-blocked note comes back.
+    # claude #17), reading deaths from entity state rather than the current
+    # scene (claude-013) and only those this turn caused (F12). A degraded or
+    # failed narration leaves no record of which, so only the movement-blocked
+    # note comes back.
     raw = outcome_contract(outcome_row)
     contract = _validated_contract(
         conn,
@@ -1504,6 +1508,11 @@ def action(request: Request, body: Annotated[dict[str, Any], Body()]):
                             "parse_error", command_id=command_id,
                             world_id=account.world_id, error=str(exc),
                         )
+                        if exc.usage is not None:  # billed even though it failed
+                            llm_gateway.record_usage(
+                                conn, exc.usage, account_id=account.account_id,
+                                world_id=account.world_id, command_id=command_id,
+                            )
                         raise HTTPException(
                             status_code=502,
                             detail="<<The Quill mis-hears you. Say it again, or tap a "

@@ -56,3 +56,15 @@ def test_an_anthropic_key_wins(monkeypatch):
     client = parser.build_client()
     assert "openrouter" not in str(client.base_url)
     assert parser.served_model("claude-haiku-4-5") == "claude-haiku-4-5"
+
+
+def test_the_narrator_is_pinned_too_but_gets_no_sampling(monkeypatch):
+    """Third audit F5: only parse calls carried the Anthropic routing pin."""
+    from llm import parser
+
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.setenv("OPENROUTER_API_KEY", "or-test")
+    assert parser.routing_body() == parser.OPENROUTER_ROUTING
+    assert "temperature" not in parser.routing_body()
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-test")
+    assert parser.routing_body() == {}

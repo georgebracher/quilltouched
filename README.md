@@ -94,7 +94,7 @@ CI runs the same gate against an ephemeral Postgres
    `http://localhost:5173` needs its origin in `EVERQUILL_CORS_ORIGINS` (comma-separated).
 3. The client: `VITE_API_BASE=http://127.0.0.1:8000 npm -C client run dev`, then open
    http://localhost:5173 and enter the invite code.
-4. Optional, the first-scene browser check: invite, creation, three turns, Character,
+4. Optional, the first-scene browser check: invite, creation, six tapped turns and a move, Character,
    Codex and a reload, in Chromium at 1280 and 390 px. Each size burns one invite code, so
    start the API with two (`EVERQUILL_INVITE_CODES=local-1,local-2`) and with
    `EVERQUILL_NARRATOR=plain`:
@@ -121,7 +121,9 @@ The parser is measured on sentences it was not tuned on ([`evals/`](evals/)):
 
 Latest parser run (prompt p13, schema v1.3, Claude Haiku 4.5, 25 Oct 2026): **93.3%** of
 fields on `heldout-2` (97.2% held-out, 98.6% golden, 6/6 fog), every safety gate passing,
-$0.54 for all four sets. The narrator prompt (n6) has not been re-measured since July.
+$0.54 for all four sets. By whole sentence, 21 of the 30 held-out-2 sentences are right on
+every field the engine acts on, and 16 of 30 are right on every field. The narrator prompt
+(now n7) has not been re-measured since July.
 
 Every run, its prompt version and its cost are in [`llm/EVAL-LOG.md`](llm/EVAL-LOG.md),
 with the raw results in [`llm/results/`](llm/results/). Running an eval calls the
@@ -163,14 +165,22 @@ Left as they are for an invite-only build; each would need work before more play
 - **`api/main.py` is about 1,700 lines,** and `/api/action` and `/api/action/confirm` repeat
   much of the same orchestration.
 - **Throughput.** A world's first bootstrap takes a process-wide lock, so other requests wait
-  behind it. A turn holds its database connection through up to two model calls (30 to 45 s
-  timeouts). The synchronous routes share one thread pool with `/healthz`, and every
+  behind it. A turn holds its database connection through its model calls: the parse (a
+  second one if the first breaks the contract), the narration and one corrective re-narration,
+  each with a 30 to 45 s timeout. The synchronous routes share one thread pool with `/healthz`, and every
   authenticated request checks `information_schema`.
 - **The web process holds the owner database URL.** It needs it to run migrations and create
   each player's schema. Turns run as the restricted `app_role` when `APP_DATABASE_URL` is set.
 - **Training never finishes.** A typed "train" action starts a timer, but only the command-line
   sweeper fires timers; the API has no worker for them. The training suggestion is hidden.
-- **The character name survives a crypto-shred.** See
+- **Before any re-hosting.** Tapped turns have no per-minute guard on the paid narrator (the
+  daily cap and the spend breaker bound it); the global invite-claim bucket counts bad guesses
+  too; removing a code from `EVERQUILL_INVITE_CODES` does not revoke it (delete its
+  `public.invite` row); rate-limit rows keep client addresses and are never pruned; some 503s
+  echo driver error text; and readiness can report ready after a failed check.
+- **A crypto-shred is not a full erasure.** It makes the typed fields unreadable, but the
+  narration prose (which may repeat the player's words), the character name and the opt-in
+  test capture stay in plaintext. See
   [docs/engine/events.md](docs/engine/events.md#crypto-shredding-high-8).
 
 ## Status

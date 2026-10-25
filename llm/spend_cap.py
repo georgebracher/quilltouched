@@ -27,8 +27,10 @@ from anthropic.resources.messages import Messages
 #: bill at 0.1x input and cache writes at 1.25x input.
 PRICES_PER_MTOK = {
     "claude-haiku-4-5": (1.00, 5.00),
+    "claude-sonnet-5": (3.00, 15.00),
     # OpenRouter passes the provider's price through (llm/parser.OPENROUTER_MODELS).
     "anthropic/claude-haiku-4.5": (1.00, 5.00),
+    "anthropic/claude-sonnet-5": (3.00, 15.00),  # listed at $2/$10 (25 Oct): cautious
 }
 
 

@@ -144,3 +144,20 @@ def test_a_correction_rides_in_the_user_message_not_the_system_block(monkeypatch
     user = sent["messages"][0]["content"]
     assert user.rstrip().endswith("No em dashes: use a full stop, comma or colon.")
     assert json.dumps([violation]) in user
+
+
+def test_a_reply_without_an_intent_still_carries_its_usage(monkeypatch):
+    """codex-004 (third audit): a billed reply with no emit_intent block raised
+    before its usage reached the ledger, so the spend breaker missed it."""
+    import pytest
+
+    fake = _FakeClient()
+    fake.messages.create = lambda **kw: SimpleNamespace(
+        content=[SimpleNamespace(type="text", text="I would rather not.")],
+        usage=SimpleNamespace(input_tokens=900, output_tokens=12),
+        stop_reason="end_turn",
+    )
+    monkeypatch.setattr(gateway, "_get_client", lambda: fake)
+    with pytest.raises(gateway.ParseFailure) as caught:
+        gateway.parse_free_text("I wave at the barkeep", "ROSTER")
+    assert caught.value.usage is not None and caught.value.usage.input_tokens == 900

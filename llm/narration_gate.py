@@ -522,7 +522,7 @@ def specific_injury_violation(
 
 
 #: A model-facing alias for an unlearned person (api/context.fogged_aliases).
-ALIAS_TOKEN = re.compile(r"\bperson_\d+\b")
+ALIAS_TOKEN = re.compile(r"\bperson_\d+\b", re.IGNORECASE)
 #: An em dash anywhere, or an en dash used as a dash (spaced).
 DASH = re.compile("\u2014|\s\u2013\s")
 
@@ -580,7 +580,19 @@ def check_narration(
     aliases = sorted(set(ALIAS_TOKEN.findall(text)))
     if aliases:
         violations.append(f"G4 an internal alias in prose: {', '.join(aliases)}")
-    named = sorted({w for w in words(text) if w in set(unlearned_names)})
+    # Possessives count ("Jorun's"); a name the player typed themselves does not
+    # (the narrator may echo what was said), audit claude-004.
+    player_said = set(words(" ".join(
+        str(v) for v in (
+            (action or {}).get("approach"),
+            ((action or {}).get("dialogue") or {}).get("quoted_speech"),
+        ) if v
+    )))
+    unlearned = set(unlearned_names) - player_said
+    named = sorted({
+        base for w in words(text)
+        if (base := re.sub(r"['’]s?$", "", w)) in unlearned
+    })
     if named:
         violations.append(f"G4 a name the character has not learned: {', '.join(named)}")
     # George's rule: no em dashes anywhere in his brands, the game's prose included.

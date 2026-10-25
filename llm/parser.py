@@ -73,9 +73,14 @@ def served_model(model: str) -> str:
 OPENROUTER_ROUTING = {"provider": {"order": ["anthropic"], "allow_fallbacks": False}}
 
 
+def routing_body() -> dict:
+    """The OpenRouter routing pin alone (the narrator sends no sampling fields)."""
+    return dict(OPENROUTER_ROUTING) if _via_openrouter() else {}
+
+
 def request_body() -> dict:
-    """Extra request-body fields: sampling, plus the routing pin on OpenRouter."""
-    return {**SAMPLING_BODY, **OPENROUTER_ROUTING} if _via_openrouter() else dict(SAMPLING_BODY)
+    """Extra request-body fields for the parse: sampling, plus the routing pin."""
+    return {**SAMPLING_BODY, **routing_body()}
 
 
 def _resolve_api_key() -> str:

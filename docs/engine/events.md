@@ -422,20 +422,27 @@ ships) — is AES-256-GCM encrypted AT APPEND under a per-account-world
 envelope key (`account_key` singleton, migration 0009; DEK wrapped
 under `EVERQUILL_MASTER_KEY` when set). The `pending_confirmation`
 intent is encrypted the same way and decrypted at confirm. Deleting the
-key row (`crypto.shred_account_key`, owner connections only) is the
-GDPR erasure: dumps/backups hold only ciphertext, owners' reads render
-`[shredded]`, and every event still folds — no projection reads an
+key row (`crypto.shred_account_key`, owner connections only) erases
+those fields: dumps and backups hold them only as ciphertext, owners'
+reads render `[shredded]`, and every event still folds. No projection reads an
 encrypted field, and derived canon (deposit-claim texts, impossible-
 attempt deed descriptions) deliberately no longer embeds the player's
 words. Read-path contract for Team F: docs/engine/claims.md §"Crypto-
 shred read path".
 
-Known limit (audit 2026-10-24, claude #5): the character name is the
-one piece of player-chosen text that canon does embed (the duration
-words joined the encrypted fields on 25 Oct). It sits in the
-`character_created` payload, the `characters` and `scene_manifest`
-projections, and the narration prose, all in plaintext, so a shred
-does not erase it. The API bounds it (1 to 40 printable characters,
-no newlines), the parser roster shows the player as "you", and the
-narrator receives it JSON-quoted. Erasing it would mean encrypting
-narration prose as well, which is not done.
+Known limits: what a shred does not erase (audits 2026-10-24 and 25).
+- The narration prose. The narrator is given the player's approach and
+  quoted speech and may repeat them ("Kneel," she says), and prose is
+  stored in plaintext on `narration_generated` (it is model output, so it
+  is not on the registry).
+- The character name, in the `character_created` payload, the
+  `characters` and `scene_manifest` projections and the prose. The API
+  bounds it (1 to 40 printable characters, no newlines), the parser
+  roster shows the player as "you", and the narrator receives it
+  JSON-quoted.
+- `public.test_turn_capture`, which stores the utterance and approach
+  in plaintext for accounts flagged for testing; a shred with a world
+  id deletes that account's rows, but not copies already in backups.
+So a shred makes the typed fields unreadable but is not a full erasure.
+Erasing the rest would mean encrypting narration prose under the same
+key, which is not done.
