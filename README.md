@@ -186,9 +186,12 @@ Left as they are for an invite-only build; each would need work before more play
 ## Status
 
 Shelved on 17 July 2026. It worked, but typing every action on a phone was too slow to be
-fun. The engine is the part worth reading. The docs under `docs/tickets/`,
-`docs/research/` and `docs/playtests/` are the July record and still describe the hosting
-of the time, which is gone.
+fun. Revisited in October 2026: three audits, the typed decision fields, a desktop layout
+and a measured parser. Played again on 25 October, it still wasn't fun: the suggested
+actions gave away more of the story than talking to the people in it. It is finished as a
+case study and is not hosted anywhere. The engine is the part worth reading. The docs under
+`docs/tickets/`, `docs/research/` and `docs/playtests/` are the July record and still
+describe the hosting of the time, which is gone.
 
 ## Licence
 
